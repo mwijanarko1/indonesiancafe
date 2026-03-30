@@ -11,8 +11,8 @@ export function AboutSection() {
         <div className="relative mx-auto w-full max-w-md md:max-w-none">
           <div className="relative aspect-[3/4] max-h-[min(32rem,70vh)] overflow-hidden rounded-sm shadow-[0_24px_60px_-12px_rgb(0_0_0_/_0.2)] ring-1 ring-stone-300/60">
             <Image
-              src="/photos/638300464_17849684961639557_4845296330349199575_n.jpg"
-              alt="Cooking at Indonesian Cafe — mortar and spices"
+              src="/photos/nano-banana-2-kn729vma53ntat588f6fr262hs83wg2x.png"
+              alt="Wok cooking at Indonesian Cafe — stir-fry with eggs, shrimp, and fresh prep on the pass"
               fill
               className="object-cover object-center"
               sizes="(max-width: 768px) 100vw, 45vw"
