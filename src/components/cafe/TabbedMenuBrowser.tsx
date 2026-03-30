@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useId, useMemo, useState } from "react";
 import {
   filterUnavailableMenuItems,
+  formatMenuItemDisplayName,
   safeMenuImageHref,
   type MenuCategory,
   type SiteMenuContent,
@@ -56,7 +57,7 @@ function PricedCategoryPanel({
               <div className="flex flex-row items-baseline justify-between gap-4 border-b border-white/10 pb-4">
                 <div className="min-w-0 flex-1 pr-2">
                   <h3 className="font-[family-name:var(--font-serif)] text-base font-semibold leading-snug sm:text-lg">
-                    {item.name}
+                    {formatMenuItemDisplayName(item.name)}
                   </h3>
                   {item.description ? (
                     <p className="mt-1.5 text-sm leading-relaxed text-brand-address/75 sm:text-[0.9375rem]">
@@ -86,7 +87,7 @@ function PricedCategoryPanel({
             <div className="flex flex-row items-baseline justify-between gap-3 rounded-lg border border-brand-maroon/10 bg-brand-cream/80 px-3 py-3 sm:px-4">
               <div className="min-w-0 flex-1 pr-2">
                 <h3 className="font-[family-name:var(--font-serif)] text-base font-semibold leading-snug text-brand-maroon sm:text-lg">
-                  {item.name}
+                  {formatMenuItemDisplayName(item.name)}
                 </h3>
                 {item.description ? (
                   <p className="mt-1.5 text-sm leading-relaxed text-brand-maroon/78 sm:text-[0.9375rem]">
@@ -142,7 +143,7 @@ function DrinksCategoryPanel({
                         scope="row"
                         className="py-3 pr-4 font-[family-name:var(--font-serif)] font-semibold leading-snug"
                       >
-                        {row.name}
+                        {formatMenuItemDisplayName(row.name)}
                       </th>
                       <td className="py-3 pr-3 text-right tabular-nums text-brand-address/90">{row.hot ?? "—"}</td>
                       <td className="py-3 text-right tabular-nums text-brand-address/90">{row.iced ?? "—"}</td>
@@ -186,7 +187,7 @@ function DrinksCategoryPanel({
                       scope="row"
                       className="py-3 pr-4 font-[family-name:var(--font-serif)] font-semibold leading-snug"
                     >
-                      {row.name}
+                      {formatMenuItemDisplayName(row.name)}
                     </th>
                     <td className="py-3 pr-3 text-right tabular-nums text-brand-maroon/90">{row.hot ?? "—"}</td>
                     <td className="py-3 text-right tabular-nums text-brand-maroon/90">{row.iced ?? "—"}</td>

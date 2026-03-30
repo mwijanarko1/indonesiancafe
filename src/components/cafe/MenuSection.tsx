@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, UtensilsCrossed } from "lucide-react";
 import { useMemo } from "react";
-import { type PricedMenuItem, type SiteMenuContent } from "@/lib/cafe-menu";
+import {
+  formatMenuItemDisplayName,
+  type PricedMenuItem,
+  type SiteMenuContent,
+} from "@/lib/cafe-menu";
 import { useSiteMenu } from "./useSiteMenu";
 
 type HighlightSpec = {
@@ -104,7 +108,7 @@ export function MenuSection() {
               {featured ? (
                 <>
                   <h3 className="font-[family-name:var(--font-serif)] text-xl font-semibold text-brand-maroon sm:text-2xl">
-                    {featured.name}
+                    {formatMenuItemDisplayName(featured.name)}
                   </h3>
                   {featured.description ? (
                     <p className="mt-2 text-sm leading-relaxed text-stone-600">{featured.description}</p>
@@ -116,7 +120,7 @@ export function MenuSection() {
                     <Link
                       href="/menu"
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-maroon/20 text-brand-maroon transition hover:border-brand-maroon hover:bg-brand-menu-surface"
-                      aria-label={`Order ${featured.name} — open menu`}
+                      aria-label={`Order ${formatMenuItemDisplayName(featured.name)} — open menu`}
                     >
                       <ShoppingBag className="h-4 w-4" aria-hidden />
                     </Link>
@@ -146,7 +150,7 @@ export function MenuSection() {
                 {item ? (
                   <>
                     <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon">
-                      {item.name}
+                      {formatMenuItemDisplayName(item.name)}
                     </h3>
                     {item.description ? (
                       <p className="mt-1 line-clamp-3 text-sm leading-relaxed text-stone-600">
@@ -160,7 +164,7 @@ export function MenuSection() {
                       <Link
                         href="/menu"
                         className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-maroon/20 text-brand-maroon transition hover:border-brand-maroon hover:bg-brand-menu-surface"
-                        aria-label={`View ${item.name} on menu`}
+                        aria-label={`View ${formatMenuItemDisplayName(item.name)} on menu`}
                       >
                         <ShoppingBag className="h-3.5 w-3.5" aria-hidden />
                       </Link>

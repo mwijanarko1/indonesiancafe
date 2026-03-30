@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import {
   filterUnavailableMenuItems,
+  formatMenuItemDisplayName,
   safeMenuImageHref,
   type DrinkMenuGroup,
   type MenuCategory,
@@ -66,7 +67,7 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
             {photoA ? (
               <Image
                 src={photoA}
-                alt={a.name}
+                alt={formatMenuItemDisplayName(a.name)}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 66vw"
@@ -87,7 +88,9 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
               ))}
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
-              <h3 className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-white sm:text-3xl">{a.name}</h3>
+              <h3 className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-white sm:text-3xl">
+                {formatMenuItemDisplayName(a.name)}
+              </h3>
               {a.description ? (
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">{a.description}</p>
               ) : null}
@@ -101,7 +104,9 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
         {b ? (
           <article className="flex flex-col overflow-hidden rounded-2xl border border-brand-maroon/10 bg-[#f5ebe0] shadow-sm lg:col-span-4">
             <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon sm:text-xl">{b.name}</h3>
+              <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon sm:text-xl">
+                {formatMenuItemDisplayName(b.name)}
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-stone-600">{b.description}</p>
               <p className="mt-auto pt-4 font-[family-name:var(--font-serif)] text-lg font-semibold tabular-nums text-brand-maroon">
                 {b.price}
@@ -140,7 +145,7 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
                 ))}
               </div>
               <h3 className="mt-2 font-[family-name:var(--font-serif)] text-base font-semibold text-brand-maroon sm:text-lg">
-                {item.name}
+                {formatMenuItemDisplayName(item.name)}
               </h3>
               {item.description ? <p className="mt-1.5 flex-1 text-sm leading-relaxed text-stone-600">{item.description}</p> : null}
               <p className="mt-3 font-[family-name:var(--font-serif)] font-semibold tabular-nums text-brand-maroon">{item.price}</p>
@@ -157,7 +162,9 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
               className="rounded-xl border border-brand-maroon/8 bg-white/70 px-4 py-3 shadow-sm"
             >
               <div className="flex items-start justify-between gap-3">
-                <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">{item.name}</p>
+                <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+                  {formatMenuItemDisplayName(item.name)}
+                </p>
                 <span className="shrink-0 font-[family-name:var(--font-serif)] text-sm font-semibold tabular-nums text-brand-maroon">
                   {item.price}
                 </span>
@@ -184,7 +191,9 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
             className="rounded-xl border border-brand-maroon/10 bg-[#f5ebe0]/90 px-4 py-3"
           >
             <div className="flex items-baseline justify-between gap-2">
-              <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">{item.name}</span>
+              <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+                {formatMenuItemDisplayName(item.name)}
+              </span>
               <span className="shrink-0 text-sm font-semibold tabular-nums text-brand-maroon">{item.price}</span>
             </div>
             {item.description ? <p className="mt-1 text-xs text-stone-600">{item.description}</p> : null}
@@ -221,7 +230,9 @@ function SidesRow({ items }: { items: PricedMenuItem[] }) {
                 </div>
               ) : null}
               <div className="min-w-0 flex-1 py-0.5">
-                <h3 className="font-[family-name:var(--font-serif)] text-base font-semibold text-brand-maroon">{item.name}</h3>
+                <h3 className="font-[family-name:var(--font-serif)] text-base font-semibold text-brand-maroon">
+                  {formatMenuItemDisplayName(item.name)}
+                </h3>
                 {item.description ? (
                   <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-stone-600">{item.description}</p>
                 ) : null}
@@ -247,7 +258,9 @@ function DessertsColumn({ items }: { items: PricedMenuItem[] }) {
         {items.map((item) => (
           <li key={item.name} className="flex gap-4 border-b border-brand-maroon/10 pb-5 last:border-0">
             <div className="min-w-0 flex-1">
-              <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">{item.name}</p>
+              <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+                {formatMenuItemDisplayName(item.name)}
+              </p>
               {item.description ? <p className="mt-1 text-sm text-stone-600">{item.description}</p> : null}
             </div>
             <p className="shrink-0 font-[family-name:var(--font-serif)] font-semibold tabular-nums text-brand-maroon">{item.price}</p>
@@ -280,7 +293,9 @@ function DrinksPanel({ groups }: { groups: DrinkMenuGroup[] }) {
             <ul className="mt-4 space-y-3">
               {g.items.map((row) => (
                 <li key={row.name} className="flex items-baseline justify-between gap-4 text-sm sm:text-base">
-                  <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">{row.name}</span>
+                  <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+                    {formatMenuItemDisplayName(row.name)}
+                  </span>
                   <span className="shrink-0 text-right text-sm font-medium tabular-nums text-brand-maroon/90">
                     {formatDrinkPrice(row.hot, row.iced)}
                   </span>

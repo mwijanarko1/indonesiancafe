@@ -17,23 +17,23 @@ export const defaultSiteMenuRow = {
       variant: "priced" as const,
       items: [
         {
-          name: "Butter kaya toast",
+          name: "Butter Kaya Toast",
           price: "£3.50",
           description:
             "Toast with spread of srikaya and block of butter in the middle",
         },
         {
-          name: "Poached / fried eggs on toast",
+          name: "Poached / Fried Eggs on Toast",
           price: "£5.50",
           description: "Poached or fried egg on toast with beans",
         },
         {
-          name: "Indomie goreng",
+          name: "Indomie Goreng",
           price: "£5.00",
           description: "Warung style fried noodles with eggs and salad",
         },
         {
-          name: "Indomie rebus",
+          name: "Indomie Rebus",
           price: "£5.00",
           description: "Warung style curry noodles with eggs",
         },
@@ -44,13 +44,13 @@ export const defaultSiteMenuRow = {
             "Beef sausage, hash browns (+50p for egg / beans / mushroom)",
         },
         {
-          name: "Cereal + milk",
+          name: "Cereal + Milk",
           price: "£2.50",
           description:
             "A portion size cereal of your choosing with a bowl of milk — please ask the staff for options",
         },
         {
-          name: "Full breakfast",
+          name: "Full Breakfast",
           price: "£10.50",
           description:
             "A full breakfast with beef sausage, chopped potato, mushroom, hash brown, beans, egg, tomato",
@@ -59,123 +59,123 @@ export const defaultSiteMenuRow = {
     },
     {
       id: "mains",
-      label: "Main menu",
+      label: "Main Menu",
       variant: "priced" as const,
       items: [
         {
-          name: "Rendang beef + rice",
+          name: "Rendang Beef + Rice",
           price: "£12.80",
           description:
             "A rich slow cooked beef in coconut milk with special family recipe spices until tender",
         },
         {
-          name: "Beef black pepper + rice",
+          name: "Beef Black Pepper + Rice",
           price: "£12.00",
           description:
             "Sliced beef stir fried with black pepper sauce, soy sauce, carrot, red & green pepper and onions",
         },
         {
-          name: "Chicken curry + rice",
+          name: "Chicken Curry + Rice",
           price: "£11.80",
           description:
             "A traditional Indonesian chicken curry, a specialty of West Sumatra — perfect meal to start the day. Not spicy unless requested",
         },
         {
-          name: "Chicken sweet sauce + rice",
+          name: "Chicken Sweet Sauce + Rice",
           price: "£11.50",
           description:
             "Fried chicken coated in a sauce of ketchup, vinegar, honey, soy sauce and pineapple for a tangy flavour",
         },
         {
-          name: "Chicken katsu curry + rice",
+          name: "Chicken Katsu Curry + Rice",
           price: "£12.00",
           description:
             "Fried chicken cutlet coated in panko breadcrumbs, served with curry sauce over rice",
         },
         {
-          name: "Ayam geprek + rice",
+          name: "Ayam Geprek + Rice",
           price: "£13.50",
           description:
             "Crispy fried chicken smashed / geprek and mixed with fiery spicy sambal",
         },
         {
-          name: "Ayam sambal merah + rice",
+          name: "Ayam Sambal Merah + Rice",
           price: "£13.50",
           description:
             "Chicken simmered in a rich, sweet tomato-based sauce — often served for special occasions",
         },
         {
-          name: "Chicken stroganoff + rice",
+          name: "Chicken Stroganoff + Rice",
           price: "£12.50",
           description:
             "Chicken breast with soured cream, mushrooms and fresh herbs",
         },
         {
-          name: "Seafood / beef fried rice",
+          name: "Seafood / Beef Fried Rice",
           price: "£13.00",
           description:
             "Fried rice with mixed seafood and vegetables, served with prawn crackers",
         },
         {
-          name: "Chicken fried rice",
+          name: "Chicken Fried Rice",
           price: "£12.00",
           description:
             "Fried rice with chicken and vegetables, served with prawn crackers",
         },
         {
-          name: "Seafood / beef fried noodles",
+          name: "Seafood / Beef Fried Noodles",
           price: "£12.70",
           description:
             "Fried noodles with mixed seafood and vegetables — vermicelli rice noodles or egg noodles",
         },
         {
-          name: "Fish & chips",
+          name: "Fish & Chips",
           price: "£12.00",
           description:
             "Haddock in homemade batter for a crispy meal, with tartar sauce",
         },
         {
-          name: "Scampi & chips",
+          name: "Scampi & Chips",
           price: "£11.50",
           description: "Deep fried scampi with tartar sauce",
         },
         {
-          name: "Bakso daging",
+          name: "Bakso Daging",
           price: "£10.80",
           description:
             "Indonesian style meatballs with noodles and a hearty vegetable broth",
         },
         {
-          name: "Bakso ikan",
+          name: "Bakso Ikan",
           price: "£10.50",
           description: "Fish balls with noodles and a hearty vegetable broth",
         },
         {
-          name: "Mie ayam",
+          name: "Mie Ayam",
           price: "£10.50",
           description:
             "Egg noodles with diced chicken, salty soy sauce and chicken broth",
         },
         {
-          name: "Mie ayam bakso",
+          name: "Mie Ayam Bakso",
           price: "£13.50",
           description:
             "Diced chicken and beef meatballs with egg noodles and chicken broth — great to warm you up",
         },
         {
-          name: "Capcai chicken + rice",
+          name: "Capcai Chicken + Rice",
           price: "£12.50",
           description:
             "Indonesian style stir fry with broccoli, cauliflower, bok choy, carrots and onions — cooked fresh every time",
         },
         {
-          name: "Capcai veggie + rice",
+          name: "Capcai Veggie + Rice",
           price: "£10.50",
           description:
             "Indonesian style stir fry with broccoli, cauliflower, bok choy, carrots and onions — cooked fresh every time",
         },
         {
-          name: "Chicken fried noodles",
+          name: "Chicken Fried Noodles",
           price: "£12.00",
           description:
             "Fried noodles with chicken and vegetables — vermicelli rice noodles or egg noodles",
@@ -188,7 +188,7 @@ export const defaultSiteMenuRow = {
       variant: "priced" as const,
       items: [
         {
-          name: "Nasi Padang komplit",
+          name: "Nasi Padang Komplit",
           price: "£15.80",
           description:
             "Rendang beef + chicken curry + egg / omelette + vegetable + spicy sambal / chilli sauce",
@@ -207,16 +207,16 @@ export const defaultSiteMenuRow = {
     },
     {
       id: "packed-lunch",
-      label: "Packed lunch",
+      label: "Packed Lunch",
       subtitle:
         "Sandwich fillings of choice: tuna mayo, egg mayo, cheese — ask staff when ordering",
       variant: "priced" as const,
       items: [
         { name: "Sandwich", price: "£3.50" },
-        { name: "Sandwich + chip", price: "£6.00" },
-        { name: "Sandwich + coffee or tea", price: "£5.50" },
+        { name: "Sandwich + Chip", price: "£6.00" },
+        { name: "Sandwich + Coffee or Tea", price: "£5.50" },
         {
-          name: "Sandwich + coffee or tea + chocolate bar / crisp",
+          name: "Sandwich + Coffee or Tea + Chocolate Bar / Crisp",
           price: "£6.00",
         },
       ],
@@ -227,24 +227,24 @@ export const defaultSiteMenuRow = {
       variant: "priced" as const,
       items: [
         {
-          name: "Kue cubit",
+          name: "Kue Cubit",
           price: "£5.50",
           description: "Small pinch-size snack cakes with chocolate sprinkles",
         },
         {
-          name: "Pisang goreng keju",
+          name: "Pisang Goreng Keju",
           price: "£6.50",
           description:
             "Banana fritters topped with grated cheese and condensed milk",
         },
         {
-          name: "Pisang bakar santan",
+          name: "Pisang Bakar Santan",
           price: "£8.00",
           description:
             "Grilled bananas with sweet coconut milk sauce and gobri / crackers",
         },
         {
-          name: "Bolen / pisang pastry",
+          name: "Bolen / Pisang Pastry",
           price: "£4.50",
           description: "Slice of banana with chocolate and cheese inside pastry",
         },
@@ -252,40 +252,40 @@ export const defaultSiteMenuRow = {
     },
     {
       id: "sides",
-      label: "Side dish menu",
+      label: "Side Dish Menu",
       variant: "priced" as const,
       items: [
         {
-          name: "Mini spring roll",
+          name: "Mini Spring Roll",
           price: "£6.00",
           description:
             "Chicken, carrots, vermicelli and cabbage, mixed with vegetables, deep-fried",
         },
         {
-          name: "Chicken spring roll",
+          name: "Chicken Spring Roll",
           price: "£6.00",
           description:
             "Seasoned minced chicken, cabbage, carrots and vermicelli, fried until crispy",
         },
         {
-          name: "Prawn toast",
+          name: "Prawn Toast",
           price: "£5.50",
           description:
             "Bread topped with seasoned minced prawn paste and sesame, fried until golden",
         },
         {
-          name: "King butterfly prawn",
+          name: "King Butterfly Prawn",
           price: "£6.00",
           description: "Deep fried prawns with chilli or sweet sauce",
         },
         {
-          name: "Gado-gado",
+          name: "Gado-Gado",
           price: "£5.00",
           description:
             "Indonesian style vegetable fritters with cabbage, carrots, spring onion and seasoned flour batter",
         },
         {
-          name: "Tahu isi",
+          name: "Tahu Isi",
           price: "£5.00",
           description:
             "Fried tofu stuffed with seasoned vegetables — vermicelli, cabbage, carrots and bean sprouts",
@@ -297,13 +297,13 @@ export const defaultSiteMenuRow = {
             "Sundanese speciality: fried tofu, fish dumpling, boiled potatoes with homemade peanut sauce (contains nuts)",
         },
         {
-          name: "Tempeh mendoan",
+          name: "Tempeh Mendoan",
           price: "£5.00",
           description:
             "Thin tempeh in seasoned batter, fried lightly — soft inside, crunchy outside",
         },
         {
-          name: "Chicken satay",
+          name: "Chicken Satay",
           price: "£5.50",
           description:
             "Skewered chicken with homemade peanut sauce (contains nuts)",
@@ -314,7 +314,7 @@ export const defaultSiteMenuRow = {
           description: "Chips with salt, vinegar and Henderson's",
         },
         {
-          name: "Kerak telor Batam",
+          name: "Kerak Telor Batam",
           price: "£6.00",
           description:
             "Indonesian style egg takoyaki from Bintan Island, with starch and vegetable",
@@ -326,13 +326,13 @@ export const defaultSiteMenuRow = {
             "Fried tapioca dough from West Java with spring onion — chewy inside, crispy outside",
         },
         {
-          name: "Epok-epok lumpia",
+          name: "Epok-Epok Lumpia",
           price: "£5.50",
           description:
             "Traditional Melayu snack like samosa, with potato and carrot",
         },
         {
-          name: "Gado-gado / Indonesian salad",
+          name: "Gado-Gado / Indonesian Salad",
           price: "£10.50",
           description:
             "Boiled egg, potatoes, tempeh, tofu, carrots, fine beans, cucumber, lettuce, cabbage with homemade peanut sauce (contains nuts). Vegan? Ask staff to omit the egg.",
@@ -351,21 +351,21 @@ export const defaultSiteMenuRow = {
             { name: "Americano", hot: "£2.50", iced: "£2.70" },
             { name: "Cappuccino", hot: "£2.50", iced: "£2.70" },
             { name: "Latte", hot: "£2.50", iced: "£2.70" },
-            { name: "Spanish latte", hot: "£3.00", iced: "£3.20" },
-            { name: "Salted caramel", hot: "£3.00", iced: "£3.20" },
+            { name: "Spanish Latte", hot: "£3.00", iced: "£3.20" },
+            { name: "Salted Caramel", hot: "£3.00", iced: "£3.20" },
           ],
         },
         {
-          title: "Non-coffee",
+          title: "Non-Coffee",
           items: [
             { name: "Tea", hot: "£2.00", iced: "£2.50" },
-            { name: "Speciality tea", hot: "£2.50", iced: null },
-            { name: "Hot chocolate", hot: "£2.50", iced: "£3.00" },
-            { name: "Teh tarik", hot: "£3.80", iced: "£4.00" },
+            { name: "Speciality Tea", hot: "£2.50", iced: null },
+            { name: "Hot Chocolate", hot: "£2.50", iced: "£3.00" },
+            { name: "Teh Tarik", hot: "£3.80", iced: "£4.00" },
             { name: "Matcha", hot: "£3.50", iced: "£3.80" },
             { name: "Milo", hot: "£3.80", iced: "£4.00" },
-            { name: "Still & sparkling water", hot: null, iced: "£1.50" },
-            { name: "J20 (any flavour)", hot: null, iced: "£2.00" },
+            { name: "Still & Sparkling Water", hot: null, iced: "£1.50" },
+            { name: "J20 (Any Flavour)", hot: null, iced: "£2.00" },
             { name: "Soda", hot: null, iced: "£2.00" },
           ],
         },
