@@ -24,6 +24,10 @@ export const SITE = {
   addressRegion: "South Yorkshire",
   addressCountry: "GB",
   mapsUrl: "https://maps.app.goo.gl/p6cuBbE77hqYN3j68",
+  /** Embed URL for homepage (no Maps API key; matches Share → Embed query style). */
+  mapsEmbedSrc: `https://www.google.com/maps?q=${encodeURIComponent(
+    "Indonesian Cafe, 15 Crookes, Sheffield S10 1UA, United Kingdom",
+  )}&hl=en&z=17&output=embed`,
 } as const;
 
 /** Weekly hours shown on the site (matches Google listing; holidays may differ). */

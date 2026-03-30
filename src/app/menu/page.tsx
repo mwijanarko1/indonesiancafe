@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
-import { MenuPageHeader } from "@/components/cafe/MenuPageHeader";
+import { SiteHeader } from "@/components/cafe/SiteHeader";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
 import { getCanonicalSiteUrl } from "@/lib/site";
 
@@ -46,8 +46,8 @@ export default async function MenuPage() {
         // eslint-disable-next-line react/no-danger -- JSON-LD for menu page
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <MenuPageHeader />
-      <main id="main-content" className="min-h-[50vh] bg-brand-cream pb-12">
+      <SiteHeader />
+      <main id="main-content" className="min-h-[50vh] bg-[#fcf4e8]">
         <MenuPageBody />
       </main>
       <SiteFooter />

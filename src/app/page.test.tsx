@@ -3,6 +3,10 @@ import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
 import Home from "./page";
 import { vi } from "vitest";
 
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+}));
+
 vi.mock("@/components/cafe/useSiteMenu", () => ({
   useSiteMenu: () => ({
     menu: DEFAULT_SITE_MENU,
@@ -31,7 +35,7 @@ describe("Home (Indonesian Cafe)", () => {
 
   it("renders menu and visit sections", () => {
     render(<Home />);
-    expect(screen.getByRole("heading", { name: /Indo-Asian classics/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Indonesian favourites/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Home in Crookes/i })).toBeInTheDocument();
   });
 

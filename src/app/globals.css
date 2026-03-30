@@ -15,6 +15,9 @@
   --brand-charcoal: #1c1917;
   --brand-address-text: #f5edd5;
   --brand-shadow: #3a0509;
+  /** Menu page (warm peach + footer band) — align home chrome with /menu */
+  --brand-menu-page: #fcf4e8;
+  --brand-menu-surface: #f5ebe0;
 }
 
 /* Indonesian Cafe — bright crimson + batik-style overlay */
@@ -60,6 +63,8 @@
   --color-brand-charcoal: #1c1917;
   --color-brand-address: #f5edd5;
   --color-brand-shadow: #3a0509;
+  --color-brand-menu-page: #fcf4e8;
+  --color-brand-menu-surface: #f5ebe0;
   --typography-font-size: 1rem;
   --typography-line-height: 1.75;
   --typography-font-weight: 400;

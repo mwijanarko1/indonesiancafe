@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
-import { MenuPageHeader } from "@/components/cafe/MenuPageHeader";
+import { SiteHeader } from "@/components/cafe/SiteHeader";
 import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
 import { useSiteMenu } from "@/components/cafe/useSiteMenu";
 import { metadata } from "./page";
@@ -15,7 +15,7 @@ const mockedUseSiteMenu = vi.mocked(useSiteMenu);
 function MenuPageTestShell() {
   return (
     <>
-      <MenuPageHeader />
+      <SiteHeader />
       <main id="main-content">
         <MenuPageBody />
       </main>
@@ -37,28 +37,28 @@ describe("/menu page", () => {
     expect(String(metadata.description ?? "")).toMatch(/Sheffield/i);
   });
 
-  it("renders the page heading and at least one category tab", () => {
+  it("renders the page heading and category jump controls", () => {
     render(<MenuPageTestShell />);
-    expect(screen.getByRole("heading", { name: /our menu/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /^Breakfast$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^The menu$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Main courses$/i })).toBeInTheDocument();
   });
 
   it("shows fallback food and drinks scan links", () => {
     render(<MenuPageTestShell />);
-    expect(screen.getByRole("link", { name: /food menu \(image\)/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /food menu \(PDF \/ image\)/i })).toHaveAttribute(
       "href",
       "/indo-cafe-menu.jpg",
     );
-    expect(screen.getByRole("link", { name: /drinks menu \(image\)/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /drinks menu \(PDF \/ image\)/i })).toHaveAttribute(
       "href",
       "/indo-cafe-drinks-menu.jpg",
     );
   });
 
-  it("renders back to home and directions", () => {
+  it("renders home link in header and primary nav", () => {
     render(<MenuPageTestShell />);
-    expect(screen.getByRole("link", { name: /home/i })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: /^Directions$/i })).toHaveAttribute("href", expect.stringContaining("http"));
+    const homeLinks = screen.getAllByRole("link", { name: /^Home$/i });
+    expect(homeLinks.some((el) => el.getAttribute("href") === "/")).toBe(true);
   });
 
   it("does not list items marked unavailable", () => {
@@ -80,6 +80,6 @@ describe("/menu page", () => {
 
     mockedUseSiteMenu.mockReturnValue({ menu, contentLoading: false });
     render(<MenuPageTestShell />);
-    expect(screen.queryByRole("heading", { name: hiddenName })).not.toBeInTheDocument();
+    expect(screen.queryByText(hiddenName)).not.toBeInTheDocument();
   });
 });

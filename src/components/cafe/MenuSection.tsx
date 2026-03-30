@@ -18,25 +18,25 @@ const HIGHLIGHTS: HighlightSpec[] = [
   {
     id: "rendang",
     match: (n) => n.toLowerCase() === "rendang beef + rice",
-    image: "/photos/641250097_17850189750639557_6725361524569605642_n.jpg",
+    image: "/photos/rendang.jpg",
     imageAlt: "Rendang beef with rice at Indonesian Cafe",
   },
   {
     id: "geprek",
     match: (n) => n.toLowerCase().includes("ayam geprek"),
-    image: "/photos/641226693_17850190233639557_4210214828822079588_n.jpg",
+    image: "/photos/ayam-geprek.jpg",
     imageAlt: "Ayam geprek at Indonesian Cafe",
   },
   {
     id: "mie",
     match: (n) => n.toLowerCase().includes("mie ayam bakso"),
-    image: "/photos/640295809_17850190128639557_3571693074223811109_n.jpg",
+    image: "/photos/mie-ayam.jpg",
     imageAlt: "Mie ayam bakso at Indonesian Cafe",
   },
   {
     id: "gado",
     match: (n) => n.toLowerCase().includes("gado-gado / indonesian salad"),
-    image: "/photos/640333146_17849685921639557_200861914345081368_n.jpg",
+    image: "/photos/gado-gado.jpg",
     imageAlt: "Gado-gado Indonesian salad at Indonesian Cafe",
   },
 ];
@@ -65,7 +65,7 @@ export function MenuSection() {
   return (
     <section
       id="menu"
-      className="scroll-mt-24 bg-brand-tertiary px-4 py-16 sm:py-20"
+      className="scroll-mt-24 bg-brand-menu-page px-4 py-16 sm:py-20"
       aria-labelledby="menu-heading"
       aria-busy={contentLoading ? true : undefined}
     >
@@ -73,22 +73,21 @@ export function MenuSection() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <h2
             id="menu-heading"
-            className="font-[family-name:var(--font-serif)] text-3xl font-semibold text-brand-charcoal sm:text-4xl"
+            className="font-[family-name:var(--font-serif)] text-3xl font-semibold text-brand-maroon sm:text-4xl"
           >
-            Indo-Asian classics
+            Indonesian favourites
           </h2>
           <Link
             href="/menu"
-            className="text-sm font-semibold uppercase tracking-[0.1em] text-brand-crimson underline-offset-4 transition hover:underline"
+            className="text-sm font-semibold uppercase tracking-[0.1em] text-brand-maroon underline-offset-4 transition hover:underline"
           >
             View full menu
           </Link>
         </div>
-        <p className="mt-3 max-w-2xl text-sm text-stone-600 sm:text-base">{menu.disclaimer}</p>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {/* Featured — spans 2 cols on large */}
-          <article className="group relative overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-stone-200/80 sm:col-span-2 lg:min-h-[280px] lg:grid lg:grid-cols-2">
+          <article className="group relative overflow-hidden rounded-xl border border-brand-maroon/10 bg-white/80 shadow-md shadow-brand-maroon/5 backdrop-blur-[2px] sm:col-span-2 lg:min-h-[280px] lg:grid lg:grid-cols-2">
             <div className="relative aspect-[4/3] min-h-[200px] lg:aspect-auto lg:min-h-full">
               <Image
                 src={HIGHLIGHTS[0]!.image}
@@ -97,26 +96,26 @@ export function MenuSection() {
                 className="object-cover transition duration-500 group-hover:scale-[1.02]"
                 sizes="(max-width: 1024px) 100vw, 66vw"
               />
-              <span className="absolute left-3 top-3 rounded-sm bg-brand-crimson px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.14em] text-white">
+              <span className="absolute left-3 top-3 rounded-sm bg-brand-maroon px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.14em] text-white">
                 Chef&apos;s special
               </span>
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-8">
               {featured ? (
                 <>
-                  <h3 className="font-[family-name:var(--font-serif)] text-xl font-semibold text-brand-charcoal sm:text-2xl">
+                  <h3 className="font-[family-name:var(--font-serif)] text-xl font-semibold text-brand-maroon sm:text-2xl">
                     {featured.name}
                   </h3>
                   {featured.description ? (
                     <p className="mt-2 text-sm leading-relaxed text-stone-600">{featured.description}</p>
                   ) : null}
                   <div className="mt-4 flex flex-wrap items-center gap-4">
-                    <span className="font-[family-name:var(--font-serif)] text-xl font-semibold tabular-nums text-brand-crimson">
+                    <span className="font-[family-name:var(--font-serif)] text-xl font-semibold tabular-nums text-brand-maroon">
                       {featured.price}
                     </span>
                     <Link
                       href="/menu"
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-brand-charcoal transition hover:border-brand-crimson hover:text-brand-crimson"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-maroon/20 text-brand-maroon transition hover:border-brand-maroon hover:bg-brand-menu-surface"
                       aria-label={`Order ${featured.name} — open menu`}
                     >
                       <ShoppingBag className="h-4 w-4" aria-hidden />
@@ -132,7 +131,7 @@ export function MenuSection() {
           {cards.map(({ spec, item }) => (
             <article
               key={spec.id}
-              className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-stone-200/80"
+              className="group flex flex-col overflow-hidden rounded-xl border border-brand-maroon/10 bg-white/80 shadow-md shadow-brand-maroon/5 backdrop-blur-[2px]"
             >
               <div className="relative aspect-square">
                 <Image
@@ -146,7 +145,7 @@ export function MenuSection() {
               <div className="flex flex-1 flex-col p-5">
                 {item ? (
                   <>
-                    <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-charcoal">
+                    <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon">
                       {item.name}
                     </h3>
                     {item.description ? (
@@ -155,12 +154,12 @@ export function MenuSection() {
                       </p>
                     ) : null}
                     <div className="mt-auto flex items-center justify-between pt-4">
-                      <span className="font-[family-name:var(--font-serif)] text-lg font-semibold tabular-nums text-brand-crimson">
+                      <span className="font-[family-name:var(--font-serif)] text-lg font-semibold tabular-nums text-brand-maroon">
                         {item.price}
                       </span>
                       <Link
                         href="/menu"
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-stone-300 text-brand-charcoal transition hover:border-brand-crimson"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-maroon/20 text-brand-maroon transition hover:border-brand-maroon hover:bg-brand-menu-surface"
                         aria-label={`View ${item.name} on menu`}
                       >
                         <ShoppingBag className="h-3.5 w-3.5" aria-hidden />
@@ -176,7 +175,7 @@ export function MenuSection() {
 
           <Link
             href="/menu"
-            className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-lg bg-brand-crimson p-8 text-center text-white shadow-md transition hover:bg-brand-oxblood focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-charcoal sm:min-h-0"
+            className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-xl border border-brand-maroon/15 bg-brand-maroon p-8 text-center text-white shadow-md transition hover:bg-brand-oxblood focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-maroon sm:min-h-0"
           >
             <UtensilsCrossed className="h-10 w-10 opacity-95" aria-hidden />
             <span className="font-[family-name:var(--font-serif)] text-lg font-semibold uppercase tracking-[0.12em]">

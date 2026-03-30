@@ -61,9 +61,10 @@ function FeaturedGuestReviewsCardsView({
 }: {
   featured: GuestReview[];
   loading?: boolean;
-  variant?: "cream" | "dark";
+  variant?: "cream" | "dark" | "maroon";
 }) {
   const isDark = variant === "dark";
+  const isMaroon = variant === "maroon";
   return (
     <ul
       className="mt-12 grid gap-8 sm:grid-cols-3"
@@ -73,19 +74,27 @@ function FeaturedGuestReviewsCardsView({
         <li
           key={r.author}
           className={`border-t-2 pt-6 text-center sm:text-left ${
-            isDark ? "border-white/20" : "border-brand-crimson/25"
+            isMaroon
+              ? "border-brand-address/30"
+              : isDark
+                ? "border-white/20"
+                : "border-brand-crimson/25"
           }`}
         >
           <p
             className={`font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] ${
-              isDark ? "text-brand-gold" : "text-brand-crimson"
+              isMaroon
+                ? "text-brand-address"
+                : isDark
+                  ? "text-brand-gold"
+                  : "text-brand-crimson"
             }`}
           >
             {r.author}
           </p>
           <blockquote
             className={`mt-3 text-sm leading-relaxed sm:text-base ${
-              isDark ? "text-white/88" : "text-brand-maroon/88"
+              isMaroon ? "text-brand-address/92" : isDark ? "text-white/88" : "text-brand-maroon/88"
             }`}
           >
             <p className="text-pretty whitespace-pre-line">
@@ -98,7 +107,7 @@ function FeaturedGuestReviewsCardsView({
   );
 }
 
-function FeaturedGuestReviewsCardsConvex({ variant }: { variant?: "cream" | "dark" }) {
+function FeaturedGuestReviewsCardsConvex({ variant }: { variant?: "cream" | "dark" | "maroon" }) {
   const remote = useQuery(api.reviews.get, {});
   const loading = remote === undefined;
   const featured =
@@ -114,7 +123,7 @@ function FeaturedGuestReviewsCardsConvex({ variant }: { variant?: "cream" | "dar
 export function FeaturedGuestReviewsCards({
   variant = "cream",
 }: {
-  variant?: "cream" | "dark";
+  variant?: "cream" | "dark" | "maroon";
 }) {
   if (!process.env.NEXT_PUBLIC_CONVEX_URL?.trim()) {
     return (

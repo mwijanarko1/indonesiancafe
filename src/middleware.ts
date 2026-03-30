@@ -59,6 +59,7 @@ export function middleware(request: NextRequest) {
     "object-src 'none'",
     "base-uri 'none'",
     "frame-ancestors 'none'",
+    "frame-src 'self' https://www.google.com https://www.google.co.uk https://maps.google.com",
   ].join("; ");
 
   response.headers.set("Content-Security-Policy", csp);
