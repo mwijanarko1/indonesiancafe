@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cinzel, Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { RestaurantJsonLd } from "@/components/seo/RestaurantJsonLd";
 import { getCanonicalSiteUrl } from "@/lib/site";
 import "./globals.css";
@@ -97,14 +98,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} min-h-screen antialiased bg-brand-cream`}
       >
-        <RestaurantJsonLd />
-        <a
-          href="#main-content"
-          className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
-        >
-          Skip to main content
-        </a>
-        {children}
+        <ConvexClientProvider>
+          <RestaurantJsonLd />
+          <a
+            href="#main-content"
+            className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
+          >
+            Skip to main content
+          </a>
+          {children}
+        </ConvexClientProvider>
       </body>
     </html>
   );

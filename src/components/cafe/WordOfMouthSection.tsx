@@ -1,17 +1,5 @@
-const quotes = [
-  {
-    source: "Regulars in Crookes",
-    line: "Consistent, comforting plates — the kind of place you bring friends when they ask where to eat in S10.",
-  },
-  {
-    source: "Sheffield food lovers",
-    line: "Bold sambals and charcoal notes on the satay — Indonesian home cooking without the fuss.",
-  },
-  {
-    source: "Students & neighbours",
-    line: "Easy stop for mie goreng, nasi goreng, and a proper cup of coffee between lectures and errands.",
-  },
-] as const;
+import Link from "next/link";
+import { FeaturedGuestReviewsCards } from "@/components/cafe/GuestReviewsList";
 
 export function WordOfMouthSection() {
   return (
@@ -27,23 +15,17 @@ export function WordOfMouthSection() {
           Word of mouth
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-center text-sm text-brand-maroon/80">
-          We are a neighbourhood restaurant — here is how guests describe the experience.
+          Real words from guests — thank you for eating with us in Crookes.
         </p>
-        <ul className="mt-12 grid gap-8 sm:grid-cols-3">
-          {quotes.map((q) => (
-            <li
-              key={q.source}
-              className="border-t-2 border-brand-crimson/25 pt-6 text-center sm:text-left"
-            >
-              <p className="font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-brand-crimson">
-                {q.source}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-brand-maroon/88 sm:text-base">
-                “{q.line}”
-              </p>
-            </li>
-          ))}
-        </ul>
+        <FeaturedGuestReviewsCards />
+        <div className="mt-12 flex justify-center">
+          <Link
+            href="/reviews"
+            className="rounded-full border-2 border-brand-crimson bg-transparent px-8 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-brand-crimson transition hover:bg-brand-crimson/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-crimson"
+          >
+            See more reviews
+          </Link>
+        </div>
       </div>
     </section>
   );
