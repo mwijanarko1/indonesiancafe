@@ -42,6 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 # template-specific
-/docs
+docs/
 !/docs/CODEBASE_MAP.md
-/for-agent
+for-agent/

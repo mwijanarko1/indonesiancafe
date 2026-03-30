@@ -1,7 +1,55 @@
 @import "tailwindcss";
 
+/* Brand tokens — typography + palette (see brand guidelines) */
+:root {
+  --font-address: Georgia, "Times New Roman", Times, serif;
+  --brand-crimson: #c0272d;
+  --brand-maroon: #5a0a14;
+  --brand-gold: #d4af6a;
+  --brand-cream-arc: #f2e8c8;
+  --brand-address-text: #f5edd5;
+  --brand-shadow: #3a0509;
+}
+
+/* Indonesian Cafe — bright crimson + batik-style overlay */
+.batik-bg {
+  background-color: var(--brand-crimson);
+  background-image:
+    linear-gradient(
+      180deg,
+      rgb(58 5 9 / 0.45) 0%,
+      rgb(90 10 20 / 0.12) 50%,
+      rgb(58 5 9 / 0.38) 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='%23ffffff' fill-opacity='0.055'%3E%3Cpath d='M48 8c6 10 14 18 24 22-10 4-18 12-24 22-6-10-14-18-24-22 10-4 18-12 24-22z'/%3E%3Ccircle cx='48' cy='48' r='10'/%3E%3Cpath d='M8 48c10-6 18-14 22-24 4 10 12 18 22 24-10 6-18 14-22 24-4-10-12-18-22-24z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, 96px 96px;
+}
+
+/* Deeper texture + soft “painted wall” noise — same palette as brand guidelines */
+.batik-bg-heavy {
+  background-color: var(--brand-crimson);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 10% 20%, rgb(212 175 106 / 0.08) 0%, transparent 45%),
+    radial-gradient(ellipse 90% 70% at 90% 75%, rgb(90 10 20 / 0.35) 0%, transparent 50%),
+    linear-gradient(
+      165deg,
+      rgb(58 5 9 / 0.5) 0%,
+      rgb(90 10 20 / 0.15) 42%,
+      rgb(58 5 9 / 0.42) 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='%23ffffff' fill-opacity='0.045'%3E%3Cpath d='M48 8c6 10 14 18 24 22-10 4-18 12-24 22-6-10-14-18-24-22 10-4 18-12 24-22z'/%3E%3Ccircle cx='48' cy='48' r='10'/%3E%3Cpath d='M8 48c10-6 18-14 22-24 4 10 12 18 22 24-10 6-18 14-22 24-4-10-12-18-22-24z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, auto, auto, 120px 120px, 96px 96px;
+}
+
 /* Tailwind CSS v4 customizations */
 @theme {
+  --color-brand-crimson: #c0272d;
+  --color-brand-maroon: #5a0a14;
+  --color-brand-gold: #d4af6a;
+  --color-brand-cream: #f2e8c8;
+  --color-brand-address: #f5edd5;
+  --color-brand-shadow: #3a0509;
   --typography-font-size: 1rem;
   --typography-line-height: 1.75;
   --typography-font-weight: 400;
@@ -102,23 +150,23 @@
   }
 }
 
-/* Custom scrollbar styles */
+/* Scrollbar — match brand so the track is not a bright “white bar” beside coloured sections */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgb(58 5 9 / 0.35);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c5c5c5;
+  background: rgb(212 175 106 / 0.55);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: rgb(212 175 106 / 0.75);
 }
 
 /* Code block styles */
@@ -139,19 +187,25 @@ code {
 
 /* Focus styles */
 *:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid var(--brand-gold);
   outline-offset: 2px;
 }
 
 /* Base styles */
 html {
-  color-scheme: light dark;
+  color-scheme: light;
+  scroll-behavior: smooth;
+  /* Avoid horizontal scroll + cream “stripe” when any child is slightly wider than the viewport */
+  overflow-x: clip;
+  scrollbar-color: rgb(212 175 106 / 0.65) rgb(58 5 9 / 0.4);
+  scrollbar-width: thin;
 }
 
 body {
-  font-family: 'Geist', sans-serif;
-  color: #1f2937;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  color: var(--brand-maroon);
   line-height: 1.5;
+  overflow-x: clip;
 }
 
 /* Prose styles for content */
