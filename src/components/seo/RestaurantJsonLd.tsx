@@ -11,7 +11,8 @@ export function RestaurantJsonLd({ nonce }: { nonce: string }) {
   return (
     <script
       type="application/ld+json"
-      nonce={nonce}
+      nonce={nonce || undefined}
+      suppressHydrationWarning
       // eslint-disable-next-line react/no-danger -- JSON-LD must be embedded for search engines
       dangerouslySetInnerHTML={{ __html: json }}
     />

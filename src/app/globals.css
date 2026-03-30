@@ -3,10 +3,16 @@
 /* Brand tokens — typography + palette (see brand guidelines) */
 :root {
   --font-address: Georgia, "Times New Roman", Times, serif;
-  --brand-crimson: #c0272d;
+  --brand-crimson: #b91c1c;
+  --brand-oxblood: #8f1d1d;
   --brand-maroon: #5a0a14;
-  --brand-gold: #d4af6a;
+  --brand-gold: #b8954a;
+  --brand-gold-muted: #c4a35a;
   --brand-cream-arc: #f2e8c8;
+  --brand-cream-page: #f7f4ec;
+  /** Tertiary surface — warmer cream (labels / alternate sections) */
+  --brand-tertiary: #f2e8c8;
+  --brand-charcoal: #1c1917;
   --brand-address-text: #f5edd5;
   --brand-shadow: #3a0509;
 }
@@ -44,10 +50,14 @@
 
 /* Tailwind CSS v4 customizations */
 @theme {
-  --color-brand-crimson: #c0272d;
+  --color-brand-crimson: #b91c1c;
+  --color-brand-oxblood: #8f1d1d;
   --color-brand-maroon: #5a0a14;
-  --color-brand-gold: #d4af6a;
+  --color-brand-gold: #b8954a;
   --color-brand-cream: #f2e8c8;
+  --color-brand-cream-page: #f7f4ec;
+  --color-brand-tertiary: #f2e8c8;
+  --color-brand-charcoal: #1c1917;
   --color-brand-address: #f5edd5;
   --color-brand-shadow: #3a0509;
   --typography-font-size: 1rem;

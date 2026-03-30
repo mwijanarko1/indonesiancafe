@@ -57,10 +57,13 @@ export function GuestReviewsList() {
 function FeaturedGuestReviewsCardsView({
   featured,
   loading,
+  variant = "cream",
 }: {
   featured: GuestReview[];
   loading?: boolean;
+  variant?: "cream" | "dark";
 }) {
+  const isDark = variant === "dark";
   return (
     <ul
       className="mt-12 grid gap-8 sm:grid-cols-3"
@@ -69,12 +72,22 @@ function FeaturedGuestReviewsCardsView({
       {featured.map((r) => (
         <li
           key={r.author}
-          className="border-t-2 border-brand-crimson/25 pt-6 text-center sm:text-left"
+          className={`border-t-2 pt-6 text-center sm:text-left ${
+            isDark ? "border-white/20" : "border-brand-crimson/25"
+          }`}
         >
-          <p className="font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-brand-crimson">
+          <p
+            className={`font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] ${
+              isDark ? "text-brand-gold" : "text-brand-crimson"
+            }`}
+          >
             {r.author}
           </p>
-          <blockquote className="mt-3 text-sm leading-relaxed text-brand-maroon/88 sm:text-base">
+          <blockquote
+            className={`mt-3 text-sm leading-relaxed sm:text-base ${
+              isDark ? "text-white/88" : "text-brand-maroon/88"
+            }`}
+          >
             <p className="text-pretty whitespace-pre-line">
               “{r.homeExcerpt ?? r.quote}”
             </p>
@@ -85,7 +98,7 @@ function FeaturedGuestReviewsCardsView({
   );
 }
 
-function FeaturedGuestReviewsCardsConvex() {
+function FeaturedGuestReviewsCardsConvex({ variant }: { variant?: "cream" | "dark" }) {
   const remote = useQuery(api.reviews.get, {});
   const loading = remote === undefined;
   const featured =
@@ -93,14 +106,21 @@ function FeaturedGuestReviewsCardsConvex() {
       ? getFeaturedGuestReviewsFrom(remote.reviews, remote.featuredAuthorOrder)
       : getFeaturedGuestReviews();
 
-  return <FeaturedGuestReviewsCardsView featured={featured} loading={loading} />;
+  return (
+    <FeaturedGuestReviewsCardsView featured={featured} loading={loading} variant={variant} />
+  );
 }
 
-export function FeaturedGuestReviewsCards() {
+export function FeaturedGuestReviewsCards({
+  variant = "cream",
+}: {
+  variant?: "cream" | "dark";
+}) {
   if (!process.env.NEXT_PUBLIC_CONVEX_URL?.trim()) {
     return (
-      <FeaturedGuestReviewsCardsView featured={getFeaturedGuestReviews()} />
+      <FeaturedGuestReviewsCardsView featured={getFeaturedGuestReviews()} variant={variant} />
     );
   }
-  return <FeaturedGuestReviewsCardsConvex />;
+  return <FeaturedGuestReviewsCardsConvex variant={variant} />;
 }
+

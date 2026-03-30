@@ -2,14 +2,14 @@ import Link from "next/link";
 import { SITE } from "@/lib/site";
 
 const titleClass =
-  "truncate font-[family-name:var(--font-cinzel)] text-base font-extrabold uppercase leading-none tracking-[0.12em] text-white drop-shadow-[0_2px_6px_rgb(0_0_0_/_0.35)] sm:text-lg sm:tracking-[0.14em]";
+  "truncate font-[family-name:var(--font-serif)] text-base font-bold uppercase tracking-[0.06em] text-brand-charcoal sm:text-lg";
 
 const linkClass =
-  "inline-flex min-h-11 min-w-[44px] items-center justify-center rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-address transition motion-safe:duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:text-[0.7rem]";
+  "inline-flex min-h-11 min-w-[44px] items-center justify-center rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-stone-600 transition motion-safe:duration-200 hover:bg-stone-100 hover:text-brand-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-crimson sm:text-[0.7rem]";
 
 export function MenuPageHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/15 bg-brand-crimson/98 backdrop-blur-md batik-bg">
+    <header className="sticky top-0 z-50 border-b border-stone-200/80 bg-brand-cream-page/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-4">
         <Link href="/" className={linkClass}>
           ← Home

@@ -23,17 +23,16 @@ vi.mock("next/image", () => ({
 }));
 
 describe("Home (Indonesian Cafe)", () => {
-  it("renders the restaurant name as the main heading", () => {
+  it("renders the hero heading", () => {
     render(<Home />);
     const h1 = screen.getByRole("heading", { level: 1 });
-    expect(h1).toHaveTextContent(/Indonesian/i);
-    expect(h1).toHaveTextContent(/CAFE/i);
+    expect(h1).toHaveTextContent(/Authentic Indonesian Taste/i);
   });
 
   it("renders menu and visit sections", () => {
     render(<Home />);
-    expect(screen.getByRole("heading", { name: /Indonesian Cafe menu/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Visit us/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Indo-Asian classics/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Home in Crookes/i })).toBeInTheDocument();
   });
 
   it("primary nav Menu link targets /menu", () => {
@@ -47,12 +46,12 @@ describe("Home (Indonesian Cafe)", () => {
 
   it("homepage menu section links to full menu page", () => {
     render(<Home />);
-    expect(screen.getByRole("link", { name: /open full menu page/i })).toHaveAttribute("href", "/menu");
+    expect(screen.getByRole("link", { name: /view full menu/i })).toHaveAttribute("href", "/menu");
   });
 
   it("shows the Sheffield address", () => {
     render(<Home />);
-    expect(screen.getByText("15, Crookes")).toBeInTheDocument();
+    expect(screen.getAllByText(/15 Crookes/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/S10 1UA/i).length).toBeGreaterThan(0);
   });
 });

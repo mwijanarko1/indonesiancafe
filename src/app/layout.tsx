@@ -31,7 +31,7 @@ const playfair = Playfair_Display({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#c0272d",
+  themeColor: "#b91c1c",
 };
 
 export const metadata: Metadata = {
@@ -99,10 +99,11 @@ export default async function RootLayout({
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} min-h-screen antialiased bg-brand-cream`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} min-h-screen antialiased bg-brand-cream-page`}
       >
+        {/* Outside ConvexClientProvider so JSON-LD is not under a client boundary (avoids nonce hydration mismatches in dev). */}
+        <RestaurantJsonLd nonce={nonce} />
         <ConvexClientProvider>
-          <RestaurantJsonLd nonce={nonce} />
           <a
             href="#main-content"
             className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"

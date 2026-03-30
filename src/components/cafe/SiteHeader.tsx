@@ -1,65 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingBag, X } from "lucide-react";
 import { useEffect, useId, useState } from "react";
-import type { IconType } from "react-icons";
-import { FaFacebook, FaInstagram } from "react-icons/fa6";
 
 const nav = [
-  { href: "#about", label: "About" },
+  { href: "/", label: "Home" },
   { href: "/menu", label: "Menu" },
+  { href: "#visit", label: "Contact" },
 ] as const;
 
-type SocialLink = {
-  href: string;
-  label: string;
-  shortLabel: string;
-  Icon: IconType;
-};
-
-const socialLinks: SocialLink[] = [
-  {
-    href: "https://www.instagram.com/indonesiancafe_/",
-    label: "Indonesian Cafe on Instagram",
-    shortLabel: "Instagram",
-    Icon: FaInstagram,
-  },
-  {
-    href: "https://www.facebook.com/profile.php?id=61583156852755",
-    label: "Indonesian Cafe on Facebook",
-    shortLabel: "Facebook",
-    Icon: FaFacebook,
-  },
-];
-
-const socialButtonClass =
-  "inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-gold/70 text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:h-10 sm:w-10";
+const logoClass =
+  "font-[family-name:var(--font-serif)] text-lg font-bold uppercase tracking-[0.06em] text-brand-charcoal sm:text-xl";
 
 const navLinkClass =
-  "rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-address/95 transition-colors hover:bg-white/10 hover:text-brand-address focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:text-[0.7rem]";
+  "rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-stone-600 transition-colors hover:text-brand-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-crimson sm:text-[0.7rem]";
 
-const titleClass =
-  "max-w-full font-[family-name:var(--font-cinzel)] text-xl font-extrabold uppercase leading-none tracking-[0.14em] text-white drop-shadow-[0_2px_8px_rgb(0_0_0_/_0.35)] sm:text-2xl sm:tracking-[0.16em] md:text-3xl md:tracking-[0.18em]";
-
-function SocialNav({ className = "" }: { className?: string }) {
-  return (
-    <nav aria-label="Social media" className={`flex min-w-0 items-center gap-2 ${className}`}>
-      {socialLinks.map(({ href, label, Icon }) => (
-        <a
-          key={href}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={label}
-          className={socialButtonClass}
-        >
-          <Icon className="h-4 w-4 shrink-0" aria-hidden />
-        </a>
-      ))}
-    </nav>
-  );
-}
+const orderButtonClass =
+  "inline-flex items-center justify-center rounded-sm bg-brand-crimson px-4 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-sm transition hover:bg-brand-oxblood focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-charcoal sm:px-5 sm:text-[0.7rem]";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -85,17 +43,15 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-white/15 bg-brand-crimson/98 backdrop-blur-md">
-        {/* Mobile: title | menu (social links live in the flyout only) */}
-        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3.5 md:hidden">
-          <div className="flex min-w-0 justify-center px-1 text-center">
-            <p className={titleClass} lang="en">
-              Indonesian Cafe
-            </p>
-          </div>
+      <header className="sticky top-0 z-50 border-b border-stone-200/80 bg-brand-cream-page/95 backdrop-blur-md">
+        {/* Mobile */}
+        <div className="flex w-full items-center justify-between gap-3 px-4 py-3.5 sm:px-6 lg:px-8 md:hidden">
+          <Link href="/" className={`min-w-0 shrink ${logoClass}`} lang="en">
+            Indonesian Cafe
+          </Link>
           <button
             type="button"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/20 text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-stone-300 text-brand-charcoal transition hover:bg-stone-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-crimson"
             aria-expanded={menuOpen}
             aria-controls={menuId}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -106,39 +62,47 @@ export function SiteHeader() {
         </div>
 
         {/* Desktop */}
-        <div className="mx-auto hidden max-w-6xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 px-4 py-4 md:grid">
-          <nav aria-label="Primary" className="flex min-w-0 flex-wrap justify-start gap-1">
+        <div className="hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-6 px-4 py-4 sm:px-6 lg:px-8 md:grid">
+          <Link href="/" className={`justify-self-start ${logoClass}`} lang="en">
+            Indonesian Cafe
+          </Link>
+          <nav aria-label="Primary" className="flex flex-wrap items-center justify-center gap-1">
             {nav.map((item) => (
               <Link key={item.href} href={item.href} className={navLinkClass}>
                 {item.label}
               </Link>
             ))}
           </nav>
-          <div className="flex min-w-0 items-center justify-center px-2 text-center">
-            <p className={titleClass} lang="en">
-              Indonesian Cafe
-            </p>
+          <div className="flex items-center justify-end gap-3">
+            <Link
+              href="/menu"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-brand-charcoal transition hover:bg-stone-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-crimson"
+              aria-label="View menu and order"
+            >
+              <ShoppingBag className="h-[1.15rem] w-[1.15rem]" aria-hidden />
+            </Link>
+            <Link href="/menu" className={orderButtonClass}>
+              Order now
+            </Link>
           </div>
-          <SocialNav className="justify-end" />
         </div>
       </header>
 
-      {/* Full-screen mobile menu (above header) */}
       {menuOpen ? (
         <div
           id={menuId}
           role="dialog"
           aria-modal="true"
           aria-labelledby="mobile-menu-title"
-          className="batik-bg fixed inset-0 z-[100] flex min-h-0 flex-col overflow-y-auto md:hidden"
+          className="fixed inset-0 z-[100] flex min-h-0 flex-col overflow-y-auto bg-brand-cream-page md:hidden"
         >
-          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/15 px-4 py-4">
-            <p id="mobile-menu-title" className={`min-w-0 ${titleClass}`} lang="en">
+          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-stone-200 px-4 py-4">
+            <p id="mobile-menu-title" className={`min-w-0 ${logoClass}`} lang="en">
               Indonesian Cafe
             </p>
             <button
               type="button"
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/20 text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-stone-300 text-brand-charcoal transition hover:bg-stone-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-crimson"
               aria-label="Close menu"
               onClick={() => setMenuOpen(false)}
             >
@@ -152,7 +116,7 @@ export function SiteHeader() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="block rounded-lg px-4 py-4 text-center font-[family-name:var(--font-serif)] text-2xl font-semibold uppercase tracking-[0.12em] text-brand-address transition-colors hover:bg-white/10"
+                    className="block rounded-lg px-4 py-4 text-center font-[family-name:var(--font-serif)] text-xl font-semibold tracking-wide text-brand-charcoal transition-colors hover:bg-stone-200/60"
                     onClick={() => setMenuOpen(false)}
                   >
                     {item.label}
@@ -160,26 +124,22 @@ export function SiteHeader() {
                 </li>
               ))}
             </ul>
-            <div className="mt-10 border-t border-white/15 pt-8">
-              <p className="px-4 pb-3 text-center font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-brand-gold/90">
-                Follow us
-              </p>
-              <ul className="flex flex-col gap-2">
-                {socialLinks.map(({ href, shortLabel, label, Icon }) => (
-                  <li key={href}>
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-3 rounded-lg px-4 py-4 text-base font-semibold uppercase tracking-[0.12em] text-brand-address transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <Icon className="h-6 w-6 shrink-0 text-white" aria-hidden />
-                      {shortLabel}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <div className="mt-8 flex flex-col gap-3 border-t border-stone-200 pt-8">
+              <Link
+                href="/menu"
+                className={`${orderButtonClass} w-full text-center`}
+                onClick={() => setMenuOpen(false)}
+              >
+                Order now
+              </Link>
+              <Link
+                href="/menu"
+                className="flex items-center justify-center gap-2 rounded-lg border border-stone-300 py-3 text-sm font-semibold text-brand-charcoal transition hover:bg-stone-100"
+                onClick={() => setMenuOpen(false)}
+              >
+                <ShoppingBag className="h-5 w-5" aria-hidden />
+                View menu
+              </Link>
             </div>
           </nav>
         </div>

@@ -4,44 +4,62 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="scroll-mt-20 overflow-x-clip batik-bg-heavy px-4 py-16 sm:py-24"
+      className="scroll-mt-24 overflow-x-clip bg-brand-cream-page px-4 py-16 sm:py-24"
       aria-labelledby="about-heading"
     >
-      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2 md:items-center md:gap-14">
+      <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:items-center md:gap-16">
+        <div className="relative mx-auto w-full max-w-md md:max-w-none">
+          <div className="relative aspect-[3/4] max-h-[min(32rem,70vh)] overflow-hidden rounded-sm shadow-[0_24px_60px_-12px_rgb(0_0_0_/_0.2)] ring-1 ring-stone-300/60">
+            <Image
+              src="/photos/638300464_17849684961639557_4845296330349199575_n.jpg"
+              alt="Cooking at Indonesian Cafe — mortar and spices"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 45vw"
+            />
+          </div>
+          <figure className="absolute -bottom-4 right-2 z-10 max-w-[14rem] bg-brand-crimson p-4 text-white shadow-lg sm:-right-2 sm:max-w-[16rem] sm:p-5">
+            <blockquote className="font-[family-name:var(--font-serif)] text-sm font-medium leading-snug sm:text-base">
+              &ldquo;We cook like we do at home — patient, generous, and true to the islands.&rdquo;
+            </blockquote>
+            <figcaption className="mt-2 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-white/80">
+              Indonesian Cafe
+            </figcaption>
+          </figure>
+        </div>
+
         <div>
-          <p className="font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-brand-gold/90">
-            Indonesian Cafe
+          <p className="font-[family-name:var(--font-serif)] text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-brand-gold">
+            Our mission
           </p>
           <h2
             id="about-heading"
-            className="mt-3 font-[family-name:var(--font-serif)] text-3xl font-semibold leading-tight text-brand-address sm:text-4xl md:text-[2.35rem]"
+            className="mt-3 font-[family-name:var(--font-serif)] text-3xl font-semibold leading-tight text-brand-charcoal sm:text-4xl"
           >
-            Unapologetically Indonesian — rooted in Crookes
+            A journey across the archipelago
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-brand-address/92 sm:text-lg">
-            We cook home-style food from the islands: rice and noodle dishes, satay from the grill,
-            sambals built slowly, and cafe favourites for everyday visits. Warm spice, honest
-            portions, and a welcome that feels like Sheffield meets Jakarta.
+          <p className="mt-5 text-base leading-relaxed text-stone-700 sm:text-lg">
+            From West Sumatra-style curries to street-style noodles and sambals built the slow way — we
+            bring Indonesian comfort food to Crookes with a fully halal kitchen and ingredients chosen for
+            honest flavour, not shortcuts.
           </p>
-          <p className="mt-4 text-sm leading-relaxed text-brand-address/78">
-            Uni Linda · 15 Crookes, Sheffield S10 1UA
+          <p className="mt-4 text-sm leading-relaxed text-stone-600">
+            15 Crookes, Sheffield S10 1UA — a short walk from the city centre and universities.
           </p>
-        </div>
-        <div className="relative mx-auto w-full max-w-md md:max-w-none">
-          <div
-            className="absolute -inset-3 rounded-sm border border-brand-gold/35 bg-brand-maroon/30 sm:-inset-4"
-            aria-hidden
-          />
-          <div className="relative overflow-hidden rounded-sm shadow-[0_24px_60px_-12px_rgb(0_0_0_/_0.45)] ring-1 ring-white/15">
-            <Image
-              src="/poster.png"
-              alt="Indonesian Cafe — poster with traditional roof motif and Sheffield address"
-              width={720}
-              height={960}
-              className="h-auto w-full object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
+          <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-stone-200 pt-8">
+            <div>
+              <dt className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-charcoal">
+                100% halal
+              </dt>
+              <dd className="mt-1 text-sm text-stone-600">Certified standards in our kitchen</dd>
+            </div>
+            <div>
+              <dt className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-charcoal">
+                Sheffield
+              </dt>
+              <dd className="mt-1 text-sm text-stone-600">Cooked fresh in Crookes</dd>
+            </div>
+          </dl>
         </div>
       </div>
     </section>
