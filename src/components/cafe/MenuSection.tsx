@@ -178,7 +178,7 @@ function MenuSectionView({
           role="tabpanel"
           id={`${tablistId}-${activeCategory.id}-panel`}
           aria-labelledby={`${tablistId}-${activeCategory.id}-tab`}
-          className={`mt-10 ${contentLoading ? "motion-safe:animate-pulse" : ""}`}
+          className="mt-10"
         >
           {activeCategory.variant === "priced" ? (
             <PricedCategoryPanel category={activeCategory} />
