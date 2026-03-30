@@ -1,6 +1,7 @@
 /**
  * Canonical public site URL for metadata, sitemap, and structured data.
- * Set NEXT_PUBLIC_APP_URL in production (e.g. https://indonesiancafe.co.uk).
+ * On Vercel, `VERCEL_URL` is used when unset. Set `NEXT_PUBLIC_APP_URL` for a
+ * stable canonical (e.g. https://indonesiancafe.vercel.app or a custom domain).
  */
 export function getCanonicalSiteUrl(requestOrigin?: string): string {
   const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");

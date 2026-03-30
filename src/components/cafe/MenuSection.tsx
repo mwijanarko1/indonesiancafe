@@ -125,25 +125,6 @@ function MenuSectionView({
           {menu.disclaimer}
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={menu.foodMenuImageUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border-2 border-brand-gold/80 bg-white/5 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:text-[0.7rem]"
-          >
-            Food menu (image)
-          </a>
-          <a
-            href={menu.drinksMenuImageUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border-2 border-brand-gold/80 bg-white/5 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:text-[0.7rem]"
-          >
-            Drinks menu (image)
-          </a>
-        </div>
-
         <div
           className="mt-10 flex flex-wrap items-center justify-center gap-2 border-b border-white/15 pb-6"
           role="tablist"
@@ -185,6 +166,25 @@ function MenuSectionView({
           ) : (
             <DrinksCategoryPanel category={activeCategory} />
           )}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={menu.foodMenuImageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border-2 border-brand-gold/80 bg-white/5 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:text-[0.7rem]"
+          >
+            Food menu (image)
+          </a>
+          <a
+            href={menu.drinksMenuImageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border-2 border-brand-gold/80 bg-white/5 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-brand-address transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:text-[0.7rem]"
+          >
+            Drinks menu (image)
+          </a>
         </div>
 
         <p className="mt-8 text-center text-xs text-brand-address/65">{menu.footerTagline}</p>

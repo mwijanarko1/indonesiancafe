@@ -18,7 +18,7 @@ function GuestReviewsListView({
 }) {
   return (
     <ul
-      className={`mt-14 flex list-none flex-col gap-12 p-0 ${loading ? "motion-safe:animate-pulse" : ""}`}
+      className="mt-14 flex list-none flex-col gap-12 p-0"
       aria-busy={loading ? true : undefined}
     >
       {reviews.map((r) => (
@@ -63,7 +63,7 @@ function FeaturedGuestReviewsCardsView({
 }) {
   return (
     <ul
-      className={`mt-12 grid gap-8 sm:grid-cols-3 ${loading ? "motion-safe:animate-pulse" : ""}`}
+      className="mt-12 grid gap-8 sm:grid-cols-3"
       aria-busy={loading ? true : undefined}
     >
       {featured.map((r) => (

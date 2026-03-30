@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Guest reviews",
   description:
     "What guests say about Indonesian Cafe in Crookes, Sheffield — authentic Indonesian food, nasi padang, rendang, and warm service.",
+  alternates: {
+    canonical: "/reviews",
+  },
 };
 
 export default function ReviewsPage() {
