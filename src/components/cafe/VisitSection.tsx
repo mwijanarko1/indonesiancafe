@@ -19,8 +19,9 @@ export function VisitSection() {
           Visit us
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-brand-address/88 sm:text-lg">
-          Walk-ins welcome when we are open — Crookes is a short hop from the city centre and
-          university. Tap below for directions.
+          Walk-ins welcome when we are open — Monday and Wednesday–Sunday (Tuesday closed). Most days
+          11 am–7 pm; Friday and Sunday until 7:30 pm. Crookes is a short hop from the city centre
+          and university. Tap below for directions.
         </p>
         <address className="mx-auto mt-6 text-lg font-normal not-italic leading-relaxed [font-family:var(--font-address)] text-brand-address">
           <span className="block">15, Crookes</span>

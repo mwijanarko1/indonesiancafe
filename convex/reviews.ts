@@ -1,10 +1,9 @@
 import type { GenericMutationCtx } from "convex/server";
 import { v } from "convex/values";
-import { internalMutation, mutation, query } from "./_generated/server";
+import { internalMutation, query } from "./_generated/server";
 import type { DataModel } from "./_generated/dataModel";
 import { defaultSiteReviewsRow } from "./defaultGuestReviews";
 import { guestReview } from "./schema";
-import { assertMenuAdminSecret } from "./siteAdmin";
 
 type MutationCtx = GenericMutationCtx<DataModel>;
 
@@ -50,17 +49,12 @@ const replacePayload = {
   featuredAuthorOrder: v.array(v.string()),
 } as const;
 
-/** Replace singleton content; requires `MENU_ADMIN_SECRET` in Convex env. */
-export const replace = mutation({
-  args: {
-    adminSecret: v.string(),
-    ...replacePayload,
-  },
+/** Called only from Convex HTTP admin routes (Bearer auth), not from clients. */
+export const replaceInternal = internalMutation({
+  args: replacePayload,
   returns: v.union(v.literal("created"), v.literal("updated")),
   handler: async (ctx, args) => {
-    assertMenuAdminSecret(args.adminSecret);
-    const { adminSecret: _s, ...rest } = args;
-    const doc = { key: "default" as const, ...rest };
+    const doc = { key: "default" as const, ...args };
     const existing = await ctx.db
       .query("siteReviews")
       .withIndex("by_key", (q) => q.eq("key", "default"))
@@ -74,19 +68,10 @@ export const replace = mutation({
   },
 });
 
-/** Called from `seed:seedAll` (and other Convex functions only). */
+/** Called from `internal.seed.seedAll` and HTTP admin only. */
 export const applyDefaultSeed = internalMutation({
   args: {},
   returns: v.union(v.literal("created"), v.literal("updated")),
   handler: async (ctx) => writeDefaultSiteReviews(ctx),
 });
 
-/** Insert or overwrite with built-in defaults; pass `adminSecret` for dashboard / scripts. */
-export const seed = mutation({
-  args: { adminSecret: v.string() },
-  returns: v.union(v.literal("created"), v.literal("updated")),
-  handler: async (ctx, args) => {
-    assertMenuAdminSecret(args.adminSecret);
-    return writeDefaultSiteReviews(ctx);
-  },
-});

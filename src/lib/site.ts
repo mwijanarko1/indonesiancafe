@@ -26,6 +26,20 @@ export const SITE = {
   mapsUrl: "https://maps.app.goo.gl/p6cuBbE77hqYN3j68",
 } as const;
 
+/** Weekly hours shown on the site (matches Google listing; holidays may differ). */
+export const OPENING_HOURS: readonly { day: string; time: string }[] = [
+  { day: "Monday", time: "11 am–7 pm" },
+  { day: "Tuesday", time: "Closed" },
+  { day: "Wednesday", time: "11 am–7 pm" },
+  { day: "Thursday", time: "11 am–7 pm" },
+  { day: "Friday", time: "11 am–7:30 pm" },
+  { day: "Saturday", time: "11 am–7 pm" },
+  { day: "Sunday", time: "11 am–7:30 pm" },
+] as const;
+
+export const OPENING_HOURS_FOOTNOTE =
+  "Bank holiday hours may differ — check Google Maps before you travel.";
+
 export function buildRestaurantJsonLd(siteUrl: string) {
   const base = siteUrl.replace(/\/$/, "");
   const restaurantId = `${base}/#restaurant`;
@@ -58,6 +72,20 @@ export function buildRestaurantJsonLd(siteUrl: string) {
           { "@type": "City", name: "Sheffield" },
           { "@type": "AdministrativeArea", name: "South Yorkshire" },
           { "@type": "Country", name: "United Kingdom" },
+        ],
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Wednesday", "Thursday", "Saturday"],
+            opens: "11:00",
+            closes: "19:00",
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Friday", "Sunday"],
+            opens: "11:00",
+            closes: "19:30",
+          },
         ],
       },
       {

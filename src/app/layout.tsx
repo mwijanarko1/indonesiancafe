@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Cinzel, Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { RestaurantJsonLd } from "@/components/seo/RestaurantJsonLd";
@@ -88,18 +89,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get("x-nonce") ?? "";
+
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} min-h-screen antialiased bg-brand-cream`}
       >
         <ConvexClientProvider>
-          <RestaurantJsonLd />
+          <RestaurantJsonLd nonce={nonce} />
           <a
             href="#main-content"
             className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"

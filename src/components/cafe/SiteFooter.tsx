@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SITE } from "@/lib/site";
+import { OPENING_HOURS, OPENING_HOURS_FOOTNOTE, SITE } from "@/lib/site";
 
 const MAPS_URL = "https://maps.app.goo.gl/p6cuBbE77hqYN3j68";
 const CREDIT_URL = "https://mikhailwijanarko.xyz";
@@ -42,8 +42,19 @@ export function SiteFooter() {
             <p className="font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-gold">
               Hours
             </p>
-            <p className="mt-2 text-sm text-brand-address/78">
-              See Google Maps for opening times before you travel.
+            <dl className="mt-3 space-y-1.5 text-sm [font-family:var(--font-address)]">
+              {OPENING_HOURS.map((row) => (
+                <div
+                  key={row.day}
+                  className="flex flex-wrap justify-center gap-x-2 gap-y-0.5 sm:justify-start"
+                >
+                  <dt className="min-w-[6.5rem] text-brand-address/90">{row.day}</dt>
+                  <dd className="text-brand-address/78">{row.time}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-xs leading-relaxed text-brand-address/60">
+              {OPENING_HOURS_FOOTNOTE}
             </p>
           </div>
         </div>

@@ -1,11 +1,14 @@
 import { v } from "convex/values";
-import { action } from "./_generated/server";
+import { internalAction } from "./_generated/server";
 import { internal } from "./_generated/api";
 
 const createdOrUpdated = v.union(v.literal("created"), v.literal("updated"));
 
-/** Default site menu only (`npx convex run seed:seedMenu` / `--prod`). */
-export const seedMenu = action({
+/**
+ * Default site menu only. Not callable from the public Convex API.
+ * CLI: `npx convex run internal.seed.seedMenu` (add `--prod` for production).
+ */
+export const seedMenu = internalAction({
   args: {},
   returns: createdOrUpdated,
   handler: async (ctx): Promise<"created" | "updated"> => {
@@ -13,8 +16,11 @@ export const seedMenu = action({
   },
 });
 
-/** Guest reviews only (`npx convex run seed:seedReviews` / `--prod`). */
-export const seedReviews = action({
+/**
+ * Guest reviews only.
+ * CLI: `npx convex run internal.seed.seedReviews` / `--prod`.
+ */
+export const seedReviews = internalAction({
   args: {},
   returns: createdOrUpdated,
   handler: async (ctx): Promise<"created" | "updated"> => {
@@ -22,8 +28,11 @@ export const seedReviews = action({
   },
 });
 
-/** Menu + reviews (`npx convex run seed:seedAll` / `--prod`). */
-export const seedAll = action({
+/**
+ * Menu + reviews.
+ * CLI: `npx convex run internal.seed.seedAll` / `--prod`.
+ */
+export const seedAll = internalAction({
   args: {},
   returns: v.object({
     menu: createdOrUpdated,

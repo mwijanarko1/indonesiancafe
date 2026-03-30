@@ -1,10 +1,13 @@
 import type { GenericMutationCtx, GenericQueryCtx } from "convex/server";
 import { type Infer, v } from "convex/values";
-import { internalMutation, mutation, query } from "./_generated/server";
+import { internalMutation, query } from "./_generated/server";
 import type { DataModel } from "./_generated/dataModel";
 import { defaultSiteMenuRow } from "./defaultSiteMenu";
 import { menuCategory, menuCategoryPublic } from "./schema";
-import { assertMenuAdminSecret } from "./siteAdmin";
+import {
+  assertHttpOrHttpsUrl,
+  safeHttpOrHttpsUrl,
+} from "./siteAdmin";
 
 type MutationCtx = GenericMutationCtx<DataModel>;
 type QueryCtx = GenericQueryCtx<DataModel>;
@@ -21,7 +24,7 @@ type PublicCategory =
       label: string;
       variant: "priced";
       subtitle?: string;
-      items: { name: string; price: string }[];
+      items: { name: string; price: string; description?: string }[];
     }
   | {
       id: string;
@@ -88,6 +91,9 @@ async function insertMenuFromNested(ctx: MutationCtx, body: MenuBody): Promise<v
           categoryId: tabId,
           name: item.name,
           price: item.price,
+          ...(item.description !== undefined && item.description !== ""
+            ? { description: item.description }
+            : {}),
           isAvailable: item.isAvailable !== false,
           sortOrder: i++,
         });
@@ -133,7 +139,13 @@ async function buildPublicCategories(ctx: DbCtx): Promise<PublicCategory[]> {
         .collect();
       const items = rows
         .filter((r) => r.isAvailable)
-        .map(({ name, price }) => ({ name, price }));
+        .map(({ name, price, description }) => ({
+          name,
+          price,
+          ...(description !== undefined && description !== ""
+            ? { description }
+            : {}),
+        }));
       if (items.length > 0) {
         out.push({
           id: tab.slug,
@@ -195,55 +207,53 @@ export const get = query({
     return {
       disclaimer: settings.disclaimer,
       footerTagline: settings.footerTagline,
-      foodMenuImageUrl: settings.foodMenuImageUrl,
-      drinksMenuImageUrl: settings.drinksMenuImageUrl,
+      foodMenuImageUrl: safeHttpOrHttpsUrl(settings.foodMenuImageUrl),
+      drinksMenuImageUrl: safeHttpOrHttpsUrl(settings.drinksMenuImageUrl),
       categories,
     };
   },
 });
 
-export const replace = mutation({
-  args: {
-    adminSecret: v.string(),
-    disclaimer: v.string(),
-    footerTagline: v.string(),
-    foodMenuImageUrl: v.string(),
-    drinksMenuImageUrl: v.string(),
-    categories: v.array(menuCategory),
-  },
+const replaceBody = {
+  disclaimer: v.string(),
+  footerTagline: v.string(),
+  foodMenuImageUrl: v.string(),
+  drinksMenuImageUrl: v.string(),
+  categories: v.array(menuCategory),
+} as const;
+
+/** Called only from Convex HTTP admin routes (Bearer auth), not from clients. */
+export const replaceInternal = internalMutation({
+  args: replaceBody,
   returns: v.null(),
   handler: async (ctx, args) => {
-    assertMenuAdminSecret(args.adminSecret);
-    const { adminSecret: _s, ...body } = args;
+    assertHttpOrHttpsUrl(args.foodMenuImageUrl);
+    assertHttpOrHttpsUrl(args.drinksMenuImageUrl);
     await clearMenu(ctx);
-    await insertMenuFromNested(ctx, body);
+    await insertMenuFromNested(ctx, args);
     return null;
   },
 });
 
-export const setPricedItemAvailable = mutation({
+export const setPricedItemAvailableInternal = internalMutation({
   args: {
-    adminSecret: v.string(),
     itemId: v.id("menuPricedItems"),
     isAvailable: v.boolean(),
   },
   returns: v.null(),
-  handler: async (ctx, { adminSecret, itemId, isAvailable }) => {
-    assertMenuAdminSecret(adminSecret);
+  handler: async (ctx, { itemId, isAvailable }) => {
     await ctx.db.patch(itemId, { isAvailable });
     return null;
   },
 });
 
-export const setDrinkItemAvailable = mutation({
+export const setDrinkItemAvailableInternal = internalMutation({
   args: {
-    adminSecret: v.string(),
     itemId: v.id("menuDrinkItems"),
     isAvailable: v.boolean(),
   },
   returns: v.null(),
-  handler: async (ctx, { adminSecret, itemId, isAvailable }) => {
-    assertMenuAdminSecret(adminSecret);
+  handler: async (ctx, { itemId, isAvailable }) => {
     await ctx.db.patch(itemId, { isAvailable });
     return null;
   },

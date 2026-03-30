@@ -9,8 +9,8 @@
     "lint": "next lint",
     "test": "vitest",
     "test:run": "vitest run",
-    "convex:seed": "npx convex run --push seed:seedAll",
-    "convex:seed:prod": "npx convex run seed:seedAll --prod",
+    "convex:seed": "npx convex run --push internal.seed.seedAll",
+    "convex:seed:prod": "npx convex run internal.seed.seedAll --prod",
     "seed:convex": "npm run convex:seed && npm run convex:seed:prod"
   },
   "dependencies": {

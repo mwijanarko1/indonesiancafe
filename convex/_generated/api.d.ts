@@ -10,6 +10,7 @@
 
 import type * as defaultGuestReviews from "../defaultGuestReviews.js";
 import type * as defaultSiteMenu from "../defaultSiteMenu.js";
+import type * as http from "../http.js";
 import type * as menu from "../menu.js";
 import type * as reviews from "../reviews.js";
 import type * as seed from "../seed.js";
@@ -24,6 +25,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   defaultGuestReviews: typeof defaultGuestReviews;
   defaultSiteMenu: typeof defaultSiteMenu;
+  http: typeof http;
   menu: typeof menu;
   reviews: typeof reviews;
   seed: typeof seed;

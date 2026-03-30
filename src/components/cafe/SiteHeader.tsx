@@ -8,7 +8,7 @@ import { FaFacebook, FaInstagram } from "react-icons/fa6";
 
 const nav = [
   { href: "#about", label: "About" },
-  { href: "#menu", label: "Menu" },
+  { href: "/menu", label: "Menu" },
 ] as const;
 
 type SocialLink = {

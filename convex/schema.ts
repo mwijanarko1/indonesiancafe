@@ -1,10 +1,11 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-/** Nested priced item (used by `menu.replace` payload and seed JSON). */
+/** Nested priced item (used by menu replace payload and seed JSON). */
 const pricedItem = v.object({
   name: v.string(),
   price: v.string(),
+  description: v.optional(v.string()),
   isAvailable: v.optional(v.boolean()),
 });
 
@@ -35,12 +36,13 @@ const drinksCategory = v.object({
   groups: v.array(drinkGroup),
 });
 
-/** Input shape for `menu.replace` and seed source. */
+/** Input shape for menu replace (HTTP admin) and seed source. */
 export const menuCategory = v.union(pricedCategory, drinksCategory);
 
 const pricedItemPublic = v.object({
   name: v.string(),
   price: v.string(),
+  description: v.optional(v.string()),
 });
 
 const pricedCategoryPublic = v.object({
@@ -102,6 +104,7 @@ export default defineSchema({
     categoryId: v.id("menuTabs"),
     name: v.string(),
     price: v.string(),
+    description: v.optional(v.string()),
     isAvailable: v.boolean(),
     sortOrder: v.number(),
   }).index("by_category_sort", ["categoryId", "sortOrder"]),
