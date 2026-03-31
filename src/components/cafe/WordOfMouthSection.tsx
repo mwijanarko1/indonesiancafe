@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { FeaturedGuestReviewsCards } from "@/components/cafe/GuestReviewsList";
+import { FeaturedGuestReviewsCardsView } from "@/components/cafe/GuestReviewsList";
+import { type GuestReview } from "@/lib/guest-reviews";
 
-export function WordOfMouthSection() {
+export function WordOfMouthSection({ featured }: { featured: readonly GuestReview[] }) {
   return (
     <section
       className="bg-brand-maroon px-4 py-16 text-brand-address sm:py-20"
@@ -17,7 +18,7 @@ export function WordOfMouthSection() {
         <p className="mx-auto mt-3 max-w-xl text-center text-sm text-brand-address/85">
           Real words from guests — thank you for eating with us in Crookes.
         </p>
-        <FeaturedGuestReviewsCards variant="maroon" />
+        <FeaturedGuestReviewsCardsView featured={featured} variant="maroon" />
         <div className="mt-12 flex justify-center">
           <Link
             href="/reviews"

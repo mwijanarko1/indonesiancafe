@@ -1,18 +1,43 @@
+import { getEnv } from "./env";
+
+const LOCAL_CANONICAL_SITE_URL = "http://localhost:3000";
+
+function normalizeSiteUrl(url: string): string {
+  return url.trim().replace(/\/$/, "");
+}
+
+/**
+ * Local-safe site URL helper for non-critical contexts. Production metadata should
+ * use `getRequiredCanonicalSiteUrl()` instead.
+ */
+export function getCanonicalSiteUrl(): string {
+  const { NEXT_PUBLIC_APP_URL } = getEnv();
+  return NEXT_PUBLIC_APP_URL
+    ? normalizeSiteUrl(NEXT_PUBLIC_APP_URL)
+    : LOCAL_CANONICAL_SITE_URL;
+}
+
 /**
  * Canonical public site URL for metadata, sitemap, and structured data.
- * On Vercel, `VERCEL_URL` is used when unset. Set `NEXT_PUBLIC_APP_URL` for a
- * stable canonical (e.g. https://indonesiancafe.vercel.app or a custom domain).
+ * Prefer `NEXT_PUBLIC_APP_URL`. On Vercel, `VERCEL_URL` is set during build.
+ * During `next build` without either, falls back to localhost so local builds succeed.
  */
-export function getCanonicalSiteUrl(requestOrigin?: string): string {
-  const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");
-  if (fromEnv) return fromEnv;
-
-  const vercel = process.env.VERCEL_URL?.trim();
-  if (vercel) return `https://${vercel.replace(/^https?:\/\//, "")}`;
-
-  if (requestOrigin) return requestOrigin.replace(/\/$/, "");
-
-  return "http://localhost:3000";
+export function getRequiredCanonicalSiteUrl(): string {
+  const { NODE_ENV, NEXT_PUBLIC_APP_URL } = getEnv();
+  if (NEXT_PUBLIC_APP_URL) {
+    return normalizeSiteUrl(NEXT_PUBLIC_APP_URL);
+  }
+  const vercelUrl = process.env.VERCEL_URL?.trim();
+  if (vercelUrl) {
+    return normalizeSiteUrl(`https://${vercelUrl}`);
+  }
+  if (NODE_ENV === "development" || NODE_ENV === "test") {
+    return LOCAL_CANONICAL_SITE_URL;
+  }
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return LOCAL_CANONICAL_SITE_URL;
+  }
+  throw new Error("NEXT_PUBLIC_APP_URL must be set for production metadata generation.");
 }
 
 export const SITE = {

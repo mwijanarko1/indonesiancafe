@@ -1,26 +1,12 @@
-"use client";
+import { type GuestReview } from "@/lib/guest-reviews";
 
-import { useQuery } from "convex/react";
-import { api } from "@convex/_generated/api";
-import {
-  getFeaturedGuestReviews,
-  getFeaturedGuestReviewsFrom,
-  GUEST_REVIEWS,
-  type GuestReview,
-} from "@/lib/guest-reviews";
-
-function GuestReviewsListView({
+export function GuestReviewsListView({
   reviews,
-  loading,
 }: {
   reviews: readonly GuestReview[];
-  loading?: boolean;
 }) {
   return (
-    <ul
-      className="mt-14 flex list-none flex-col gap-12 p-0"
-      aria-busy={loading ? true : undefined}
-    >
+    <ul className="mt-14 flex list-none flex-col gap-12 p-0">
       {reviews.map((r) => (
         <li
           key={r.author}
@@ -38,38 +24,17 @@ function GuestReviewsListView({
   );
 }
 
-function GuestReviewsListConvex() {
-  const remote = useQuery(api.reviews.get, {});
-  const reviews =
-    remote !== undefined && remote !== null ? remote.reviews : GUEST_REVIEWS;
-  const loading = remote === undefined;
-
-  return <GuestReviewsListView reviews={reviews} loading={loading} />;
-}
-
-export function GuestReviewsList() {
-  if (!process.env.NEXT_PUBLIC_CONVEX_URL?.trim()) {
-    return <GuestReviewsListView reviews={GUEST_REVIEWS} />;
-  }
-  return <GuestReviewsListConvex />;
-}
-
-function FeaturedGuestReviewsCardsView({
+export function FeaturedGuestReviewsCardsView({
   featured,
-  loading,
   variant = "cream",
 }: {
-  featured: GuestReview[];
-  loading?: boolean;
+  featured: readonly GuestReview[];
   variant?: "cream" | "dark" | "maroon";
 }) {
   const isDark = variant === "dark";
   const isMaroon = variant === "maroon";
   return (
-    <ul
-      className="mt-12 grid gap-8 sm:grid-cols-3"
-      aria-busy={loading ? true : undefined}
-    >
+    <ul className="mt-12 grid gap-8 sm:grid-cols-3">
       {featured.map((r) => (
         <li
           key={r.author}
@@ -106,30 +71,3 @@ function FeaturedGuestReviewsCardsView({
     </ul>
   );
 }
-
-function FeaturedGuestReviewsCardsConvex({ variant }: { variant?: "cream" | "dark" | "maroon" }) {
-  const remote = useQuery(api.reviews.get, {});
-  const loading = remote === undefined;
-  const featured =
-    remote !== undefined && remote !== null
-      ? getFeaturedGuestReviewsFrom(remote.reviews, remote.featuredAuthorOrder)
-      : getFeaturedGuestReviews();
-
-  return (
-    <FeaturedGuestReviewsCardsView featured={featured} loading={loading} variant={variant} />
-  );
-}
-
-export function FeaturedGuestReviewsCards({
-  variant = "cream",
-}: {
-  variant?: "cream" | "dark" | "maroon";
-}) {
-  if (!process.env.NEXT_PUBLIC_CONVEX_URL?.trim()) {
-    return (
-      <FeaturedGuestReviewsCardsView featured={getFeaturedGuestReviews()} variant={variant} />
-    );
-  }
-  return <FeaturedGuestReviewsCardsConvex variant={variant} />;
-}
-

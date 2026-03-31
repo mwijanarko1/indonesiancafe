@@ -1,15 +1,11 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, UtensilsCrossed } from "lucide-react";
-import { useMemo } from "react";
 import {
   formatMenuItemDisplayName,
   type PricedMenuItem,
   type SiteMenuContent,
 } from "@/lib/cafe-menu";
-import { useSiteMenu } from "./useSiteMenu";
 
 type HighlightSpec = {
   id: string;
@@ -54,24 +50,17 @@ function findPricedItem(menu: SiteMenuContent, spec: HighlightSpec): PricedMenuI
   return null;
 }
 
-export function MenuSection() {
-  const { menu, contentLoading } = useSiteMenu();
-
-  const { featured, cards } = useMemo(() => {
-    const featuredSpec = HIGHLIGHTS[0]!;
-    const cardSpecs = HIGHLIGHTS.slice(1);
-    return {
-      featured: findPricedItem(menu, featuredSpec),
-      cards: cardSpecs.map((spec) => ({ spec, item: findPricedItem(menu, spec) })),
-    };
-  }, [menu]);
+export function MenuSection({ menu }: { menu: SiteMenuContent }) {
+  const featuredSpec = HIGHLIGHTS[0]!;
+  const cardSpecs = HIGHLIGHTS.slice(1);
+  const featured = findPricedItem(menu, featuredSpec);
+  const cards = cardSpecs.map((spec) => ({ spec, item: findPricedItem(menu, spec) }));
 
   return (
     <section
       id="menu"
       className="scroll-mt-24 bg-brand-menu-page px-4 py-16 sm:py-20"
       aria-labelledby="menu-heading"
-      aria-busy={contentLoading ? true : undefined}
     >
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

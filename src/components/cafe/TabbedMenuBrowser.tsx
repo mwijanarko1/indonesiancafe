@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   filterUnavailableMenuItems,
   formatMenuItemDisplayName,
@@ -211,15 +211,11 @@ export function TabbedMenuBrowser({ menu, variant }: TabbedMenuBrowserProps) {
   const displayMenu = useMemo(() => filterUnavailableMenuItems(menu), [menu]);
   const [active, setActive] = useState(displayMenu.categories[0]?.id ?? "");
   const tablistId = useId();
-
-  useEffect(() => {
-    if (!displayMenu.categories.some((c) => c.id === active)) {
-      setActive(displayMenu.categories[0]?.id ?? "");
-    }
-  }, [displayMenu.categories, active]);
-
+  const activeTabId = displayMenu.categories.some((c) => c.id === active)
+    ? active
+    : displayMenu.categories[0]?.id ?? "";
   const activeCategory =
-    displayMenu.categories.find((c) => c.id === active) ?? displayMenu.categories[0];
+    displayMenu.categories.find((c) => c.id === activeTabId) ?? displayMenu.categories[0];
 
   if (!activeCategory) {
     return null;
@@ -259,7 +255,7 @@ export function TabbedMenuBrowser({ menu, variant }: TabbedMenuBrowserProps) {
         id={tablistId}
       >
         {displayMenu.categories.map((cat) => {
-          const selected = active === cat.id;
+          const selected = activeTabId === cat.id;
           return (
             <button
               key={cat.id}

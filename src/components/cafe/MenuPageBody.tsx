@@ -1,13 +1,9 @@
-"use client";
-
+import type { SiteMenuContent } from "@/lib/cafe-menu";
 import { MenuMagazineView } from "./MenuMagazineView";
-import { useSiteMenu } from "./useSiteMenu";
 
-export function MenuPageBody() {
-  const { menu, contentLoading } = useSiteMenu();
-
+export function MenuPageBody({ menu }: { menu: SiteMenuContent }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10" aria-busy={contentLoading ? true : undefined}>
+    <div className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
       <h1 className="text-center font-[family-name:var(--font-serif)] text-4xl font-bold uppercase tracking-[0.02em] text-brand-maroon sm:text-5xl">
         The menu
       </h1>

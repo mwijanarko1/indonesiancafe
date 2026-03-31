@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { Cinzel, Geist, Geist_Mono, Playfair_Display } from "next/font/google";
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { RestaurantJsonLd } from "@/components/seo/RestaurantJsonLd";
-import { getCanonicalSiteUrl } from "@/lib/site";
+import { getRequiredCanonicalSiteUrl } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,7 +34,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getCanonicalSiteUrl()),
+  metadataBase: new URL(getRequiredCanonicalSiteUrl()),
   title: {
     default: "Indonesian Restaurant Sheffield, UK | Indonesian Cafe · Crookes",
     template: "%s · Indonesian Cafe Sheffield",
@@ -101,17 +100,14 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} min-h-screen antialiased bg-brand-cream-page`}
       >
-        {/* Outside ConvexClientProvider so JSON-LD is not under a client boundary (avoids nonce hydration mismatches in dev). */}
         <RestaurantJsonLd nonce={nonce} />
-        <ConvexClientProvider>
-          <a
-            href="#main-content"
-            className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
-          >
-            Skip to main content
-          </a>
-          {children}
-        </ConvexClientProvider>
+        <a
+          href="#main-content"
+          className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
+        >
+          Skip to main content
+        </a>
+        {children}
       </body>
     </html>
   );

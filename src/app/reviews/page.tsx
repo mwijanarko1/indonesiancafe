@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GuestReviewsList } from "@/components/cafe/GuestReviewsList";
+import { GuestReviewsListView } from "@/components/cafe/GuestReviewsList";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
 import { SiteHeader } from "@/components/cafe/SiteHeader";
 import { SITE } from "@/lib/site";
+import { getSiteReviewsContent } from "@/lib/server/site-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Guest reviews",
@@ -14,7 +17,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
+  const { reviews } = await getSiteReviewsContent();
+
   return (
     <>
       <SiteHeader />
@@ -30,8 +35,7 @@ export default function ReviewsPage() {
             Thank you to everyone who has shared kind words. We are grateful to cook for Crookes and
             Sheffield.
           </p>
-
-          <GuestReviewsList />
+          <GuestReviewsListView reviews={reviews} />
 
           <div className="mt-16 rounded-lg border border-brand-crimson/20 bg-white/40 px-6 py-8 text-center">
             <p className="text-sm leading-relaxed text-brand-maroon/85">

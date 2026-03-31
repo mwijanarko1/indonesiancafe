@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { getCanonicalSiteUrl } from "@/lib/site";
+import { getRequiredCanonicalSiteUrl } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = getCanonicalSiteUrl();
+  const base = getRequiredCanonicalSiteUrl();
 
   return {
     rules: {

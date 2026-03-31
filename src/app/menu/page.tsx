@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
-import { SiteHeader } from "@/components/cafe/SiteHeader";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
-import { getCanonicalSiteUrl } from "@/lib/site";
+import { SiteHeader } from "@/components/cafe/SiteHeader";
+import { getRequiredCanonicalSiteUrl } from "@/lib/site";
+import { getSiteMenuContent } from "@/lib/server/site-content";
 
 const description =
   "Browse the current Indonesian Cafe menu in Sheffield — Crookes, S10. Tap categories for food, drinks, and prices; allergen notice included.";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Menu",
@@ -26,8 +29,9 @@ export const metadata: Metadata = {
 };
 
 export default async function MenuPage() {
-  const nonce = (await headers()).get("x-nonce") ?? "";
-  const siteUrl = getCanonicalSiteUrl();
+  const [{ menu }, requestHeaders] = await Promise.all([getSiteMenuContent(), headers()]);
+  const nonce = requestHeaders.get("x-nonce") ?? "";
+  const siteUrl = getRequiredCanonicalSiteUrl();
   const base = siteUrl.replace(/\/$/, "");
   const jsonLd = {
     "@context": "https://schema.org",
@@ -43,12 +47,11 @@ export default async function MenuPage() {
       <script
         type="application/ld+json"
         nonce={nonce}
-        // eslint-disable-next-line react/no-danger -- JSON-LD for menu page
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <SiteHeader />
       <main id="main-content" className="min-h-[50vh] bg-[#fcf4e8]">
-        <MenuPageBody />
+        <MenuPageBody menu={menu} />
       </main>
       <SiteFooter />
     </>

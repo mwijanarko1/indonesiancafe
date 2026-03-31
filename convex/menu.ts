@@ -268,7 +268,8 @@ export const applyDefaultSeed = internalMutation({
       .withIndex("by_key", (q) => q.eq("key", "default"))
       .unique();
     await clearMenu(ctx);
-    const { key: _k, ...rest } = defaultSiteMenuRow;
+    const { key, ...rest } = defaultSiteMenuRow;
+    void key;
     await insertMenuFromNested(ctx, rest);
     return had ? "updated" : "created";
   },

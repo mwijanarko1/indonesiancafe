@@ -1,36 +1,22 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
 import { SiteHeader } from "@/components/cafe/SiteHeader";
 import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
-import { useSiteMenu } from "@/components/cafe/useSiteMenu";
 import { metadata } from "./page";
-
-vi.mock("@/components/cafe/useSiteMenu", () => ({
-  useSiteMenu: vi.fn(),
-}));
-
-const mockedUseSiteMenu = vi.mocked(useSiteMenu);
 
 function MenuPageTestShell() {
   return (
     <>
       <SiteHeader />
       <main id="main-content">
-        <MenuPageBody />
+        <MenuPageBody menu={DEFAULT_SITE_MENU} />
       </main>
     </>
   );
 }
 
 describe("/menu page", () => {
-  beforeEach(() => {
-    mockedUseSiteMenu.mockReturnValue({
-      menu: DEFAULT_SITE_MENU,
-      contentLoading: false,
-    });
-  });
-
   it("exports menu metadata with canonical /menu", () => {
     expect(metadata.title).toBe("Menu");
     expect(metadata.alternates?.canonical).toBe("/menu");
@@ -62,7 +48,10 @@ describe("/menu page", () => {
   });
 
   it("does not list items marked unavailable", () => {
-    const hiddenName = DEFAULT_SITE_MENU.categories[0].variant === "priced" ? DEFAULT_SITE_MENU.categories[0].items[0].name : "";
+    const hiddenName =
+      DEFAULT_SITE_MENU.categories[0].variant === "priced"
+        ? DEFAULT_SITE_MENU.categories[0].items[0].name
+        : "";
     expect(hiddenName).toBeTruthy();
 
     const menu = {
@@ -78,8 +67,14 @@ describe("/menu page", () => {
       }),
     };
 
-    mockedUseSiteMenu.mockReturnValue({ menu, contentLoading: false });
-    render(<MenuPageTestShell />);
+    render(
+      <>
+        <SiteHeader />
+        <main id="main-content">
+          <MenuPageBody menu={menu} />
+        </main>
+      </>,
+    );
     expect(screen.queryByText(hiddenName)).not.toBeInTheDocument();
   });
 });

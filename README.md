@@ -50,12 +50,13 @@ Set `NEXT_PUBLIC_CONVEX_URL` in `.env.local` (see `.env.example`) to load live m
 | `src/app/page.tsx` | Home: header, hero, about, menu, word of mouth, visit |
 | `src/app/menu/page.tsx` | Dedicated menu / QR destination |
 | `src/app/reviews/page.tsx` | Guest reviews |
-| `src/app/layout.tsx` | Fonts, metadata, Convex provider |
+| `src/app/layout.tsx` | Fonts, metadata, JSON-LD |
 | `src/app/globals.css` | Brand tokens, `.batik-bg`, base styles |
 | `src/components/cafe/` | `SiteHeader`, `HeroSection`, `HeroSlideshow`, `AboutSection`, `MenuSection`, `WordOfMouthSection`, `VisitSection`, `SiteFooter`, reviews UI, etc. |
 | `src/components/seo/` | `RestaurantJsonLd` (Schema.org) |
 | `convex/` | Schema, menu/reviews queries, seed data |
 | `src/lib/site.ts` | `SITE` constants, opening hours, JSON-LD builder |
+| `src/lib/server/site-content.ts` | Server-side menu/review loader with Convex fallback |
 | `src/lib/cafe-menu.ts` | Menu types and static fallback (`DEFAULT_SITE_MENU`) |
 | `src/lib/guest-reviews.ts` | Review types and defaults |
 | `src/lib/env.ts` | Zod-validated env for server usage |
@@ -68,6 +69,7 @@ For a fuller map of the repo, see [`docs/CODEBASE_MAP.md`](docs/CODEBASE_MAP.md)
 Copy `.env.example` to `.env.local` and adjust as needed:
 
 - **`NEXT_PUBLIC_APP_URL`** — canonical site URL for Open Graph and metadata (optional locally; Vercel can infer from `VERCEL_URL`)
+- Required for non-local builds so metadata, sitemap, robots, and JSON-LD cannot ship with localhost URLs.
 - **`NEXT_PUBLIC_CONVEX_URL`** — Convex deployment URL for live menu and reviews
 
 Other variables in `.env.example` are for production deploy, Convex HTTP/admin, or tooling — see comments in that file.
@@ -87,6 +89,10 @@ bun run start
 ```
 
 Deploy like any Next.js app (e.g. Vercel). After a fresh Convex deployment, you can load default menu and review data with `bun run convex:seed` (or `bun run convex:seed:prod` for production); see `package.json`.
+
+## Follow-up
+
+The breakfast subtitle currently claims `From 8 till 11`, but the published site-wide opening hours start at 11 am. That copy is intentionally unchanged in code until the owners confirm the real breakfast window.
 
 ## License
 
