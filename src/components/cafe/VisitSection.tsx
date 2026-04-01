@@ -24,24 +24,45 @@ export function VisitSection() {
       aria-labelledby="visit-heading"
     >
       <div className="mx-auto grid max-w-6xl gap-0 overflow-hidden rounded-2xl border border-brand-maroon/15 bg-brand-menu-surface shadow-sm md:grid-cols-2">
-        <div className="flex flex-col justify-center bg-brand-maroon px-6 py-12 text-brand-cream sm:px-10 sm:py-16">
+        {/* Map first in DOM: stacks above details on narrow screens; md:col-start-2 keeps it on the right on desktop */}
+        <div className="relative aspect-[5/4] w-full min-h-0 min-w-0 bg-brand-menu-page md:col-start-2 md:row-start-1 md:aspect-auto md:min-h-[28rem]">
+          <iframe
+            title="Map of Indonesian Cafe, 15 Crookes, Sheffield"
+            className="absolute inset-0 h-full w-full border-0"
+            src={SITE.mapsEmbedSrc}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+
+        <div className="flex flex-col justify-center border-t border-brand-cream/10 bg-brand-maroon px-5 py-8 text-brand-cream max-md:pb-10 sm:px-8 sm:py-12 md:col-start-1 md:row-start-1 md:border-t-0 md:px-10 md:py-16">
           <h2
             id="visit-heading"
-            className="font-[family-name:var(--font-serif)] text-3xl font-semibold text-brand-cream sm:text-4xl"
+            className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-brand-cream sm:text-4xl"
           >
             Home in Crookes
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-brand-cream/90 sm:text-base">
-            Walk-ins welcome when we&apos;re open. Tap below for Google Maps — we&apos;re a short hop from
+          <p className="mt-2 text-sm leading-relaxed text-brand-cream/90 sm:mt-3 sm:text-base">
+            Walk-ins welcome when we&apos;re open. Tap <span className="whitespace-nowrap">Get directions</span> for Google Maps — a short hop from
             the city centre and universities.
           </p>
 
-          <ul className="mt-10 space-y-8 text-brand-cream">
+          <Link
+            href={SITE.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-brand-cream px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.12em] text-brand-maroon transition hover:bg-brand-cream-page focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream sm:mt-8 sm:px-6 sm:py-3.5 sm:text-sm md:mt-10 md:w-auto"
+          >
+            Get directions
+          </Link>
+
+          <ul className="mt-6 space-y-6 text-brand-cream sm:mt-10 sm:space-y-8">
             <li>
               <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
                 Address
               </p>
-              <address className="mt-1 not-italic [font-family:var(--font-address)] text-base leading-relaxed text-brand-cream">
+              <address className="mt-1 not-italic [font-family:var(--font-address)] text-sm leading-relaxed text-brand-cream sm:text-base">
                 {SITE.streetAddress}
                 <br />
                 {SITE.addressLocality} {SITE.postalCode}
@@ -53,10 +74,10 @@ export function VisitSection() {
               <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
                 Opening hours
               </p>
-              <dl className="mt-2 space-y-1 text-sm [font-family:var(--font-address)]">
+              <dl className="mt-2 grid max-w-md grid-cols-[minmax(0,6.75rem)_1fr] gap-x-3 gap-y-1 text-sm [font-family:var(--font-address)]">
                 {OPENING_HOURS.map((row) => (
-                  <div key={row.day} className="flex flex-wrap gap-x-3">
-                    <dt className="min-w-[5.5rem] font-medium text-brand-cream">{row.day}</dt>
+                  <div key={row.day} className="contents">
+                    <dt className="font-medium text-brand-cream">{row.day}</dt>
                     <dd className="text-brand-cream/90">{row.time}</dd>
                   </div>
                 ))}
@@ -81,26 +102,6 @@ export function VisitSection() {
               </p>
             </li>
           </ul>
-
-          <Link
-            href={SITE.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-10 inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-brand-cream px-6 py-3.5 text-center text-sm font-bold uppercase tracking-[0.12em] text-brand-maroon transition hover:bg-brand-cream-page focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream sm:w-auto"
-          >
-            Get directions
-          </Link>
-        </div>
-
-        <div className="relative min-h-[min(22rem,50vh)] min-w-0 md:min-h-[28rem]">
-          <iframe
-            title="Map of Indonesian Cafe, 15 Crookes, Sheffield"
-            className="absolute inset-0 h-full w-full border-0"
-            src={SITE.mapsEmbedSrc}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
         </div>
       </div>
     </section>
