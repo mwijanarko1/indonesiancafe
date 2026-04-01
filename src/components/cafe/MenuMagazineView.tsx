@@ -102,7 +102,7 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
         </article>
 
         {b ? (
-          <article className="flex flex-col overflow-hidden rounded-2xl border border-brand-maroon/10 bg-[#f5ebe0] shadow-sm lg:col-span-4">
+          <article className="flex flex-col overflow-hidden rounded-2xl border border-brand-maroon/10 bg-white shadow-sm lg:col-span-4">
             <div className="flex flex-1 flex-col p-5 sm:p-6">
               <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon sm:text-xl">
                 {formatMenuItemDisplayName(b.name)}
@@ -132,7 +132,7 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
           {row.map((item) => (
             <article
               key={item.name}
-              className="flex flex-col rounded-xl border border-brand-maroon/10 bg-[#f5ebe0] p-4 shadow-sm sm:p-5"
+              className="flex flex-col rounded-xl border border-brand-maroon/10 bg-white p-4 shadow-sm sm:p-5"
             >
               <div className="flex flex-wrap gap-1.5">
                 {itemBadges(item.name).map((badge) => (
@@ -159,7 +159,7 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
           {more.map((item) => (
             <li
               key={item.name}
-              className="rounded-xl border border-brand-maroon/8 bg-white/70 px-4 py-3 shadow-sm"
+              className="rounded-xl border border-brand-maroon/8 bg-white px-4 py-3 shadow-sm"
             >
               <div className="flex items-start justify-between gap-3">
                 <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
@@ -188,7 +188,7 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
         {items.map((item) => (
           <li
             key={item.name}
-            className="rounded-xl border border-brand-maroon/10 bg-[#f5ebe0]/90 px-4 py-3"
+            className="rounded-xl border border-brand-maroon/10 bg-white px-4 py-3 shadow-sm"
           >
             <div className="flex items-baseline justify-between gap-2">
               <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
@@ -216,7 +216,7 @@ function SidesRow({ items }: { items: PricedMenuItem[] }) {
             return (
             <article
               key={item.name}
-              className="flex gap-4 overflow-hidden rounded-xl border border-brand-maroon/10 bg-[#f5ebe0] p-3 shadow-sm sm:p-4"
+              className="flex gap-4 overflow-hidden rounded-xl border border-brand-maroon/10 bg-white p-3 shadow-sm sm:p-4"
             >
               {sidePhoto ? (
                 <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-stone-300/50 sm:h-28 sm:w-28">
@@ -280,7 +280,7 @@ function formatDrinkPrice(hot: string | null, iced: string | null): string {
 
 function DrinksPanel({ groups }: { groups: DrinkMenuGroup[] }) {
   return (
-    <div className="rounded-2xl border border-brand-maroon/10 bg-[#f5ebe0] p-6 shadow-sm sm:p-8">
+    <div className="rounded-2xl border border-brand-maroon/10 bg-white p-6 shadow-sm sm:p-8">
       <h2 className="text-center font-[family-name:var(--font-serif)] text-lg font-bold uppercase tracking-[0.18em] text-brand-maroon sm:text-xl">
         Refreshing drinks
       </h2>
