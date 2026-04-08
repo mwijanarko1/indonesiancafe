@@ -66,13 +66,13 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <h2
             id="menu-heading"
-            className="font-[family-name:var(--font-serif)] text-3xl font-semibold text-brand-maroon sm:text-4xl"
+            className="font-[family-name:var(--font-serif)] text-3xl font-bold text-brand-maroon sm:text-4xl"
           >
             Indonesian favourites
           </h2>
           <Link
             href="/menu"
-            className="text-sm font-semibold uppercase tracking-[0.1em] text-brand-maroon underline-offset-4 transition hover:underline"
+            className="font-[family-name:var(--font-label)] text-sm font-bold uppercase tracking-[0.1em] text-brand-maroon underline-offset-4 transition hover:underline"
           >
             View full menu
           </Link>
@@ -89,21 +89,21 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
                 className="object-cover transition duration-500 group-hover:scale-[1.02]"
                 sizes="(max-width: 1024px) 100vw, 66vw"
               />
-              <span className="absolute left-3 top-3 rounded-sm bg-brand-maroon px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.14em] text-white">
+              <span className="absolute left-3 top-3 rounded-sm bg-brand-maroon px-2.5 py-1 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-[0.14em] text-white">
                 Chef&apos;s special
               </span>
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-8">
               {featured ? (
                 <>
-                  <h3 className="font-[family-name:var(--font-serif)] text-xl font-semibold text-brand-maroon sm:text-2xl">
+                  <h3 className="font-[family-name:var(--font-serif)] text-xl font-bold text-brand-maroon sm:text-2xl">
                     {formatMenuItemDisplayName(featured.name)}
                   </h3>
                   {featured.description ? (
                     <p className="mt-2 text-sm leading-relaxed text-stone-600">{featured.description}</p>
                   ) : null}
                   <div className="mt-4 flex flex-wrap items-center gap-4">
-                    <span className="font-[family-name:var(--font-serif)] text-xl font-semibold tabular-nums text-brand-maroon">
+                    <span className="font-[family-name:var(--font-serif)] text-xl font-bold tabular-nums text-brand-maroon">
                       {featured.price}
                     </span>
                     <Link
@@ -138,7 +138,7 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
               <div className="flex flex-1 flex-col p-5">
                 {item ? (
                   <>
-                    <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon">
+                    <h3 className="font-[family-name:var(--font-serif)] text-lg font-bold text-brand-maroon">
                       {formatMenuItemDisplayName(item.name)}
                     </h3>
                     {item.description ? (
@@ -147,7 +147,7 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
                       </p>
                     ) : null}
                     <div className="mt-auto flex items-center justify-between pt-4">
-                      <span className="font-[family-name:var(--font-serif)] text-lg font-semibold tabular-nums text-brand-maroon">
+                      <span className="font-[family-name:var(--font-serif)] text-lg font-bold tabular-nums text-brand-maroon">
                         {item.price}
                       </span>
                       <Link
@@ -171,10 +171,10 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
             className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-xl border border-brand-maroon/15 bg-brand-maroon p-8 text-center text-white shadow-md transition hover:bg-brand-oxblood focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-maroon sm:min-h-0"
           >
             <UtensilsCrossed className="h-10 w-10 opacity-95" aria-hidden />
-            <span className="font-[family-name:var(--font-serif)] text-lg font-semibold uppercase tracking-[0.12em]">
+            <span className="font-[family-name:var(--font-label)] text-lg font-bold uppercase tracking-[0.12em]">
               Discover more
             </span>
-            <span className="text-sm font-medium text-white/90">Full menu →</span>
+            <span className="text-sm font-semibold text-white/90">Full menu →</span>
           </Link>
         </div>
       </div>

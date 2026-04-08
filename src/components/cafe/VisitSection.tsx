@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { IconType } from "react-icons";
 import { FaFacebook, FaInstagram } from "react-icons/fa6";
+import { VISIT_SECTION_BLURB, VISIT_SECTION_TITLE } from "@/lib/site-copy";
 import { OPENING_HOURS, OPENING_HOURS_FOOTNOTE, SITE } from "@/lib/site";
 
 const socialContact: { href: string; label: string; Icon: IconType }[] = [
@@ -39,27 +40,26 @@ export function VisitSection() {
         <div className="flex flex-col justify-center border-t border-brand-cream/10 bg-brand-maroon px-5 py-8 text-brand-cream max-md:pb-10 sm:px-8 sm:py-12 md:col-start-1 md:row-start-1 md:border-t-0 md:px-10 md:py-16">
           <h2
             id="visit-heading"
-            className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-brand-cream sm:text-4xl"
+            className="font-[family-name:var(--font-serif)] text-2xl font-bold text-brand-cream sm:text-4xl"
           >
-            Home in Crookes
+            {VISIT_SECTION_TITLE}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-brand-cream/90 sm:mt-3 sm:text-base">
-            Walk-ins welcome when we&apos;re open. Tap <span className="whitespace-nowrap">Get directions</span> for Google Maps — a short hop from
-            the city centre and universities.
+            {VISIT_SECTION_BLURB}
           </p>
 
           <Link
             href={SITE.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-brand-cream px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.12em] text-brand-maroon transition hover:bg-brand-cream-page focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream sm:mt-8 sm:px-6 sm:py-3.5 sm:text-sm md:mt-10 md:w-auto"
+            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-brand-cream px-5 py-3 text-center font-[family-name:var(--font-label)] text-xs font-bold uppercase tracking-[0.12em] text-brand-maroon transition hover:bg-brand-cream-page focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream sm:mt-8 sm:px-6 sm:py-3.5 sm:text-sm md:mt-10 md:w-auto"
           >
             Get directions
           </Link>
 
           <ul className="mt-6 space-y-6 text-brand-cream sm:mt-10 sm:space-y-8">
             <li>
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
+              <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
                 Address
               </p>
               <address className="mt-1 not-italic [font-family:var(--font-address)] text-sm leading-relaxed text-brand-cream sm:text-base">
@@ -71,13 +71,13 @@ export function VisitSection() {
               </address>
             </li>
             <li>
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
+              <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
                 Opening hours
               </p>
               <dl className="mt-2 grid max-w-md grid-cols-[minmax(0,6.75rem)_1fr] gap-x-3 gap-y-1 text-sm [font-family:var(--font-address)]">
                 {OPENING_HOURS.map((row) => (
                   <div key={row.day} className="contents">
-                    <dt className="font-medium text-brand-cream">{row.day}</dt>
+                    <dt className="font-semibold text-brand-cream">{row.day}</dt>
                     <dd className="text-brand-cream/90">{row.time}</dd>
                   </div>
                 ))}
@@ -85,7 +85,9 @@ export function VisitSection() {
               <p className="mt-2 text-xs text-brand-cream/70">{OPENING_HOURS_FOOTNOTE}</p>
             </li>
             <li>
-              <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">Social</p>
+              <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
+                Social
+              </p>
               <p className="mt-2 flex flex-wrap gap-3">
                 {socialContact.map(({ href, label, Icon }) => (
                   <a

@@ -10,9 +10,9 @@ export function GuestReviewsListView({
       {reviews.map((r) => (
         <li
           key={r.author}
-          className="border-t-2 border-brand-crimson/20 pt-8 first:border-t-0 first:pt-0"
+          className="border-t-2 border-brand-maroon/15 pt-8 first:border-t-0 first:pt-0"
         >
-          <p className="font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-brand-crimson">
+          <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.22em] text-brand-maroon">
             {r.author}
           </p>
           <blockquote className="mt-3 text-base leading-relaxed text-brand-maroon/90">
@@ -47,7 +47,7 @@ export function FeaturedGuestReviewsCardsView({
           }`}
         >
           <p
-            className={`font-[family-name:var(--font-cinzel)] text-[0.65rem] font-semibold uppercase tracking-[0.22em] ${
+            className={`font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.22em] ${
               isMaroon
                 ? "text-brand-address"
                 : isDark

@@ -23,12 +23,12 @@ export function SiteFooter() {
     <footer className="border-t border-brand-address/20 bg-brand-maroon px-4 py-14 text-brand-address/90">
       <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
         <div>
-          <p className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-address">
+          <p className="font-[family-name:var(--font-label)] text-lg font-bold tracking-[0.04em] text-brand-address">
             Indonesian Cafe
           </p>
           <p className="mt-2 text-sm text-brand-address/85">Indonesian restaurant · Crookes · Sheffield · UK</p>
           <div className="mt-6 inline-flex flex-col rounded-sm border border-brand-address/30 bg-brand-address/10 px-4 py-3">
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-brand-address">
+            <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.15em] text-brand-address">
               Halal kitchen
             </p>
             <p className="mt-1 text-xs text-brand-address/80">100% halal ingredients &amp; preparation</p>
@@ -36,7 +36,9 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">Find us</p>
+          <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">
+            Find us
+          </p>
           <address className="mt-3 text-sm not-italic leading-relaxed [font-family:var(--font-address)] text-brand-address/92">
             {SITE.streetAddress}
             <br />
@@ -44,7 +46,9 @@ export function SiteFooter() {
             <br />
             United Kingdom
           </address>
-          <p className="mt-6 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">Social</p>
+          <p className="mt-6 font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">
+            Social
+          </p>
           <div className="mt-3 flex flex-wrap gap-3">
             {socialLinks.map(({ href, label, Icon }) => (
               <a
@@ -62,7 +66,9 @@ export function SiteFooter() {
         </div>
 
         <div className="sm:col-span-2 lg:col-span-1">
-          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">Hours</p>
+          <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">
+            Hours
+          </p>
           <dl className="mt-3 grid max-w-xs gap-1 text-sm [font-family:var(--font-address)]">
             {OPENING_HOURS.map((row) => (
               <div key={row.day} className="flex justify-between gap-4">
@@ -75,7 +81,31 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <p className="mx-auto mt-14 max-w-6xl border-t border-brand-address/20 pt-8 text-center text-xs leading-relaxed text-brand-address/50">
+      <nav
+        aria-label="Legal"
+        className="mx-auto mt-12 flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-2 border-t border-brand-address/15 pt-8 text-sm text-brand-address/75"
+      >
+        <Link
+          href="/privacy"
+          className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
+        >
+          Privacy
+        </Link>
+        <Link
+          href="/terms"
+          className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
+        >
+          Terms
+        </Link>
+        <Link
+          href="/llms.txt"
+          className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
+        >
+          Machine-readable guide
+        </Link>
+      </nav>
+
+      <p className="mx-auto mt-8 max-w-6xl border-t border-brand-address/20 pt-8 text-center text-xs leading-relaxed text-brand-address/50">
         <span className="text-brand-address/65">
           © {new Date().getFullYear()} Indonesian Cafe
         </span>

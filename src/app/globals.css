@@ -2,22 +2,23 @@
 
 /* Brand tokens — typography + palette (see brand guidelines) */
 :root {
-  --font-address: Georgia, "Times New Roman", Times, serif;
+  /* Matches heading serif when Next font vars are on <body> */
+  --font-address: var(--font-serif), Georgia, "Times New Roman", Times, serif;
   --brand-crimson: #b91c1c;
   --brand-oxblood: #8f1d1d;
   --brand-maroon: #5a0a14;
   --brand-gold: #b8954a;
   --brand-gold-muted: #c4a35a;
-  --brand-cream-arc: #f2e8c8;
+  --brand-cream-arc: #f7f4ec;
   --brand-cream-page: #f7f4ec;
-  /** Tertiary surface — warmer cream (labels / alternate sections) */
-  --brand-tertiary: #f2e8c8;
+  /** Tertiary surface — aligned with primary cream / page cream */
+  --brand-tertiary: #f7f4ec;
   --brand-charcoal: #1c1917;
-  --brand-address-text: #f5edd5;
+  --brand-address-text: #f7f4ec;
   --brand-shadow: #3a0509;
-  /** Menu page (warm peach + footer band) — align home chrome with /menu */
-  --brand-menu-page: #fcf4e8;
-  --brand-menu-surface: #f5ebe0;
+  /** Menu / surfaces — same cream as header (`brand-cream`) */
+  --brand-menu-page: #f7f4ec;
+  --brand-menu-surface: #f7f4ec;
 }
 
 /* Indonesian Cafe — bright crimson + batik-style overlay */
@@ -57,14 +58,14 @@
   --color-brand-oxblood: #8f1d1d;
   --color-brand-maroon: #5a0a14;
   --color-brand-gold: #b8954a;
-  --color-brand-cream: #f2e8c8;
+  --color-brand-cream: #f7f4ec;
   --color-brand-cream-page: #f7f4ec;
-  --color-brand-tertiary: #f2e8c8;
+  --color-brand-tertiary: #f7f4ec;
   --color-brand-charcoal: #1c1917;
-  --color-brand-address: #f5edd5;
+  --color-brand-address: #f7f4ec;
   --color-brand-shadow: #3a0509;
-  --color-brand-menu-page: #fcf4e8;
-  --color-brand-menu-surface: #f5ebe0;
+  --color-brand-menu-page: #f7f4ec;
+  --color-brand-menu-surface: #f7f4ec;
   --typography-font-size: 1rem;
   --typography-line-height: 1.75;
   --typography-font-weight: 400;
@@ -191,13 +192,13 @@ pre {
   border-radius: 0.5rem;
   background-color: #1e1e1e;
   color: #d4d4d4;
-  font-family: 'Geist Mono', monospace;
+  font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.875rem;
   line-height: 1.5;
 }
 
 code {
-  font-family: 'Geist Mono', monospace;
+  font-family: var(--font-mono), ui-monospace, monospace;
 }
 
 /* Focus styles */
@@ -217,7 +218,8 @@ html {
 }
 
 body {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
   color: var(--brand-maroon);
   line-height: 1.5;
   overflow-x: clip;

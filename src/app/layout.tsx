@@ -1,32 +1,47 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
-import { Cinzel, Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import {
+  Anton,
+  Barlow_Condensed,
+  DM_Sans,
+  IBM_Plex_Mono,
+  Lora,
+} from "next/font/google";
 import { RestaurantJsonLd } from "@/components/seo/RestaurantJsonLd";
-import { getRequiredCanonicalSiteUrl } from "@/lib/site";
+import { getRequiredCanonicalSiteUrl, SITE_SEO_DESCRIPTION } from "@/lib/site";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
-/** Trajan-style display for “INDONESIAN CAFE” header */
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
-
-/** Logo lockup: bold “INDONESIAN”, lighter “CAFE” */
-const playfair = Playfair_Display({
+/** Headings, menu titles, prices — readable serif that pairs with the hero poster face */
+const lora = Lora({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
+});
+
+/** Uppercase labels, header lockup — condensed sans in the same register as Anton without competing */
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-label",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+});
+
+/** Hero only — heavy poster caps */
+const anton = Anton({
+  weight: "400",
+  variable: "--font-hero",
+  subsets: ["latin"],
 });
 
 export const viewport: Viewport = {
@@ -36,40 +51,59 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(getRequiredCanonicalSiteUrl()),
   title: {
-    default: "Indonesian Restaurant Sheffield, UK | Indonesian Cafe · Crookes",
-    template: "%s · Indonesian Cafe Sheffield",
+    default:
+      "Indonesian Restaurant Sheffield | Indonesian Cafe · Halal Food · Crookes S10",
+    template: "%s · Indonesian Restaurant Sheffield",
   },
-  description:
-    "Indonesian restaurant and cafe in Crookes, Sheffield S10 1UA — authentic Indonesian food in the UK: nasi goreng, mie goreng, satay, sambals, and cafe favourites near the city centre.",
+  description: SITE_SEO_DESCRIPTION,
+  /** Priority → menu-item → local intent (GBP / homepage / schema reinforcement). Meta keywords are low impact but document targeting. */
   keywords: [
     "Indonesian restaurant Sheffield",
+    "Indonesian cafe Sheffield",
+    "Indonesian Cafe Sheffield",
     "Indonesian food Sheffield",
+    "authentic Indonesian food Sheffield",
+    "halal Indonesian food Sheffield",
+    "Indonesian takeaway Sheffield",
+    "Indonesian food near me",
+    "Indonesian cafe Crookes",
+    "Indonesian restaurant Crookes",
+    "Indonesian bakery Sheffield",
+    "nasi goreng Sheffield",
+    "beef rendang Sheffield",
+    "chicken satay Sheffield",
+    "sate ayam Sheffield",
+    "mie goreng Sheffield",
+    "sambal Sheffield",
+    "Indonesian snacks Sheffield",
+    "Indonesian coffee Sheffield",
+    "halal food Crookes",
+    "halal restaurant Sheffield",
+    "Asian restaurant Crookes",
+    "food in Crookes Sheffield",
+    "Sheffield S10 restaurant",
+    "takeaway Crookes Sheffield",
+    "15 Crookes Sheffield",
+    "S10 1UA restaurant",
     "Indonesian restaurant UK",
     "Indonesian cafe UK",
-    "Crookes restaurant",
-    "South Yorkshire Indonesian",
-    "Sheffield S10 restaurant",
-    "authentic Indonesian food",
     "Indonesian Cafe",
     "Crookes",
     "S10 1UA",
   ],
   authors: [{ name: "Indonesian Cafe" }],
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
-    title: "Indonesian Restaurant in Sheffield, UK | Indonesian Cafe",
-    description:
-      "Visit our Indonesian restaurant in Crookes, Sheffield — traditional cooking, warm welcome, and cafe favourites. 15 Crookes, S10 1UA, United Kingdom.",
+    title:
+      "Indonesian Restaurant Sheffield | Indonesian Cafe · Halal Indonesian Food · UK",
+    description: SITE_SEO_DESCRIPTION,
     url: "/",
     siteName: "Indonesian Cafe Sheffield",
     images: [
       {
-        url: "/poster.png",
-        width: 1200,
-        height: 1600,
-        alt: "Indonesian Cafe — Indonesian restaurant in Sheffield, UK — poster with traditional roof motif",
+        url: "/hero.png",
+        width: 1966,
+        height: 1423,
+        alt: "Indonesian restaurant Sheffield — Indonesian Cafe, halal food and takeaway, coffee and bakery, 15 Crookes S10",
       },
     ],
     locale: "en_GB",
@@ -77,10 +111,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Indonesian Restaurant Sheffield | Indonesian Cafe",
-    description:
-      "Authentic Indonesian restaurant in Crookes, Sheffield, UK — dine in or find us on Google Maps.",
-    images: ["/poster.png"],
+    title:
+      "Indonesian Restaurant Sheffield | Indonesian Cafe · Halal Indonesian Food",
+    description: SITE_SEO_DESCRIPTION,
+    images: ["/hero.png"],
   },
   robots: {
     index: true,
@@ -98,12 +132,12 @@ export default async function RootLayout({
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} min-h-screen antialiased bg-brand-cream-page`}
+        className={`${dmSans.variable} ${ibmPlexMono.variable} ${lora.variable} ${barlowCondensed.variable} ${anton.variable} min-h-screen antialiased bg-brand-cream-page`}
       >
         <RestaurantJsonLd nonce={nonce} />
         <a
           href="#main-content"
-          className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-medium text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
+          className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-semibold text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
         >
           Skip to main content
         </a>

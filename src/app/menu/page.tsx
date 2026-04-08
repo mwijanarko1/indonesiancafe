@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
-import { SiteHeader } from "@/components/cafe/SiteHeader";
+import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
 import { getRequiredCanonicalSiteUrl } from "@/lib/site";
 import { getSiteMenuContent } from "@/lib/server/site-content";
 
 const description =
-  "Browse the current Indonesian Cafe menu in Sheffield — Crookes, S10. Tap categories for food, drinks, and prices; allergen notice included.";
+  "Indonesian restaurant Sheffield — browse nasi goreng, mie goreng, rendang, satay, sambal and more on our halal Indonesian cafe menu. Coffee, bakery, 15 Crookes S10 1UA; prices and allergen notice online.";
 
 export const dynamic = "force-dynamic";
 
@@ -49,8 +49,11 @@ export default async function MenuPage() {
         nonce={nonce}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <SiteHeader />
-      <main id="main-content" className="min-h-[50vh] bg-[#fcf4e8]">
+      <SiteHeader variant="inverse" />
+      <main
+        id="main-content"
+        className={`min-h-[50vh] bg-brand-cream ${SITE_HEADER_OVERLAY_MAIN_PAD}`}
+      >
         <MenuPageBody menu={menu} />
       </main>
       <SiteFooter />

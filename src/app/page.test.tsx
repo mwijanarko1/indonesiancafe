@@ -4,7 +4,7 @@ import {
   DEFAULT_FEATURED_AUTHOR_ORDER,
   GUEST_REVIEWS,
 } from "@/lib/guest-reviews";
-import Home from "./page";
+import Home, { metadata } from "./page";
 import { vi } from "vitest";
 
 vi.mock("next/navigation", () => ({
@@ -34,6 +34,10 @@ vi.mock("next/image", () => ({
 }));
 
 describe("Home (Indonesian Cafe)", () => {
+  it("exports home metadata with canonical /", () => {
+    expect(metadata.alternates?.canonical).toBe("/");
+  });
+
   it("renders the hero heading", async () => {
     render(await Home());
     const h1 = screen.getByRole("heading", { level: 1 });
@@ -48,11 +52,10 @@ describe("Home (Indonesian Cafe)", () => {
 
   it("primary nav Menu link targets /menu", async () => {
     render(await Home());
-    const menuLinks = screen.getAllByRole("link", { name: /^Menu$/i });
-    expect(menuLinks.length).toBeGreaterThan(0);
-    for (const link of menuLinks) {
-      expect(link).toHaveAttribute("href", "/menu");
-    }
+    const nav = screen.getByRole("navigation", { name: /main navigation/i });
+    const menuLinks = nav.querySelectorAll('a[href="/menu"]');
+    expect(menuLinks.length).toBe(1);
+    expect(menuLinks[0]).toHaveTextContent(/^Menu$/i);
   });
 
   it("homepage menu section links to full menu page", async () => {

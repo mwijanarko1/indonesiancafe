@@ -1,15 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
-import { SiteHeader } from "@/components/cafe/SiteHeader";
+import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
 import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
 import { metadata } from "./page";
 
 function MenuPageTestShell() {
   return (
     <>
-      <SiteHeader />
-      <main id="main-content">
+      <SiteHeader variant="inverse" />
+      <main id="main-content" className={SITE_HEADER_OVERLAY_MAIN_PAD}>
         <MenuPageBody menu={DEFAULT_SITE_MENU} />
       </main>
     </>
@@ -41,10 +41,10 @@ describe("/menu page", () => {
     );
   });
 
-  it("renders home link in header and primary nav", () => {
+  it("renders site logo linking home in header", () => {
     render(<MenuPageTestShell />);
-    const homeLinks = screen.getAllByRole("link", { name: /^Home$/i });
-    expect(homeLinks.some((el) => el.getAttribute("href") === "/")).toBe(true);
+    const logo = screen.getByRole("link", { name: /^Indonesian Cafe$/i });
+    expect(logo).toHaveAttribute("href", "/");
   });
 
   it("does not list items marked unavailable", () => {
@@ -69,8 +69,8 @@ describe("/menu page", () => {
 
     render(
       <>
-        <SiteHeader />
-        <main id="main-content">
+        <SiteHeader variant="inverse" />
+        <main id="main-content" className={SITE_HEADER_OVERLAY_MAIN_PAD}>
           <MenuPageBody menu={menu} />
         </main>
       </>,

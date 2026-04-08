@@ -1,4 +1,4 @@
-import { AboutSection } from "@/components/cafe/AboutSection";
+import type { Metadata } from "next";
 import { HeroSection } from "@/components/cafe/HeroSection";
 import { MenuSection } from "@/components/cafe/MenuSection";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
@@ -9,6 +9,13 @@ import { getFeaturedGuestReviewsFrom } from "@/lib/guest-reviews";
 import { getSiteMenuContent, getSiteReviewsContent } from "@/lib/server/site-content";
 
 export const dynamic = "force-dynamic";
+
+/** Self-referencing canonical for `/` only; subpages set their own in `page.tsx`. */
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default async function Home() {
   const [{ menu }, { reviews, featuredAuthorOrder }] = await Promise.all([
@@ -22,7 +29,6 @@ export default async function Home() {
       <SiteHeader />
       <main id="main-content">
         <HeroSection />
-        <AboutSection />
         <MenuSection menu={menu} />
         <WordOfMouthSection featured={featuredReviews} />
         <VisitSection />

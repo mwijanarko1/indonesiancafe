@@ -3,18 +3,6 @@
  * Keep rules ordered: more specific phrases before broader ones.
  */
 
-export const HERO_PHOTO_FILENAMES = [
-  "rendang.jpg",
-  "ayam-geprek.jpg",
-  "mie-ayam.jpg",
-  "chicken-fried-noodles.jpg",
-  "bakso.jpg",
-  "batagor.jpg",
-  "gado-gado.jpg",
-  "gado-gado2.jpg",
-  "bakso-2.jpg",
-] as const;
-
 /**
  * Returns a photo path only when the dish name matches a known asset.
  * Callers should omit imagery when this is null.

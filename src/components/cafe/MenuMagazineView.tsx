@@ -44,7 +44,7 @@ function itemBadges(name: string): string[] {
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-8 border-b border-brand-maroon/15 pb-3">
-      <h2 className="font-[family-name:var(--font-serif)] text-xl font-bold uppercase tracking-[0.12em] text-brand-maroon sm:text-2xl">
+      <h2 className="font-[family-name:var(--font-label)] text-xl font-bold uppercase tracking-[0.12em] text-brand-maroon sm:text-2xl">
         {title}
       </h2>
     </div>
@@ -81,20 +81,20 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
               {itemBadges(a.name).map((badge) => (
                 <span
                   key={badge}
-                  className="rounded-full bg-white/95 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-brand-maroon shadow-sm"
+                  className="rounded-full bg-white/95 px-3 py-1 font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-wider text-brand-maroon shadow-sm"
                 >
                   {badge}
                 </span>
               ))}
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
-              <h3 className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-white sm:text-3xl">
+              <h3 className="font-[family-name:var(--font-serif)] text-2xl font-bold text-white sm:text-3xl">
                 {formatMenuItemDisplayName(a.name)}
               </h3>
               {a.description ? (
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">{a.description}</p>
               ) : null}
-              <p className="mt-4 text-right font-[family-name:var(--font-serif)] text-xl font-semibold tabular-nums text-brand-gold">
+              <p className="mt-4 text-right font-[family-name:var(--font-serif)] text-xl font-bold tabular-nums text-brand-gold">
                 {a.price}
               </p>
             </div>
@@ -104,11 +104,11 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
         {b ? (
           <article className="flex flex-col overflow-hidden rounded-2xl border border-brand-maroon/10 bg-white shadow-sm lg:col-span-4">
             <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <h3 className="font-[family-name:var(--font-serif)] text-lg font-semibold text-brand-maroon sm:text-xl">
+              <h3 className="font-[family-name:var(--font-serif)] text-lg font-bold text-brand-maroon sm:text-xl">
                 {formatMenuItemDisplayName(b.name)}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-stone-600">{b.description}</p>
-              <p className="mt-auto pt-4 font-[family-name:var(--font-serif)] text-lg font-semibold tabular-nums text-brand-maroon">
+              <p className="mt-auto pt-4 font-[family-name:var(--font-serif)] text-lg font-bold tabular-nums text-brand-maroon">
                 {b.price}
               </p>
             </div>
@@ -138,17 +138,17 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
                 {itemBadges(item.name).map((badge) => (
                   <span
                     key={badge}
-                    className="rounded-md bg-brand-maroon/10 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon"
+                    className="rounded-md bg-brand-maroon/10 px-2 py-0.5 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon"
                   >
                     {badge}
                   </span>
                 ))}
               </div>
-              <h3 className="mt-2 font-[family-name:var(--font-serif)] text-base font-semibold text-brand-maroon sm:text-lg">
+              <h3 className="mt-2 font-[family-name:var(--font-serif)] text-base font-bold text-brand-maroon sm:text-lg">
                 {formatMenuItemDisplayName(item.name)}
               </h3>
               {item.description ? <p className="mt-1.5 flex-1 text-sm leading-relaxed text-stone-600">{item.description}</p> : null}
-              <p className="mt-3 font-[family-name:var(--font-serif)] font-semibold tabular-nums text-brand-maroon">{item.price}</p>
+              <p className="mt-3 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">{item.price}</p>
             </article>
           ))}
         </div>
@@ -162,10 +162,10 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
               className="rounded-xl border border-brand-maroon/8 bg-white px-4 py-3 shadow-sm"
             >
               <div className="flex items-start justify-between gap-3">
-                <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+                <p className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
                   {formatMenuItemDisplayName(item.name)}
                 </p>
-                <span className="shrink-0 font-[family-name:var(--font-serif)] text-sm font-semibold tabular-nums text-brand-maroon">
+                <span className="shrink-0 font-[family-name:var(--font-serif)] text-sm font-bold tabular-nums text-brand-maroon">
                   {item.price}
                 </span>
               </div>
@@ -182,7 +182,7 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
   if (items.length === 0) return null;
   return (
     <div className="mt-12">
-      <h3 className="font-[family-name:var(--font-serif)] text-lg font-bold uppercase tracking-[0.08em] text-brand-maroon">{label}</h3>
+      <h3 className="font-[family-name:var(--font-label)] text-lg font-bold uppercase tracking-[0.1em] text-brand-maroon">{label}</h3>
       {subtitle ? <p className="mt-1 text-sm text-stone-600">{subtitle}</p> : null}
       <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
@@ -191,10 +191,10 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
             className="rounded-xl border border-brand-maroon/10 bg-white px-4 py-3 shadow-sm"
           >
             <div className="flex items-baseline justify-between gap-2">
-              <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+              <span className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
                 {formatMenuItemDisplayName(item.name)}
               </span>
-              <span className="shrink-0 text-sm font-semibold tabular-nums text-brand-maroon">{item.price}</span>
+              <span className="shrink-0 text-sm font-bold tabular-nums text-brand-maroon">{item.price}</span>
             </div>
             {item.description ? <p className="mt-1 text-xs text-stone-600">{item.description}</p> : null}
           </li>
@@ -230,13 +230,13 @@ function SidesRow({ items }: { items: PricedMenuItem[] }) {
                 </div>
               ) : null}
               <div className="min-w-0 flex-1 py-0.5">
-                <h3 className="font-[family-name:var(--font-serif)] text-base font-semibold text-brand-maroon">
+                <h3 className="font-[family-name:var(--font-serif)] text-base font-bold text-brand-maroon">
                   {formatMenuItemDisplayName(item.name)}
                 </h3>
                 {item.description ? (
                   <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-stone-600">{item.description}</p>
                 ) : null}
-                <p className="mt-2 font-[family-name:var(--font-serif)] text-sm font-semibold tabular-nums text-brand-maroon">
+                <p className="mt-2 font-[family-name:var(--font-serif)] text-sm font-bold tabular-nums text-brand-maroon">
                   {item.price}
                 </p>
               </div>
@@ -253,17 +253,17 @@ function DessertsColumn({ items }: { items: PricedMenuItem[] }) {
   return (
     <div className="relative pl-4 sm:pl-5">
       <div className="absolute bottom-0 left-0 top-2 w-1 rounded-full bg-brand-maroon" aria-hidden />
-      <h2 className="font-[family-name:var(--font-serif)] text-xl font-bold uppercase tracking-[0.12em] text-brand-maroon">Desserts</h2>
+      <h2 className="font-[family-name:var(--font-label)] text-xl font-bold uppercase tracking-[0.12em] text-brand-maroon">Desserts</h2>
       <ul className="mt-6 space-y-5">
         {items.map((item) => (
           <li key={item.name} className="flex gap-4 border-b border-brand-maroon/10 pb-5 last:border-0">
             <div className="min-w-0 flex-1">
-              <p className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+              <p className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
                 {formatMenuItemDisplayName(item.name)}
               </p>
               {item.description ? <p className="mt-1 text-sm text-stone-600">{item.description}</p> : null}
             </div>
-            <p className="shrink-0 font-[family-name:var(--font-serif)] font-semibold tabular-nums text-brand-maroon">{item.price}</p>
+            <p className="shrink-0 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">{item.price}</p>
           </li>
         ))}
       </ul>
@@ -281,22 +281,22 @@ function formatDrinkPrice(hot: string | null, iced: string | null): string {
 function DrinksPanel({ groups }: { groups: DrinkMenuGroup[] }) {
   return (
     <div className="rounded-2xl border border-brand-maroon/10 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-center font-[family-name:var(--font-serif)] text-lg font-bold uppercase tracking-[0.18em] text-brand-maroon sm:text-xl">
+      <h2 className="text-center font-[family-name:var(--font-label)] text-lg font-bold uppercase tracking-[0.14em] text-brand-maroon sm:text-xl sm:tracking-[0.16em]">
         Refreshing drinks
       </h2>
       <div className="mt-8 space-y-8">
         {groups.map((g) => (
           <div key={g.title}>
-            <p className="border-b border-brand-maroon/15 pb-2 text-center text-[0.65rem] font-bold uppercase tracking-[0.2em] text-stone-500">
+            <p className="border-b border-brand-maroon/15 pb-2 text-center font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-stone-500">
               {g.title}
             </p>
             <ul className="mt-4 space-y-3">
               {g.items.map((row) => (
                 <li key={row.name} className="flex items-baseline justify-between gap-4 text-sm sm:text-base">
-                  <span className="font-[family-name:var(--font-serif)] font-semibold text-brand-maroon">
+                  <span className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
                     {formatMenuItemDisplayName(row.name)}
                   </span>
-                  <span className="shrink-0 text-right text-sm font-medium tabular-nums text-brand-maroon/90">
+                  <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-brand-maroon/90">
                     {formatDrinkPrice(row.hot, row.iced)}
                   </span>
                 </li>
@@ -313,7 +313,7 @@ function PdfLinks({ menu }: { menu: SiteMenuContent }) {
   const food = safeMenuImageHref(menu.foodMenuImageUrl);
   const drinks = safeMenuImageHref(menu.drinksMenuImageUrl);
   const pill =
-    "inline-flex min-h-11 min-w-[44px] items-center justify-center rounded-full border border-brand-maroon/20 bg-white px-5 py-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-brand-maroon transition hover:border-brand-maroon/40 hover:bg-[#f5ebe0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-maroon sm:text-[0.7rem]";
+    "inline-flex min-h-11 min-w-[44px] items-center justify-center rounded-full border border-brand-maroon/20 bg-white px-5 py-2.5 font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.12em] text-brand-maroon transition hover:border-brand-maroon/40 hover:bg-brand-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-maroon sm:text-[0.7rem]";
   return (
     <div className="mt-16 flex flex-wrap items-center justify-center gap-3 border-t border-brand-maroon/10 pt-10">
       {food ? (
@@ -359,7 +359,7 @@ export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
 
   return (
     <div>
-      <div className="sticky top-[3.75rem] z-40 -mx-4 border-b border-brand-maroon/10 bg-[#fcf4e8]/95 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 md:top-[4.5rem]">
+      <div className="sticky top-[3.75rem] z-40 -mx-4 border-b border-brand-maroon/10 bg-brand-cream/95 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 md:top-[4.5rem]">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-2">
           {chips.map(({ key, label }) => {
             const selected = activeSection === key;
@@ -368,10 +368,10 @@ export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
                 key={key}
                 type="button"
                 onClick={() => selectSection(key)}
-                className={`rounded-full px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.06em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-maroon sm:px-5 sm:text-xs ${
+                className={`rounded-full px-4 py-2.5 font-[family-name:var(--font-label)] text-[0.7rem] font-bold uppercase tracking-[0.06em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-maroon sm:px-5 sm:text-xs ${
                   selected
                     ? "bg-brand-maroon text-white shadow-sm"
-                    : "bg-[#f5ebe0] text-brand-charcoal hover:bg-[#ede4d4]"
+                    : "bg-brand-cream text-brand-charcoal hover:bg-brand-maroon/8"
                 }`}
               >
                 {label}

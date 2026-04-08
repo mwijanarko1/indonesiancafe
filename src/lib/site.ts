@@ -40,9 +40,22 @@ export function getRequiredCanonicalSiteUrl(): string {
   throw new Error("NEXT_PUBLIC_APP_URL must be set for production metadata generation.");
 }
 
+/**
+ * Primary meta description (Google snippet), Open Graph, Twitter default, and Restaurant JSON-LD.
+ * Leans on local + cuisine intent (Sheffield, Crookes S10, halal, takeaway); menu-level terms live in `keywords` and menu copy.
+ */
+export const SITE_SEO_DESCRIPTION =
+  "Indonesian restaurant and cafe in Sheffield — authentic halal Indonesian food, takeaway, coffee and bakery. 15 Crookes, Crookes S10 1UA, UK.";
+
+/** Shown on /privacy and /terms (update when legal copy changes). */
+export const LEGAL_CONTENT_LAST_UPDATED = "8 April 2026";
+
 export const SITE = {
   name: "Indonesian Cafe",
-  tagline: "Indonesian restaurant in Crookes, Sheffield, UK",
+  tagline:
+    "Indonesian restaurant & cafe Sheffield — halal Indonesian food, takeaway, coffee and bakery · 15 Crookes, S10",
+  /** Production origin — set `NEXT_PUBLIC_APP_URL` to this on Vercel (metadata, sitemap, JSON-LD). */
+  liveUrl: "https://indonesiancafe.co.uk",
   streetAddress: "15 Crookes",
   addressLocality: "Sheffield",
   postalCode: "S10 1UA",
@@ -55,15 +68,15 @@ export const SITE = {
   )}&hl=en&z=17&output=embed`,
 } as const;
 
-/** Weekly hours shown on the site (matches Google listing; holidays may differ). */
+/** Weekly hours shown on the site (holidays may differ). */
 export const OPENING_HOURS: readonly { day: string; time: string }[] = [
-  { day: "Monday", time: "11 am–7 pm" },
+  { day: "Monday", time: "10 am–8 pm" },
   { day: "Tuesday", time: "Closed" },
-  { day: "Wednesday", time: "11 am–7 pm" },
-  { day: "Thursday", time: "11 am–7 pm" },
-  { day: "Friday", time: "11 am–7:30 pm" },
-  { day: "Saturday", time: "11 am–7 pm" },
-  { day: "Sunday", time: "11 am–7:30 pm" },
+  { day: "Wednesday", time: "10 am–8 pm" },
+  { day: "Thursday", time: "10 am–8 pm" },
+  { day: "Friday", time: "10 am–8 pm" },
+  { day: "Saturday", time: "10 am–8 pm" },
+  { day: "Sunday", time: "10 am–8 pm" },
 ] as const;
 
 export const OPENING_HOURS_FOOTNOTE =
@@ -81,9 +94,8 @@ export function buildRestaurantJsonLd(siteUrl: string) {
         "@type": "Restaurant",
         "@id": restaurantId,
         name: SITE.name,
-        description:
-          "Authentic Indonesian restaurant and cafe in Crookes, Sheffield, UK. Home-style Indonesian cooking, rice and noodle dishes, satay, and cafe favourites.",
-        image: [`${base}/poster.png`, `${base}/logo.png`],
+        description: SITE_SEO_DESCRIPTION,
+        image: [`${base}/hero.png`, `${base}/logo.png`],
         url: `${base}/`,
         address: {
           "@type": "PostalAddress",
@@ -105,15 +117,16 @@ export function buildRestaurantJsonLd(siteUrl: string) {
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
-            dayOfWeek: ["Monday", "Wednesday", "Thursday", "Saturday"],
-            opens: "11:00",
-            closes: "19:00",
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            dayOfWeek: ["Friday", "Sunday"],
-            opens: "11:00",
-            closes: "19:30",
+            dayOfWeek: [
+              "Monday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ],
+            opens: "10:00",
+            closes: "20:00",
           },
         ],
       },
