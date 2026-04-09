@@ -7,12 +7,12 @@ const CREDIT_URL = "https://mikhailwijanarko.xyz";
 
 const socialLinks: { href: string; label: string; Icon: IconType }[] = [
   {
-    href: "https://www.instagram.com/indonesiancafe_/",
+    href: SITE.instagramUrl,
     label: "Indonesian Cafe on Instagram",
     Icon: FaInstagram,
   },
   {
-    href: "https://www.facebook.com/profile.php?id=61583156852755",
+    href: SITE.facebookUrl,
     label: "Indonesian Cafe on Facebook",
     Icon: FaFacebook,
   },
@@ -46,6 +46,14 @@ export function SiteFooter() {
             <br />
             United Kingdom
           </address>
+          <p className="mt-3 text-sm [font-family:var(--font-address)] text-brand-address/92">
+            <a
+              href={`tel:${SITE.phoneE164}`}
+              className="underline decoration-brand-gold/70 underline-offset-2 transition hover:text-brand-address"
+            >
+              {SITE.phoneDisplay}
+            </a>
+          </p>
           <p className="mt-6 font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-address/85">
             Social
           </p>

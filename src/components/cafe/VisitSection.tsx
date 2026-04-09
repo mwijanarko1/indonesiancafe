@@ -6,12 +6,12 @@ import { OPENING_HOURS, OPENING_HOURS_FOOTNOTE, SITE } from "@/lib/site";
 
 const socialContact: { href: string; label: string; Icon: IconType }[] = [
   {
-    href: "https://www.instagram.com/indonesiancafe_/",
+    href: SITE.instagramUrl,
     label: "Indonesian Cafe on Instagram",
     Icon: FaInstagram,
   },
   {
-    href: "https://www.facebook.com/profile.php?id=61583156852755",
+    href: SITE.facebookUrl,
     label: "Indonesian Cafe on Facebook",
     Icon: FaFacebook,
   },
@@ -83,6 +83,17 @@ export function VisitSection() {
                 ))}
               </dl>
               <p className="mt-2 text-xs text-brand-cream/70">{OPENING_HOURS_FOOTNOTE}</p>
+            </li>
+            <li>
+              <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">
+                Phone
+              </p>
+              <a
+                href={`tel:${SITE.phoneE164}`}
+                className="mt-2 inline-block text-sm text-brand-cream/95 underline decoration-brand-gold/70 underline-offset-2 transition hover:text-brand-cream"
+              >
+                {SITE.phoneDisplay}
+              </a>
             </li>
             <li>
               <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { LegalDocumentContent } from "@/components/cafe/LegalDocumentContent";
 import { LegalPageShell } from "@/components/cafe/LegalPageShell";
+import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { TERMS_DOCUMENT } from "@/lib/legal-documents";
 
 export const metadata: Metadata = {
@@ -19,10 +21,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const nonce = (await headers()).get("x-nonce") ?? "";
+
   return (
-    <LegalPageShell title={TERMS_DOCUMENT.title}>
-      <LegalDocumentContent document={TERMS_DOCUMENT} />
-    </LegalPageShell>
+    <>
+      <PageJsonLd
+        nonce={nonce}
+        path="/terms"
+        name="Terms of use - Indonesian Cafe"
+        description={TERMS_DOCUMENT.description}
+        breadcrumbLabel="Terms"
+      />
+      <LegalPageShell title={TERMS_DOCUMENT.title}>
+        <LegalDocumentContent document={TERMS_DOCUMENT} />
+      </LegalPageShell>
+    </>
   );
 }

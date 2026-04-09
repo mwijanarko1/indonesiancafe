@@ -41,7 +41,7 @@ describe("Home (Indonesian Cafe)", () => {
   it("renders the hero heading", async () => {
     render(await Home());
     const h1 = screen.getByRole("heading", { level: 1 });
-    expect(h1).toHaveTextContent(/Authentic Indonesian Taste/i);
+    expect(h1).toHaveTextContent(/Indonesian Restaurant in Sheffield/i);
   });
 
   it("renders menu and visit sections", async () => {
@@ -67,5 +67,10 @@ describe("Home (Indonesian Cafe)", () => {
     render(await Home());
     expect(screen.getAllByText(/15 Crookes/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/S10 1UA/i).length).toBeGreaterThan(0);
+  });
+
+  it("shows the public phone number", async () => {
+    render(await Home());
+    expect(screen.getAllByRole("link", { name: /07491 287515/i }).length).toBeGreaterThan(0);
   });
 });

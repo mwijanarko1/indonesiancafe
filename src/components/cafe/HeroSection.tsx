@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { HOME_HERO_KICKER, HOME_HERO_TITLE } from "@/lib/site-copy";
-import { SITE } from "@/lib/site";
+import { HERO_IMAGE_PATH, SITE } from "@/lib/site";
 
 function HeroWaveDivider() {
   return (
@@ -59,7 +59,7 @@ export function HeroSection() {
 
         <div className="mt-10 w-full max-w-[min(36rem,calc(100vw-2rem))] md:max-w-[44rem] lg:max-w-[52rem] xl:max-w-[60rem] 2xl:max-w-[68rem]">
           <Image
-            src="/hero.png"
+            src={HERO_IMAGE_PATH}
             alt={`Illustration of ${SITE.name} storefront at ${SITE.streetAddress}, ${SITE.addressLocality}`}
             width={998}
             height={730}

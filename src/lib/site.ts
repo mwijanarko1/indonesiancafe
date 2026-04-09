@@ -1,9 +1,17 @@
 import { getEnv } from "./env";
 
 const LOCAL_CANONICAL_SITE_URL = "http://localhost:3000";
+const LEGACY_APEX_SITE_URL = "https://indonesiancafe.co.uk";
+const LIVE_CANONICAL_SITE_URL = "https://www.indonesiancafe.co.uk";
+
+export const HERO_IMAGE_PATH = "/images/seo/hero-home-v1.webp";
+export const LOGO_IMAGE_PATH = "/images/seo/logo-v1.webp";
 
 function normalizeSiteUrl(url: string): string {
-  return url.trim().replace(/\/$/, "");
+  const normalized = url.trim().replace(/\/$/, "");
+  return normalized === LEGACY_APEX_SITE_URL
+    ? LIVE_CANONICAL_SITE_URL
+    : normalized;
 }
 
 /**
@@ -55,13 +63,22 @@ export const SITE = {
   tagline:
     "Indonesian restaurant & cafe Sheffield — halal Indonesian food, takeaway, coffee and bakery · 15 Crookes, S10",
   /** Production origin — set `NEXT_PUBLIC_APP_URL` to this on Vercel (metadata, sitemap, JSON-LD). */
-  liveUrl: "https://indonesiancafe.co.uk",
+  liveUrl: LIVE_CANONICAL_SITE_URL,
   streetAddress: "15 Crookes",
   addressLocality: "Sheffield",
   postalCode: "S10 1UA",
   addressRegion: "South Yorkshire",
   addressCountry: "GB",
+  phoneDisplay: "07491 287515",
+  phoneE164: "+447491287515",
+  geo: {
+    latitude: 53.3811,
+    longitude: -1.4701,
+  },
+  menuPath: "/menu",
   mapsUrl: "https://maps.app.goo.gl/p6cuBbE77hqYN3j68",
+  instagramUrl: "https://www.instagram.com/indonesiancafe_/",
+  facebookUrl: "https://www.facebook.com/profile.php?id=61583156852755",
   /** Embed URL for homepage (no Maps API key; matches Share → Embed query style). */
   mapsEmbedSrc: `https://www.google.com/maps?q=${encodeURIComponent(
     "Indonesian Cafe, 15 Crookes, Sheffield S10 1UA, United Kingdom",
@@ -95,8 +112,9 @@ export function buildRestaurantJsonLd(siteUrl: string) {
         "@id": restaurantId,
         name: SITE.name,
         description: SITE_SEO_DESCRIPTION,
-        image: [`${base}/hero.png`, `${base}/logo.png`],
+        image: [`${base}${HERO_IMAGE_PATH}`, `${base}${LOGO_IMAGE_PATH}`],
         url: `${base}/`,
+        telephone: SITE.phoneE164,
         address: {
           "@type": "PostalAddress",
           streetAddress: SITE.streetAddress,
@@ -105,9 +123,15 @@ export function buildRestaurantJsonLd(siteUrl: string) {
           addressRegion: SITE.addressRegion,
           addressCountry: SITE.addressCountry,
         },
-        servesCuisine: ["Indonesian", "Asian"],
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: SITE.geo.latitude,
+          longitude: SITE.geo.longitude,
+        },
+        servesCuisine: ["Indonesian", "Southeast Asian", "Halal", "Asian"],
+        menu: `${base}${SITE.menuPath}`,
         priceRange: "$$",
-        sameAs: [SITE.mapsUrl],
+        sameAs: [SITE.mapsUrl, SITE.instagramUrl, SITE.facebookUrl],
         hasMap: SITE.mapsUrl,
         areaServed: [
           { "@type": "City", name: "Sheffield" },
@@ -139,5 +163,53 @@ export function buildRestaurantJsonLd(siteUrl: string) {
         publisher: { "@id": restaurantId },
       },
     ],
+  };
+}
+
+export type BreadcrumbItem = {
+  name: string;
+  path: string;
+};
+
+function toAbsoluteSiteUrl(base: string, path: string): string {
+  if (path === "/") {
+    return `${base}/`;
+  }
+  return `${base}${path}`;
+}
+
+export function buildWebPageJsonLd(
+  siteUrl: string,
+  options: { path: string; name: string; description: string },
+) {
+  const base = siteUrl.replace(/\/$/, "");
+  const pageUrl = toAbsoluteSiteUrl(base, options.path);
+
+  return {
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    name: options.name,
+    description: options.description,
+    url: pageUrl,
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${base}/#website`,
+      name: SITE.name,
+      url: `${base}/`,
+    },
+  };
+}
+
+export function buildBreadcrumbJsonLd(siteUrl: string, items: readonly BreadcrumbItem[]) {
+  const base = siteUrl.replace(/\/$/, "");
+
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: toAbsoluteSiteUrl(base, item.path),
+    })),
   };
 }

@@ -66,11 +66,11 @@ const MACHINE_DOCUMENTS: readonly MachineDocumentDescriptor[] = [
 const SOCIAL_LINKS = [
   {
     label: "Instagram",
-    href: "https://www.instagram.com/indonesiancafe_/",
+    href: SITE.instagramUrl,
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com/profile.php?id=61583156852755",
+    href: SITE.facebookUrl,
   },
 ] as const;
 

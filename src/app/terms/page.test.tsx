@@ -6,6 +6,12 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/terms",
 }));
 
+vi.mock("next/headers", () => ({
+  headers: vi.fn(async () => ({
+    get: () => "test-nonce",
+  })),
+}));
+
 describe("/terms page", () => {
   it("exports canonical metadata", () => {
     expect(metadata.title).toBe("Terms of use");
@@ -13,11 +19,13 @@ describe("/terms page", () => {
     expect(metadata.robots).toMatchObject({ index: true, follow: true });
   });
 
-  it("renders terms heading and related legal link", () => {
-    render(<TermsPage />);
+  it("renders terms heading and related legal link", async () => {
+    const { container } = render(await TermsPage());
 
     expect(screen.getByRole("heading", { name: "Terms of use", level: 1 })).toBeInTheDocument();
     expect(screen.getByText(/Last updated:/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Privacy notice" })).toHaveAttribute("href", "/privacy");
+    expect(container.innerHTML).toContain('"BreadcrumbList"');
+    expect(container.innerHTML).toContain("/terms");
   });
 });

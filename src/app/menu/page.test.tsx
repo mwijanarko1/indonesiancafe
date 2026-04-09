@@ -1,9 +1,22 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
 import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
 import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
-import { metadata } from "./page";
+import MenuPage, { metadata } from "./page";
+
+vi.mock("next/headers", () => ({
+  headers: vi.fn(async () => ({
+    get: () => "test-nonce",
+  })),
+}));
+
+vi.mock("@/lib/server/site-content", () => ({
+  getSiteMenuContent: vi.fn(async () => ({
+    menu: DEFAULT_SITE_MENU,
+    source: "fallback",
+  })),
+}));
 
 function MenuPageTestShell() {
   return (
@@ -76,5 +89,17 @@ describe("/menu page", () => {
       </>,
     );
     expect(screen.queryByText(hiddenName)).not.toBeInTheDocument();
+  });
+
+  it("renders breadcrumb json-ld for the menu page", async () => {
+    const { container } = render(await MenuPage());
+    const scripts = Array.from(container.querySelectorAll('script[type="application/ld+json"]'));
+
+    expect(
+      scripts.some((script) => {
+        const content = script.textContent ?? "";
+        return content.includes('"BreadcrumbList"') && content.includes("/menu");
+      }),
+    ).toBe(true);
   });
 });

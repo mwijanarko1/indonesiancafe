@@ -192,13 +192,13 @@ pre {
   border-radius: 0.5rem;
   background-color: #1e1e1e;
   color: #d4d4d4;
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: var(--font-mono, ui-monospace), ui-monospace, monospace;
   font-size: 0.875rem;
   line-height: 1.5;
 }
 
 code {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: var(--font-mono, ui-monospace), ui-monospace, monospace;
 }
 
 /* Focus styles */

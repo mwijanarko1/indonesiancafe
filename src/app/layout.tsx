@@ -4,23 +4,20 @@ import {
   Anton,
   Barlow_Condensed,
   DM_Sans,
-  IBM_Plex_Mono,
   Lora,
 } from "next/font/google";
 import { RestaurantJsonLd } from "@/components/seo/RestaurantJsonLd";
-import { getRequiredCanonicalSiteUrl, SITE_SEO_DESCRIPTION } from "@/lib/site";
+import {
+  getRequiredCanonicalSiteUrl,
+  HERO_IMAGE_PATH,
+  SITE_SEO_DESCRIPTION,
+} from "@/lib/site";
 import "./globals.css";
 
 const dmSans = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
 });
 
 /** Headings, menu titles, prices — readable serif that pairs with the hero poster face */
@@ -56,41 +53,6 @@ export const metadata: Metadata = {
     template: "%s · Indonesian Restaurant Sheffield",
   },
   description: SITE_SEO_DESCRIPTION,
-  /** Priority → menu-item → local intent (GBP / homepage / schema reinforcement). Meta keywords are low impact but document targeting. */
-  keywords: [
-    "Indonesian restaurant Sheffield",
-    "Indonesian cafe Sheffield",
-    "Indonesian Cafe Sheffield",
-    "Indonesian food Sheffield",
-    "authentic Indonesian food Sheffield",
-    "halal Indonesian food Sheffield",
-    "Indonesian takeaway Sheffield",
-    "Indonesian food near me",
-    "Indonesian cafe Crookes",
-    "Indonesian restaurant Crookes",
-    "Indonesian bakery Sheffield",
-    "nasi goreng Sheffield",
-    "beef rendang Sheffield",
-    "chicken satay Sheffield",
-    "sate ayam Sheffield",
-    "mie goreng Sheffield",
-    "sambal Sheffield",
-    "Indonesian snacks Sheffield",
-    "Indonesian coffee Sheffield",
-    "halal food Crookes",
-    "halal restaurant Sheffield",
-    "Asian restaurant Crookes",
-    "food in Crookes Sheffield",
-    "Sheffield S10 restaurant",
-    "takeaway Crookes Sheffield",
-    "15 Crookes Sheffield",
-    "S10 1UA restaurant",
-    "Indonesian restaurant UK",
-    "Indonesian cafe UK",
-    "Indonesian Cafe",
-    "Crookes",
-    "S10 1UA",
-  ],
   authors: [{ name: "Indonesian Cafe" }],
   openGraph: {
     title:
@@ -100,7 +62,7 @@ export const metadata: Metadata = {
     siteName: "Indonesian Cafe Sheffield",
     images: [
       {
-        url: "/hero.png",
+        url: HERO_IMAGE_PATH,
         width: 1966,
         height: 1423,
         alt: "Indonesian restaurant Sheffield — Indonesian Cafe, halal food and takeaway, coffee and bakery, 15 Crookes S10",
@@ -114,7 +76,7 @@ export const metadata: Metadata = {
     title:
       "Indonesian Restaurant Sheffield | Indonesian Cafe · Halal Indonesian Food",
     description: SITE_SEO_DESCRIPTION,
-    images: ["/hero.png"],
+    images: [HERO_IMAGE_PATH],
   },
   robots: {
     index: true,
@@ -132,7 +94,7 @@ export default async function RootLayout({
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${ibmPlexMono.variable} ${lora.variable} ${barlowCondensed.variable} ${anton.variable} min-h-screen antialiased bg-brand-cream-page`}
+        className={`${dmSans.variable} ${lora.variable} ${barlowCondensed.variable} ${anton.variable} min-h-screen antialiased bg-brand-cream-page`}
       >
         <RestaurantJsonLd nonce={nonce} />
         <a

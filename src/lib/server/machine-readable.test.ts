@@ -28,7 +28,7 @@ describe("machine-readable generators", () => {
   beforeEach(() => {
     process.env = {
       ...ORIGINAL_ENV,
-      NEXT_PUBLIC_APP_URL: "https://indonesiancafe.co.uk",
+      NEXT_PUBLIC_APP_URL: "https://www.indonesiancafe.co.uk",
       NODE_ENV: "test",
     };
     mockMenu = DEFAULT_SITE_MENU;
@@ -44,11 +44,11 @@ describe("machine-readable generators", () => {
     const { buildLlmsTxt } = await import("./machine-readable");
     const txt = buildLlmsTxt();
 
-    expect(txt).toContain("https://indonesiancafe.co.uk/llms/home.md");
-    expect(txt).toContain("https://indonesiancafe.co.uk/llms/menu.md");
-    expect(txt).toContain("https://indonesiancafe.co.uk/llms/reviews.md");
-    expect(txt).toContain("https://indonesiancafe.co.uk/llms/privacy.md");
-    expect(txt).toContain("https://indonesiancafe.co.uk/llms/terms.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/home.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/menu.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/reviews.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/privacy.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/terms.md");
   });
 
   it("home markdown includes key location and hours content", async () => {
@@ -105,8 +105,8 @@ describe("machine-readable generators", () => {
     const terms = buildTermsMarkdown();
 
     expect(privacy).toContain("## Who we are");
-    expect(privacy).toContain("[Terms of use](https://indonesiancafe.co.uk/terms)");
+    expect(privacy).toContain("[Terms of use](https://www.indonesiancafe.co.uk/terms)");
     expect(terms).toContain("## Agreement");
-    expect(terms).toContain("[Privacy notice](https://indonesiancafe.co.uk/privacy)");
+    expect(terms).toContain("[Privacy notice](https://www.indonesiancafe.co.uk/privacy)");
   });
 });

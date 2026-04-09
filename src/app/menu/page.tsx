@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { MenuPageBody } from "@/components/cafe/MenuPageBody";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
 import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
-import { getRequiredCanonicalSiteUrl } from "@/lib/site";
+import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { getSiteMenuContent } from "@/lib/server/site-content";
 
 const description =
@@ -31,23 +31,15 @@ export const metadata: Metadata = {
 export default async function MenuPage() {
   const [{ menu }, requestHeaders] = await Promise.all([getSiteMenuContent(), headers()]);
   const nonce = requestHeaders.get("x-nonce") ?? "";
-  const siteUrl = getRequiredCanonicalSiteUrl();
-  const base = siteUrl.replace(/\/$/, "");
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Menu — Indonesian Cafe",
-    description,
-    url: `${base}/menu`,
-    isPartOf: { "@type": "WebSite", name: "Indonesian Cafe", url: base },
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
+      <PageJsonLd
         nonce={nonce}
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        path="/menu"
+        name="Menu - Indonesian Cafe"
+        description={description}
+        breadcrumbLabel="Menu"
       />
       <SiteHeader variant="inverse" />
       <main

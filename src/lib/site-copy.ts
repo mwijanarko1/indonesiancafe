@@ -1,5 +1,5 @@
 export const HOME_HERO_KICKER = "The";
-export const HOME_HERO_TITLE = "Authentic Indonesian Taste";
+export const HOME_HERO_TITLE = "Indonesian Restaurant in Sheffield";
 
 export const HOME_SUMMARY =
   "Indonesian restaurant and cafe in Sheffield serving halal Indonesian home cooking, takeaway, coffee, and bakery favourites.";

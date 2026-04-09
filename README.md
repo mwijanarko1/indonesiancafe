@@ -60,7 +60,7 @@ Set `NEXT_PUBLIC_CONVEX_URL` in `.env.local` (see `.env.example`) to load live m
 | `src/lib/cafe-menu.ts` | Menu types and static fallback (`DEFAULT_SITE_MENU`) |
 | `src/lib/guest-reviews.ts` | Review types and defaults |
 | `src/lib/env.ts` | Zod-validated env for server usage |
-| `public/poster.png`, `public/logo.png` | Hero / branding / metadata images |
+| `public/images/seo/`, `public/logo.png` | SEO hero/logo assets and branding images |
 
 For a fuller map of the repo, see [`docs/CODEBASE_MAP.md`](docs/CODEBASE_MAP.md).
 
@@ -68,8 +68,8 @@ For a fuller map of the repo, see [`docs/CODEBASE_MAP.md`](docs/CODEBASE_MAP.md)
 
 Copy `.env.example` to `.env.local` and adjust as needed:
 
-- **`NEXT_PUBLIC_APP_URL`** — canonical site URL for Open Graph, sitemap, robots, and JSON-LD. In production use your real domain, e.g. **`https://indonesiancafe.co.uk`** (not the `*.vercel.app` host), so metadata and Search Console stay consistent.
-- **Vercel always keeps** a `*.vercel.app` URL for your project; that does not go away when you add a custom domain. The custom domain is an extra hostname for the same deployment. In Vercel → Domains, set **`indonesiancafe.co.uk` as the primary** production domain so visitors and (typically) the production `vercel.app` URL are steered toward the domain you want public.
+- **`NEXT_PUBLIC_APP_URL`** — canonical site URL for Open Graph, sitemap, robots, and JSON-LD. In production use your real domain, e.g. **`https://www.indonesiancafe.co.uk`** (not the `*.vercel.app` host), so metadata and Search Console stay consistent.
+- **Vercel always keeps** a `*.vercel.app` URL for your project; that does not go away when you add a custom domain. The custom domain is an extra hostname for the same deployment. In Vercel → Domains, set **`www.indonesiancafe.co.uk` as the primary** production domain so visitors and (typically) the production `vercel.app` URL are steered toward the domain you want public.
 - Optional locally; without it, dev uses localhost and Vercel builds can fall back to `VERCEL_URL`.
 - Required for non-local builds when you are not relying on `VERCEL_URL`, so metadata does not ship with localhost URLs.
 - **`NEXT_PUBLIC_CONVEX_URL`** — Convex deployment URL for live menu and reviews

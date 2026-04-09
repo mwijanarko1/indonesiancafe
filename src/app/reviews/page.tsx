@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { GuestReviewsListView } from "@/components/cafe/GuestReviewsList";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
 import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
-import { SITE } from "@/lib/site";
+import { PageJsonLd } from "@/components/seo/PageJsonLd";
+import { HERO_IMAGE_PATH, SITE } from "@/lib/site";
 import { getSiteReviewsContent } from "@/lib/server/site-content";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
     url: "/reviews",
     images: [
       {
-        url: "/hero.png",
+        url: HERO_IMAGE_PATH,
         width: 1966,
         height: 1423,
         alt: "Indonesian restaurant Sheffield — Indonesian Cafe, halal Indonesian food, coffee and bakery, 15 Crookes S10",
@@ -34,15 +36,23 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Guest reviews · Indonesian Cafe Sheffield",
     description: reviewsDescription,
-    images: ["/hero.png"],
+    images: [HERO_IMAGE_PATH],
   },
 };
 
 export default async function ReviewsPage() {
-  const { reviews } = await getSiteReviewsContent();
+  const [{ reviews }, requestHeaders] = await Promise.all([getSiteReviewsContent(), headers()]);
+  const nonce = requestHeaders.get("x-nonce") ?? "";
 
   return (
     <>
+      <PageJsonLd
+        nonce={nonce}
+        path="/reviews"
+        name="Guest reviews - Indonesian Cafe"
+        description={reviewsDescription}
+        breadcrumbLabel="Reviews"
+      />
       <SiteHeader />
       <main
         id="main-content"
