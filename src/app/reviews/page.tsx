@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import Link from "next/link";
 import { GuestReviewsListView } from "@/components/cafe/GuestReviewsList";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
@@ -8,7 +7,7 @@ import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { HERO_IMAGE_PATH, SITE } from "@/lib/site";
 import { getSiteReviewsContent } from "@/lib/server/site-content";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const reviewsDescription =
   "Guest reviews for Indonesian restaurant Sheffield — Indonesian Cafe Crookes, halal Indonesian food, takeaway and dine-in. Coffee and bakery at 15 Crookes, S10 1UA. See what diners say.";
@@ -41,13 +40,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const [{ reviews }, requestHeaders] = await Promise.all([getSiteReviewsContent(), headers()]);
-  const nonce = requestHeaders.get("x-nonce") ?? "";
+  const { reviews } = await getSiteReviewsContent();
 
   return (
     <>
       <PageJsonLd
-        nonce={nonce}
         path="/reviews"
         name="Guest reviews - Indonesian Cafe"
         description={reviewsDescription}

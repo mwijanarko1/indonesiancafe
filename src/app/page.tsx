@@ -8,7 +8,7 @@ import { WordOfMouthSection } from "@/components/cafe/WordOfMouthSection";
 import { getFeaturedGuestReviewsFrom } from "@/lib/guest-reviews";
 import { getSiteMenuContent, getSiteReviewsContent } from "@/lib/server/site-content";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 /** Self-referencing canonical for `/` only; subpages set their own in `page.tsx`. */
 export const metadata: Metadata = {

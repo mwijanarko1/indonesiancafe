@@ -76,7 +76,3 @@ export function getFeaturedGuestReviewsFrom(
   const byAuthor = new Map(reviews.map((r) => [r.author, r]));
   return order.map((name) => byAuthor.get(name)).filter((r): r is GuestReview => r !== undefined);
 }
-
-export function getFeaturedGuestReviews(): GuestReview[] {
-  return getFeaturedGuestReviewsFrom(GUEST_REVIEWS, DEFAULT_FEATURED_AUTHOR_ORDER);
-}

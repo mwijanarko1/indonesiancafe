@@ -5,12 +5,6 @@ import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/Site
 import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
 import MenuPage, { metadata } from "./page";
 
-vi.mock("next/headers", () => ({
-  headers: vi.fn(async () => ({
-    get: () => "test-nonce",
-  })),
-}));
-
 vi.mock("@/lib/server/site-content", () => ({
   getSiteMenuContent: vi.fn(async () => ({
     menu: DEFAULT_SITE_MENU,

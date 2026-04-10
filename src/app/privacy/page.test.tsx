@@ -6,12 +6,6 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/privacy",
 }));
 
-vi.mock("next/headers", () => ({
-  headers: vi.fn(async () => ({
-    get: () => "test-nonce",
-  })),
-}));
-
 describe("/privacy page", () => {
   it("exports canonical metadata", () => {
     expect(metadata.title).toBe("Privacy");

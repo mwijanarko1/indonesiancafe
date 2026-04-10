@@ -3,12 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import { GUEST_REVIEWS } from "@/lib/guest-reviews";
 import ReviewsPage, { metadata } from "./page";
 
-vi.mock("next/headers", () => ({
-  headers: vi.fn(async () => ({
-    get: () => "test-nonce",
-  })),
-}));
-
 vi.mock("@/lib/server/site-content", () => ({
   getSiteReviewsContent: vi.fn(async () => ({
     reviews: GUEST_REVIEWS,

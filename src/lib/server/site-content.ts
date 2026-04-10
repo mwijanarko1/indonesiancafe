@@ -1,6 +1,6 @@
 import "server-only";
 
-import { fetchQuery } from "convex/nextjs";
+import { ConvexHttpClient } from "convex/browser";
 import { api } from "@convex/_generated/api";
 import { DEFAULT_SITE_MENU, type SiteMenuContent } from "@/lib/cafe-menu";
 import {
@@ -10,6 +10,13 @@ import {
 } from "@/lib/guest-reviews";
 
 type ContentSource = "convex" | "fallback";
+type NextFetchInit = RequestInit & {
+  next?: {
+    revalidate?: number;
+  };
+};
+
+const SITE_CONTENT_REVALIDATE_SECONDS = 3600;
 
 export type SiteMenuContentResult = {
   menu: SiteMenuContent;
@@ -25,6 +32,21 @@ export type SiteReviewsContentResult = {
 function getConvexDeploymentUrl(): string | null {
   const url = process.env.NEXT_PUBLIC_CONVEX_URL?.trim();
   return url ? url : null;
+}
+
+function createConvexServerFetch(): typeof fetch {
+  return (input, init) =>
+    fetch(input, {
+      ...init,
+      cache: "force-cache",
+      next: { revalidate: SITE_CONTENT_REVALIDATE_SECONDS },
+    } as NextFetchInit);
+}
+
+function createConvexClient(url: string): ConvexHttpClient {
+  return new ConvexHttpClient(url, {
+    fetch: createConvexServerFetch(),
+  });
 }
 
 function fallbackMenuContent(): SiteMenuContentResult {
@@ -49,7 +71,7 @@ export async function getSiteMenuContent(): Promise<SiteMenuContentResult> {
   }
 
   try {
-    const menu = await fetchQuery(api.menu.get, {}, { url });
+    const menu = await createConvexClient(url).query(api.menu.get, {});
     if (menu !== null) {
       return { menu, source: "convex" };
     }
@@ -68,7 +90,7 @@ export async function getSiteReviewsContent(): Promise<SiteReviewsContentResult>
   }
 
   try {
-    const reviews = await fetchQuery(api.reviews.get, {}, { url });
+    const reviews = await createConvexClient(url).query(api.reviews.get, {});
     if (reviews !== null) {
       return {
         reviews: reviews.reviews,

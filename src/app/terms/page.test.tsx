@@ -6,12 +6,6 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/terms",
 }));
 
-vi.mock("next/headers", () => ({
-  headers: vi.fn(async () => ({
-    get: () => "test-nonce",
-  })),
-}));
-
 describe("/terms page", () => {
   it("exports canonical metadata", () => {
     expect(metadata.title).toBe("Terms of use");

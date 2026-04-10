@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { headers } from "next/headers";
 import {
   Anton,
   Barlow_Condensed,
@@ -45,6 +44,8 @@ export const viewport: Viewport = {
   themeColor: "#b91c1c",
 };
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   metadataBase: new URL(getRequiredCanonicalSiteUrl()),
   title: {
@@ -84,19 +85,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get("x-nonce") ?? "";
-
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body
         className={`${dmSans.variable} ${lora.variable} ${barlowCondensed.variable} ${anton.variable} min-h-screen antialiased bg-brand-cream-page`}
       >
-        <RestaurantJsonLd nonce={nonce} />
+        <RestaurantJsonLd />
         <a
           href="#main-content"
           className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-semibold text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"

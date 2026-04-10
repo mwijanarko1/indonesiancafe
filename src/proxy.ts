@@ -23,35 +23,12 @@ function connectSrcDirective(): string {
   return [...sources].join(" ");
 }
 
-function randomNonce(): string {
-  const bytes = new Uint8Array(16);
-  crypto.getRandomValues(bytes);
-  let binary = "";
-  for (const b of bytes) {
-    binary += String.fromCharCode(b);
-  }
-  return btoa(binary);
-}
-
-export function proxy(request: NextRequest) {
-  const nonce = randomNonce();
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
-
-  const response = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
-
-  const scriptParts = [
-    "'self'",
-    `'nonce-${nonce}'`,
-    "'strict-dynamic'",
-    ...(isDev ? (["'unsafe-eval'"] as const) : []),
-  ];
+export function proxy(_request: NextRequest) {
+  const response = NextResponse.next();
 
   const csp = [
     "default-src 'self'",
-    `script-src ${scriptParts.join(" ")}`,
+    `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",

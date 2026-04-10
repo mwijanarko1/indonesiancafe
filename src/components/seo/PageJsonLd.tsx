@@ -5,7 +5,6 @@ import {
 } from "@/lib/site";
 
 type PageJsonLdProps = {
-  nonce: string;
   path: string;
   name: string;
   description: string;
@@ -13,7 +12,6 @@ type PageJsonLdProps = {
 };
 
 export function PageJsonLd({
-  nonce,
   path,
   name,
   description,
@@ -35,7 +33,6 @@ export function PageJsonLd({
   return (
     <script
       type="application/ld+json"
-      nonce={nonce || undefined}
       suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: json }}
     />

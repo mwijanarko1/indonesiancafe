@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getRequiredCanonicalSiteUrl } from "@/lib/site";
 
+export const revalidate = 3600;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = getRequiredCanonicalSiteUrl();
   const lastModified = new Date();

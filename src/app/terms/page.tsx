@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { LegalDocumentContent } from "@/components/cafe/LegalDocumentContent";
 import { LegalPageShell } from "@/components/cafe/LegalPageShell";
 import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { TERMS_DOCUMENT } from "@/lib/legal-documents";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Terms of use",
@@ -22,12 +23,9 @@ export const metadata: Metadata = {
 };
 
 export default async function TermsPage() {
-  const nonce = (await headers()).get("x-nonce") ?? "";
-
   return (
     <>
       <PageJsonLd
-        nonce={nonce}
         path="/terms"
         name="Terms of use - Indonesian Cafe"
         description={TERMS_DOCUMENT.description}

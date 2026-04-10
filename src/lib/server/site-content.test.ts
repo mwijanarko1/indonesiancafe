@@ -5,8 +5,15 @@ import {
   GUEST_REVIEWS,
 } from "@/lib/guest-reviews";
 
-vi.mock("convex/nextjs", () => ({
-  fetchQuery: vi.fn(),
+const mockConvexQuery = vi.fn();
+const MockConvexHttpClient = vi.fn(function MockConvexHttpClient() {
+  return {
+    query: mockConvexQuery,
+  };
+});
+
+vi.mock("convex/browser", () => ({
+  ConvexHttpClient: MockConvexHttpClient,
 }));
 
 vi.mock("@convex/_generated/api", () => ({
@@ -31,8 +38,7 @@ afterEach(() => {
 describe("site content loaders", () => {
   it("returns Convex menu data when configured", async () => {
     process.env.NEXT_PUBLIC_CONVEX_URL = "https://example.convex.cloud";
-    const { fetchQuery } = await import("convex/nextjs");
-    vi.mocked(fetchQuery).mockResolvedValueOnce(DEFAULT_SITE_MENU);
+    mockConvexQuery.mockResolvedValueOnce(DEFAULT_SITE_MENU);
 
     const { getSiteMenuContent } = await import("./site-content");
     await expect(getSiteMenuContent()).resolves.toEqual({
@@ -44,8 +50,7 @@ describe("site content loaders", () => {
   it("falls back when the menu query returns null", async () => {
     process.env.NEXT_PUBLIC_CONVEX_URL = "https://example.convex.cloud";
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { fetchQuery } = await import("convex/nextjs");
-    vi.mocked(fetchQuery).mockResolvedValueOnce(null);
+    mockConvexQuery.mockResolvedValueOnce(null);
 
     const { getSiteMenuContent } = await import("./site-content");
     await expect(getSiteMenuContent()).resolves.toEqual({
@@ -59,8 +64,7 @@ describe("site content loaders", () => {
   it("falls back when the reviews query throws", async () => {
     process.env.NEXT_PUBLIC_CONVEX_URL = "https://example.convex.cloud";
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { fetchQuery } = await import("convex/nextjs");
-    vi.mocked(fetchQuery).mockRejectedValueOnce(new Error("boom"));
+    mockConvexQuery.mockRejectedValueOnce(new Error("boom"));
 
     const { getSiteReviewsContent } = await import("./site-content");
     await expect(getSiteReviewsContent()).resolves.toEqual({
