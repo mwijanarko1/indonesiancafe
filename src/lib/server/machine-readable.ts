@@ -311,9 +311,22 @@ export function buildTermsMarkdown(): string {
   return renderLegalMarkdown(base, getDescriptor("terms"), TERMS_DOCUMENT);
 }
 
-export function buildLlmsTxt(): string {
+export async function buildLlmsTxt(): Promise<string> {
   const base = getRequiredCanonicalSiteUrl();
   const descriptors = getMachineDocumentDescriptors();
+  const [{ menu }, { reviews, featuredAuthorOrder }] = await Promise.all([
+    getSiteMenuContent(),
+    getSiteReviewsContent(),
+  ]);
+  const featuredReviews = getFeaturedGuestReviewsFrom(reviews, featuredAuthorOrder).slice(0, 3);
+
+  const menuHighlights = menu.categories
+    .flatMap((category) => {
+      if (category.variant !== "priced") return [];
+      return category.items.filter((item) => item.isAvailable !== false);
+    })
+    .slice(0, 6)
+    .map((item) => `${formatMenuItemDisplayName(item.name)} (${item.price})`);
 
   const preferredLinks = descriptors
     .map(
@@ -330,6 +343,36 @@ export function buildLlmsTxt(): string {
     "site: Indonesian Cafe",
     `url: ${toAbsolute(base, "/")}`,
     `summary: ${HOME_SUMMARY}`,
+    "",
+    "Restaurant description",
+    `${SITE.name} is an Indonesian restaurant and cafe in Sheffield serving halal Indonesian home cooking, takeaway, coffee, and bakery favourites.`,
+    `Primary positioning: ${HOME_HERO_TITLE}.`,
+    `${VISIT_SECTION_TITLE}: ${VISIT_SECTION_BLURB}`,
+    "",
+    "Contact",
+    `- address: ${SITE.streetAddress}, ${SITE.addressLocality} ${SITE.postalCode}, ${SITE.addressCountry}`,
+    `- phone: ${SITE.phoneDisplay}`,
+    `- maps: ${SITE.mapsUrl}`,
+    "",
+    "Opening hours",
+    ...OPENING_HOURS.map((row) => `- ${row.day}: ${row.time}`),
+    `- note: ${OPENING_HOURS_FOOTNOTE}`,
+    "",
+    "Cuisine and service",
+    "- cuisine: Indonesian, Southeast Asian, halal, Asian",
+    "- service: dine-in, takeaway, coffee, bakery",
+    "",
+    "Menu highlights",
+    ...(menuHighlights.length > 0
+      ? menuHighlights.map((item) => `- ${item}`)
+      : ["- Menu highlights are available on the full menu page."]),
+    "",
+    "Guest reviews",
+    REVIEWS_SECTION_BLURB,
+    ...featuredReviews.map((review) => `- ${review.author}: "${review.homeExcerpt ?? review.quote}"`),
+    "",
+    "Social links",
+    ...SOCIAL_LINKS.map(({ label, href }) => `- ${label}: ${href}`),
     "",
     "Canonical HTML pages are authoritative for ranking, presentation, and user experience.",
     "",

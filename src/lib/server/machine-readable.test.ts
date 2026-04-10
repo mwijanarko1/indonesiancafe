@@ -42,13 +42,17 @@ describe("machine-readable generators", () => {
 
   it("buildLlmsTxt includes all markdown document URLs", async () => {
     const { buildLlmsTxt } = await import("./machine-readable");
-    const txt = buildLlmsTxt();
+    const txt = await buildLlmsTxt();
 
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/home.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/menu.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/reviews.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/privacy.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/terms.md");
+    expect(txt).toContain("Restaurant description");
+    expect(txt).toContain("07491 287515");
+    expect(txt).toContain("Opening hours");
+    expect(txt).toContain("Cuisine and service");
   });
 
   it("home markdown includes key location and hours content", async () => {

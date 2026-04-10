@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/server/machine-readable", () => ({
-  buildLlmsTxt: vi.fn(() => "site: Indonesian Cafe"),
+  buildLlmsTxt: vi.fn(async () => "site: Indonesian Cafe"),
 }));
 
 import { buildLlmsTxt } from "@/lib/server/machine-readable";
