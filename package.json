@@ -14,13 +14,16 @@
     "seed:convex": "npm run convex:seed && npm run convex:seed:prod"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
     "@tailwindcss/postcss": "^4.2.2",
+    "clsx": "^2.1.1",
     "convex": "^1.34.1",
     "lucide-react": "^1.7.0",
     "next": "^16.2.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-icons": "^5.6.0",
+    "tailwind-merge": "^3.3.1",
     "server-only": "^0.0.1",
     "zod": "^4.3.6"
   },

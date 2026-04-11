@@ -1,17 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useMemo, useState } from "react";
+import type { KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   filterUnavailableMenuItems,
   formatMenuItemDisplayName,
   safeMenuImageHref,
   type DrinkMenuGroup,
+  type DrinkMenuItem,
   type MenuCategory,
   type PricedMenuItem,
   type SiteMenuContent,
 } from "@/lib/cafe-menu";
 import { menuItemPhotoIfMatched } from "@/lib/menu-item-photos";
+import { MenuItemDetailModal, type MenuDetailSelection } from "./MenuItemDetailModal";
 
 const SECTION_IDS = {
   mains: "menu-section-mains",
@@ -21,6 +24,37 @@ const SECTION_IDS = {
 } as const;
 
 type SectionKey = keyof typeof SECTION_IDS;
+
+const PRESSABLE =
+  "cursor-pointer select-none transition hover:opacity-[0.97] focus-visible:outline focus-visible:ring-2 focus-visible:ring-brand-maroon focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream";
+
+function pricedItemPressableHandlers(item: PricedMenuItem, onSelect: (item: PricedMenuItem) => void) {
+  return {
+    role: "button" as const,
+    tabIndex: 0,
+    onClick: () => onSelect(item),
+    onKeyDown: (e: KeyboardEvent<HTMLElement>) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onSelect(item);
+      }
+    },
+  };
+}
+
+function drinkItemPressableHandlers(item: DrinkMenuItem, onSelect: (item: DrinkMenuItem) => void) {
+  return {
+    role: "button" as const,
+    tabIndex: 0,
+    onClick: () => onSelect(item),
+    onKeyDown: (e: KeyboardEvent<HTMLElement>) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onSelect(item);
+      }
+    },
+  };
+}
 
 function isPriced(cat: MenuCategory): cat is Extract<MenuCategory, { variant: "priced" }> {
   return cat.variant === "priced";
@@ -51,7 +85,13 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
+function MainsFeaturedBlock({
+  items,
+  onSelectItem,
+}: {
+  items: PricedMenuItem[];
+  onSelectItem: (item: PricedMenuItem) => void;
+}) {
   if (items.length === 0) return null;
   const [a, b, ...rest] = items;
   const row = rest.slice(0, 3);
@@ -62,7 +102,12 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-12">
-        <article className="relative overflow-hidden rounded-2xl bg-stone-200/80 shadow-sm lg:col-span-8">
+        <article
+          className={`relative overflow-hidden rounded-2xl bg-stone-200/80 shadow-sm lg:col-span-8 ${PRESSABLE}`}
+          aria-haspopup="dialog"
+          aria-controls="menu-item-detail"
+          {...pricedItemPressableHandlers(a, onSelectItem)}
+        >
           <div className="relative aspect-[16/10] min-h-[220px] w-full sm:aspect-[21/9] sm:min-h-[280px]">
             {photoA ? (
               <Image
@@ -102,7 +147,12 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
         </article>
 
         {b ? (
-          <article className="flex flex-col overflow-hidden rounded-2xl border border-brand-maroon/10 bg-white shadow-sm lg:col-span-4">
+          <article
+            className={`flex flex-col overflow-hidden rounded-2xl border border-brand-maroon/10 bg-white shadow-sm lg:col-span-4 ${PRESSABLE}`}
+            aria-haspopup="dialog"
+            aria-controls="menu-item-detail"
+            {...pricedItemPressableHandlers(b, onSelectItem)}
+          >
             <div className="flex flex-1 flex-col p-5 sm:p-6">
               <h3 className="font-[family-name:var(--font-serif)] text-lg font-bold text-brand-maroon sm:text-xl">
                 {formatMenuItemDisplayName(b.name)}
@@ -134,7 +184,10 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
             return (
               <article
                 key={item.name}
-                className="flex flex-col overflow-hidden rounded-xl border border-brand-maroon/10 bg-white shadow-sm"
+                className={`flex flex-col overflow-hidden rounded-xl border border-brand-maroon/10 bg-white shadow-sm ${PRESSABLE}`}
+                aria-haspopup="dialog"
+                aria-controls="menu-item-detail"
+                {...pricedItemPressableHandlers(item, onSelectItem)}
               >
                 <div className="flex flex-1 flex-col p-4 sm:p-5">
                   <div className="flex flex-wrap gap-1.5">
@@ -179,7 +232,10 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
             return (
               <li
                 key={item.name}
-                className="overflow-hidden rounded-xl border border-brand-maroon/8 bg-white shadow-sm"
+                className={`overflow-hidden rounded-xl border border-brand-maroon/8 bg-white shadow-sm ${PRESSABLE}`}
+                aria-haspopup="dialog"
+                aria-controls="menu-item-detail"
+                {...pricedItemPressableHandlers(item, onSelectItem)}
               >
                 <div className="flex gap-3 px-3 py-3 sm:px-4">
                   {morePhoto ? (
@@ -210,7 +266,17 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
   );
 }
 
-function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?: string; items: PricedMenuItem[] }) {
+function PricedSubsection({
+  label,
+  subtitle,
+  items,
+  onSelectItem,
+}: {
+  label: string;
+  subtitle?: string;
+  items: PricedMenuItem[];
+  onSelectItem: (item: PricedMenuItem) => void;
+}) {
   if (items.length === 0) return null;
   return (
     <div className="mt-12">
@@ -222,7 +288,10 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
           return (
             <li
               key={item.name}
-              className="overflow-hidden rounded-xl border border-brand-maroon/10 bg-white shadow-sm"
+              className={`overflow-hidden rounded-xl border border-brand-maroon/10 bg-white shadow-sm ${PRESSABLE}`}
+              aria-haspopup="dialog"
+              aria-controls="menu-item-detail"
+              {...pricedItemPressableHandlers(item, onSelectItem)}
             >
               <div className="flex gap-3 p-3 sm:p-4">
                 {subPhoto ? (
@@ -248,7 +317,13 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
   );
 }
 
-function SidesRow({ items }: { items: PricedMenuItem[] }) {
+function SidesRow({
+  items,
+  onSelectItem,
+}: {
+  items: PricedMenuItem[];
+  onSelectItem: (item: PricedMenuItem) => void;
+}) {
   const chunks: PricedMenuItem[][] = [];
   for (let i = 0; i < items.length; i += 3) chunks.push(items.slice(i, i + 3));
   return (
@@ -260,7 +335,10 @@ function SidesRow({ items }: { items: PricedMenuItem[] }) {
             return (
             <article
               key={item.name}
-              className="flex gap-4 overflow-hidden rounded-xl border border-brand-maroon/10 bg-white p-3 shadow-sm sm:p-4"
+              className={`flex gap-4 overflow-hidden rounded-xl border border-brand-maroon/10 bg-white p-3 shadow-sm sm:p-4 ${PRESSABLE}`}
+              aria-haspopup="dialog"
+              aria-controls="menu-item-detail"
+              {...pricedItemPressableHandlers(item, onSelectItem)}
             >
               {sidePhoto ? (
                 <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-stone-300/50 sm:h-28 sm:w-28">
@@ -293,7 +371,13 @@ function SidesRow({ items }: { items: PricedMenuItem[] }) {
   );
 }
 
-function DessertsColumn({ items }: { items: PricedMenuItem[] }) {
+function DessertsColumn({
+  items,
+  onSelectItem,
+}: {
+  items: PricedMenuItem[];
+  onSelectItem: (item: PricedMenuItem) => void;
+}) {
   return (
     <div className="relative pl-4 sm:pl-5">
       <div className="absolute bottom-0 left-0 top-2 w-1 rounded-full bg-brand-maroon" aria-hidden />
@@ -302,7 +386,13 @@ function DessertsColumn({ items }: { items: PricedMenuItem[] }) {
         {items.map((item) => {
           const dessertPhoto = menuItemPhotoIfMatched(item.name);
           return (
-            <li key={item.name} className="flex gap-4 border-b border-brand-maroon/10 pb-5 last:border-0">
+            <li
+              key={item.name}
+              className={`flex gap-4 border-b border-brand-maroon/10 pb-5 last:border-0 ${PRESSABLE}`}
+              aria-haspopup="dialog"
+              aria-controls="menu-item-detail"
+              {...pricedItemPressableHandlers(item, onSelectItem)}
+            >
               {dessertPhoto ? (
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-stone-200/80 sm:h-24 sm:w-24">
                   <Image src={dessertPhoto} alt="" fill className="object-cover" sizes="96px" />
@@ -332,7 +422,13 @@ function formatDrinkPrice(hot: string | null, iced: string | null): string {
   return "—";
 }
 
-function DrinksPanel({ groups }: { groups: DrinkMenuGroup[] }) {
+function DrinksPanel({
+  groups,
+  onSelectDrink,
+}: {
+  groups: DrinkMenuGroup[];
+  onSelectDrink: (item: DrinkMenuItem) => void;
+}) {
   return (
     <div className="rounded-2xl border border-brand-maroon/10 bg-white p-6 shadow-sm sm:p-8">
       <h2 className="text-center font-[family-name:var(--font-label)] text-lg font-bold uppercase tracking-[0.14em] text-brand-maroon sm:text-xl sm:tracking-[0.16em]">
@@ -350,7 +446,10 @@ function DrinksPanel({ groups }: { groups: DrinkMenuGroup[] }) {
                 return (
                   <li
                     key={row.name}
-                    className="flex items-center gap-3 text-sm sm:text-base"
+                    className={`flex items-center gap-3 text-sm sm:text-base ${PRESSABLE} rounded-lg px-1 py-0.5 -mx-1`}
+                    aria-haspopup="dialog"
+                    aria-controls="menu-item-detail"
+                    {...drinkItemPressableHandlers(row, onSelectDrink)}
                   >
                     {drinkPhoto ? (
                       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-stone-200/80">
@@ -400,6 +499,21 @@ function PdfLinks({ menu }: { menu: SiteMenuContent }) {
 export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
   const displayMenu = useMemo(() => filterUnavailableMenuItems(menu), [menu]);
   const [activeSection, setActiveSection] = useState<SectionKey>("mains");
+  const [detail, setDetail] = useState<MenuDetailSelection | null>(null);
+
+  const openPriced = useCallback((item: PricedMenuItem) => {
+    setDetail({ kind: "priced", item });
+  }, []);
+
+  const openDrink = useCallback((item: DrinkMenuItem) => {
+    setDetail({ kind: "drink", item });
+  }, []);
+
+  const closeDetail = useCallback(() => setDetail(null), []);
+
+  useEffect(() => {
+    setDetail(null);
+  }, [activeSection]);
 
   const pricedCats = displayMenu.categories.filter(isPriced);
   const drinksCat = displayMenu.categories.find(isDrinks);
@@ -426,6 +540,7 @@ export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
 
   return (
     <div>
+      <MenuItemDetailModal selection={detail} onClose={closeDetail} />
       <div className="sticky top-[3.75rem] z-40 -mx-4 border-b border-brand-maroon/10 bg-brand-cream/95 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 md:top-[4.5rem]">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-2">
           {chips.map(({ key, label }) => {
@@ -450,19 +565,37 @@ export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
 
       {activeSection === "mains" ? (
         <section id={SECTION_IDS.mains} className={panelClass}>
-          {mainsCat && mainsCat.items.length > 0 ? <MainsFeaturedBlock items={mainsCat.items} /> : null}
-          {breakfast && breakfast.items.length > 0 ? (
-            <PricedSubsection label={breakfast.label} subtitle={breakfast.subtitle} items={breakfast.items} />
+          {mainsCat && mainsCat.items.length > 0 ? (
+            <MainsFeaturedBlock items={mainsCat.items} onSelectItem={openPriced} />
           ) : null}
-          {nasi && nasi.items.length > 0 ? <PricedSubsection label={nasi.label} items={nasi.items} /> : null}
-          {packed && packed.items.length > 0 ? <PricedSubsection label={packed.label} subtitle={packed.subtitle} items={packed.items} /> : null}
+          {breakfast && breakfast.items.length > 0 ? (
+            <PricedSubsection
+              label={breakfast.label}
+              subtitle={breakfast.subtitle}
+              items={breakfast.items}
+              onSelectItem={openPriced}
+            />
+          ) : null}
+          {nasi && nasi.items.length > 0 ? (
+            <PricedSubsection label={nasi.label} items={nasi.items} onSelectItem={openPriced} />
+          ) : null}
+          {packed && packed.items.length > 0 ? (
+            <PricedSubsection
+              label={packed.label}
+              subtitle={packed.subtitle}
+              items={packed.items}
+              onSelectItem={openPriced}
+            />
+          ) : null}
         </section>
       ) : null}
 
       {activeSection === "sides" ? (
         <section id={SECTION_IDS.sides} className={panelClass}>
           <SectionHeader title="Sides" />
-          {sidesCat && sidesCat.items.length > 0 ? <SidesRow items={sidesCat.items} /> : (
+          {sidesCat && sidesCat.items.length > 0 ? (
+            <SidesRow items={sidesCat.items} onSelectItem={openPriced} />
+          ) : (
             <p className="text-sm text-stone-500">No sides listed right now.</p>
           )}
         </section>
@@ -471,7 +604,7 @@ export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
       {activeSection === "desserts" ? (
         <section id={SECTION_IDS.desserts} className={panelClass}>
           {dessertCat && dessertCat.items.length > 0 ? (
-            <DessertsColumn items={dessertCat.items} />
+            <DessertsColumn items={dessertCat.items} onSelectItem={openPriced} />
           ) : (
             <p className="text-sm text-stone-500">No desserts listed right now.</p>
           )}
@@ -481,7 +614,7 @@ export function MenuMagazineView({ menu }: { menu: SiteMenuContent }) {
       {activeSection === "drinks" ? (
         <section id={SECTION_IDS.drinks} className={panelClass}>
           {drinksCat && drinksCat.groups.length > 0 ? (
-            <DrinksPanel groups={drinksCat.groups} />
+            <DrinksPanel groups={drinksCat.groups} onSelectDrink={openDrink} />
           ) : (
             <p className="text-sm text-stone-500">Drinks coming soon.</p>
           )}
