@@ -6,6 +6,7 @@ import {
   type PricedMenuItem,
   type SiteMenuContent,
 } from "@/lib/cafe-menu";
+import { publicMenuPhoto } from "@/lib/menu-item-photos";
 
 type HighlightSpec = {
   id: string;
@@ -18,25 +19,25 @@ const HIGHLIGHTS: HighlightSpec[] = [
   {
     id: "rendang",
     match: (n) => n.toLowerCase() === "rendang beef + rice",
-    image: "/photos/rendang.jpg",
+    image: publicMenuPhoto("rendang.jpg"),
     imageAlt: "Rendang beef with rice at Indonesian Cafe",
   },
   {
     id: "geprek",
     match: (n) => n.toLowerCase().includes("ayam geprek"),
-    image: "/photos/ayam-geprek.jpg",
+    image: publicMenuPhoto("ayam_geprek.jpg"),
     imageAlt: "Ayam geprek at Indonesian Cafe",
   },
   {
     id: "mie",
     match: (n) => n.toLowerCase().includes("mie ayam bakso"),
-    image: "/photos/mie-ayam.jpg",
+    image: publicMenuPhoto("mie-ayam.jpg"),
     imageAlt: "Mie ayam bakso at Indonesian Cafe",
   },
   {
     id: "gado",
     match: (n) => n.toLowerCase().includes("gado-gado / indonesian salad"),
-    image: "/photos/gado-gado.jpg",
+    image: publicMenuPhoto("gado-gado2.jpg"),
     imageAlt: "Gado-gado Indonesian salad at Indonesian Cafe",
   },
 ];

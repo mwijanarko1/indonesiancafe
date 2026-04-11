@@ -129,49 +129,81 @@ function MainsFeaturedBlock({ items }: { items: PricedMenuItem[] }) {
 
       {row.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {row.map((item) => (
-            <article
-              key={item.name}
-              className="flex flex-col rounded-xl border border-brand-maroon/10 bg-white p-4 shadow-sm sm:p-5"
-            >
-              <div className="flex flex-wrap gap-1.5">
-                {itemBadges(item.name).map((badge) => (
-                  <span
-                    key={badge}
-                    className="rounded-md bg-brand-maroon/10 px-2 py-0.5 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon"
-                  >
-                    {badge}
-                  </span>
-                ))}
-              </div>
-              <h3 className="mt-2 font-[family-name:var(--font-serif)] text-base font-bold text-brand-maroon sm:text-lg">
-                {formatMenuItemDisplayName(item.name)}
-              </h3>
-              {item.description ? <p className="mt-1.5 flex-1 text-sm leading-relaxed text-stone-600">{item.description}</p> : null}
-              <p className="mt-3 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">{item.price}</p>
-            </article>
-          ))}
+          {row.map((item) => {
+            const rowPhoto = menuItemPhotoIfMatched(item.name);
+            return (
+              <article
+                key={item.name}
+                className="flex flex-col overflow-hidden rounded-xl border border-brand-maroon/10 bg-white shadow-sm"
+              >
+                <div className="flex flex-1 flex-col p-4 sm:p-5">
+                  <div className="flex flex-wrap gap-1.5">
+                    {itemBadges(item.name).map((badge) => (
+                      <span
+                        key={badge}
+                        className="rounded-md bg-brand-maroon/10 px-2 py-0.5 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="mt-2 font-[family-name:var(--font-serif)] text-base font-bold text-brand-maroon sm:text-lg">
+                    {formatMenuItemDisplayName(item.name)}
+                  </h3>
+                  {item.description ? (
+                    <p className="mt-1.5 flex-1 text-sm leading-relaxed text-stone-600">{item.description}</p>
+                  ) : null}
+                  <p className="mt-3 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">{item.price}</p>
+                </div>
+                {rowPhoto ? (
+                  <div className="relative aspect-[16/10] w-full bg-stone-200/80">
+                    <Image
+                      src={rowPhoto}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                    />
+                  </div>
+                ) : null}
+              </article>
+            );
+          })}
         </div>
       ) : null}
 
       {more.length > 0 ? (
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {more.map((item) => (
-            <li
-              key={item.name}
-              className="rounded-xl border border-brand-maroon/8 bg-white px-4 py-3 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <p className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
-                  {formatMenuItemDisplayName(item.name)}
-                </p>
-                <span className="shrink-0 font-[family-name:var(--font-serif)] text-sm font-bold tabular-nums text-brand-maroon">
-                  {item.price}
-                </span>
-              </div>
-              {item.description ? <p className="mt-1 text-xs leading-relaxed text-stone-600">{item.description}</p> : null}
-            </li>
-          ))}
+          {more.map((item) => {
+            const morePhoto = menuItemPhotoIfMatched(item.name);
+            return (
+              <li
+                key={item.name}
+                className="overflow-hidden rounded-xl border border-brand-maroon/8 bg-white shadow-sm"
+              >
+                <div className="flex gap-3 px-3 py-3 sm:px-4">
+                  {morePhoto ? (
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-stone-200/80 sm:h-[4.5rem] sm:w-[4.5rem]">
+                      <Image src={morePhoto} alt="" fill className="object-cover" sizes="72px" />
+                    </div>
+                  ) : null}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
+                        {formatMenuItemDisplayName(item.name)}
+                      </p>
+                      <span className="shrink-0 font-[family-name:var(--font-serif)] text-sm font-bold tabular-nums text-brand-maroon">
+                        {item.price}
+                      </span>
+                    </div>
+                    {item.description ? (
+                      <p className="mt-1 text-xs leading-relaxed text-stone-600">{item.description}</p>
+                    ) : null}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
     </div>
@@ -185,20 +217,32 @@ function PricedSubsection({ label, subtitle, items }: { label: string; subtitle?
       <h3 className="font-[family-name:var(--font-label)] text-lg font-bold uppercase tracking-[0.1em] text-brand-maroon">{label}</h3>
       {subtitle ? <p className="mt-1 text-sm text-stone-600">{subtitle}</p> : null}
       <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
-          <li
-            key={item.name}
-            className="rounded-xl border border-brand-maroon/10 bg-white px-4 py-3 shadow-sm"
-          >
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
-                {formatMenuItemDisplayName(item.name)}
-              </span>
-              <span className="shrink-0 text-sm font-bold tabular-nums text-brand-maroon">{item.price}</span>
-            </div>
-            {item.description ? <p className="mt-1 text-xs text-stone-600">{item.description}</p> : null}
-          </li>
-        ))}
+        {items.map((item) => {
+          const subPhoto = menuItemPhotoIfMatched(item.name);
+          return (
+            <li
+              key={item.name}
+              className="overflow-hidden rounded-xl border border-brand-maroon/10 bg-white shadow-sm"
+            >
+              <div className="flex gap-3 p-3 sm:p-4">
+                {subPhoto ? (
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-stone-200/80 sm:h-24 sm:w-24">
+                    <Image src={subPhoto} alt="" fill className="object-cover" sizes="96px" />
+                  </div>
+                ) : null}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
+                      {formatMenuItemDisplayName(item.name)}
+                    </span>
+                    <span className="shrink-0 text-sm font-bold tabular-nums text-brand-maroon">{item.price}</span>
+                  </div>
+                  {item.description ? <p className="mt-1 text-xs text-stone-600">{item.description}</p> : null}
+                </div>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -255,17 +299,27 @@ function DessertsColumn({ items }: { items: PricedMenuItem[] }) {
       <div className="absolute bottom-0 left-0 top-2 w-1 rounded-full bg-brand-maroon" aria-hidden />
       <h2 className="font-[family-name:var(--font-label)] text-xl font-bold uppercase tracking-[0.12em] text-brand-maroon">Desserts</h2>
       <ul className="mt-6 space-y-5">
-        {items.map((item) => (
-          <li key={item.name} className="flex gap-4 border-b border-brand-maroon/10 pb-5 last:border-0">
-            <div className="min-w-0 flex-1">
-              <p className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
-                {formatMenuItemDisplayName(item.name)}
+        {items.map((item) => {
+          const dessertPhoto = menuItemPhotoIfMatched(item.name);
+          return (
+            <li key={item.name} className="flex gap-4 border-b border-brand-maroon/10 pb-5 last:border-0">
+              {dessertPhoto ? (
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-stone-200/80 sm:h-24 sm:w-24">
+                  <Image src={dessertPhoto} alt="" fill className="object-cover" sizes="96px" />
+                </div>
+              ) : null}
+              <div className="min-w-0 flex-1">
+                <p className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
+                  {formatMenuItemDisplayName(item.name)}
+                </p>
+                {item.description ? <p className="mt-1 text-sm text-stone-600">{item.description}</p> : null}
+              </div>
+              <p className="shrink-0 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">
+                {item.price}
               </p>
-              {item.description ? <p className="mt-1 text-sm text-stone-600">{item.description}</p> : null}
-            </div>
-            <p className="shrink-0 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">{item.price}</p>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -291,16 +345,29 @@ function DrinksPanel({ groups }: { groups: DrinkMenuGroup[] }) {
               {g.title}
             </p>
             <ul className="mt-4 space-y-3">
-              {g.items.map((row) => (
-                <li key={row.name} className="flex items-baseline justify-between gap-4 text-sm sm:text-base">
-                  <span className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
-                    {formatMenuItemDisplayName(row.name)}
-                  </span>
-                  <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-brand-maroon/90">
-                    {formatDrinkPrice(row.hot, row.iced)}
-                  </span>
-                </li>
-              ))}
+              {g.items.map((row) => {
+                const drinkPhoto = menuItemPhotoIfMatched(row.name);
+                return (
+                  <li
+                    key={row.name}
+                    className="flex items-center gap-3 text-sm sm:text-base"
+                  >
+                    {drinkPhoto ? (
+                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-stone-200/80">
+                        <Image src={drinkPhoto} alt="" fill className="object-cover" sizes="56px" />
+                      </div>
+                    ) : null}
+                    <div className="flex min-w-0 flex-1 items-baseline justify-between gap-4">
+                      <span className="font-[family-name:var(--font-serif)] font-bold text-brand-maroon">
+                        {formatMenuItemDisplayName(row.name)}
+                      </span>
+                      <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-brand-maroon/90">
+                        {formatDrinkPrice(row.hot, row.iced)}
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
