@@ -93,6 +93,7 @@ export function applyProxy(request: NextRequest) {
     "base-uri 'none'",
     "frame-ancestors 'none'",
     "frame-src 'self' https://www.google.com https://www.google.co.uk https://maps.google.com https://*.clerk.accounts.dev https://clerk.indonesiancafe.co.uk",
+    "worker-src 'self' blob:",
   ].join("; ");
 
   response.headers.set("Content-Security-Policy", csp);

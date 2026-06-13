@@ -53,4 +53,12 @@ describe("proxy markdown negotiation", () => {
     // frame-src should have it
     expect(csp).toMatch(/frame-src[^;]*https:\/\/clerk\.indonesiancafe\.co\.uk/);
   });
+
+  it("allows blob workers for Clerk via worker-src directive", () => {
+    const request = new NextRequest("https://www.indonesiancafe.co.uk/");
+    const response = applyProxy(request);
+    const csp = response.headers.get("Content-Security-Policy");
+
+    expect(csp).toMatch(/worker-src 'self' blob:/);
+  });
 });
