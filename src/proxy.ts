@@ -83,16 +83,16 @@ export function applyProxy(request: NextRequest) {
 
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://*.clerk.com https://*.clerk.accounts.dev`,
+    `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://*.clerk.com https://*.clerk.accounts.dev https://clerk.indonesiancafe.co.uk`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://img.clerk.com https://*.convex.cloud",
     "media-src 'self' https://*.convex.cloud",
     "font-src 'self'",
-    `connect-src ${connectSrcDirective()} https://*.clerk.com wss://*.clerk.com https://*.clerk.accounts.dev wss://*.clerk.accounts.dev`,
+    `connect-src ${connectSrcDirective()} https://*.clerk.com wss://*.clerk.com https://*.clerk.accounts.dev wss://*.clerk.accounts.dev https://clerk.indonesiancafe.co.uk wss://clerk.indonesiancafe.co.uk`,
     "object-src 'none'",
     "base-uri 'none'",
     "frame-ancestors 'none'",
-    "frame-src 'self' https://www.google.com https://www.google.co.uk https://maps.google.com https://*.clerk.accounts.dev",
+    "frame-src 'self' https://www.google.com https://www.google.co.uk https://maps.google.com https://*.clerk.accounts.dev https://clerk.indonesiancafe.co.uk",
   ].join("; ");
 
   response.headers.set("Content-Security-Policy", csp);

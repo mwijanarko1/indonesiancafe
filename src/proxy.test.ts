@@ -38,4 +38,19 @@ describe("proxy markdown negotiation", () => {
 
     expect(getRewriteTarget(response)).toBeNull();
   });
+
+  it("allows Clerk custom domain in CSP directives", () => {
+    const request = new NextRequest("https://www.indonesiancafe.co.uk/");
+    const response = applyProxy(request);
+    const csp = response.headers.get("Content-Security-Policy");
+
+    expect(csp).toContain("https://clerk.indonesiancafe.co.uk");
+    // script-src should have it
+    expect(csp).toMatch(/script-src[^;]*https:\/\/clerk\.indonesiancafe\.co\.uk/);
+    // connect-src should have both https and wss
+    expect(csp).toMatch(/connect-src[^;]*https:\/\/clerk\.indonesiancafe\.co\.uk/);
+    expect(csp).toMatch(/connect-src[^;]*wss:\/\/clerk\.indonesiancafe\.co\.uk/);
+    // frame-src should have it
+    expect(csp).toMatch(/frame-src[^;]*https:\/\/clerk\.indonesiancafe\.co\.uk/);
+  });
 });
