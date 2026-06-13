@@ -83,6 +83,12 @@ export function applyProxy(request: NextRequest) {
 
   const csp = [
     "default-src 'self'",
+    // TODO: Remove 'unsafe-inline' once Clerk supports nonce-based CSP.
+    // Next.js App Router hydration also injects inline <script> elements,
+    // so a full nonce migration requires: (1) Clerk nonce support,
+    // (2) Next.js built-in nonce injection via middleware, (3) verifying
+    // all third-party scripts accept nonces. For now, 'unsafe-inline' is
+    // required for both Clerk and Next.js hot-reload/hydration.
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://*.clerk.com https://*.clerk.accounts.dev https://clerk.indonesiancafe.co.uk`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://img.clerk.com https://*.convex.cloud",

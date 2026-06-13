@@ -1,0 +1,13 @@
+# Security contact for Indonesian Cafe Sheffield
+# https://www.indonesiancafe.co.uk/.well-known/security.txt
+
+
+
+# Canonical URI where this file is published
+Canonical: https://www.indonesiancafe.co.uk/.well-known/security.txt
+
+# Preferred languages for security reports
+Preferred-Languages: en
+
+# Expiry date (RFC 9116 recommends 1 year maximum)
+Expires: 2027-06-13T00:00:00.000Z

@@ -61,4 +61,13 @@ describe("proxy markdown negotiation", () => {
 
     expect(csp).toMatch(/worker-src 'self' blob:/);
   });
+
+  it("does not set wildcard CORS headers (Access-Control-Allow-Origin: *)", () => {
+    // Regression: Vercel/proxy-level CORS may be configured outside the repo,
+    // but the application itself must never set a wildcard CORS header.
+    const request = new NextRequest("https://www.indonesiancafe.co.uk/");
+    const response = applyProxy(request);
+
+    expect(response.headers.get("Access-Control-Allow-Origin")).not.toBe("*");
+  });
 });
