@@ -1,6 +1,7 @@
 import "server-only";
 
 import { formatMenuItemDisplayName, type DrinkMenuItem, type PricedMenuItem } from "@/lib/cafe-menu";
+import { FAQ_ITEMS } from "@/lib/faq";
 import { getFeaturedGuestReviewsFrom } from "@/lib/guest-reviews";
 import type { LegalDocument, LegalInlinePart } from "@/lib/legal-documents";
 import { PRIVACY_DOCUMENT, TERMS_DOCUMENT } from "@/lib/legal-documents";
@@ -9,57 +10,128 @@ import {
   HOME_SUMMARY,
   REVIEWS_SECTION_BLURB,
   REVIEWS_SECTION_TITLE,
+  VISIT_PAGE_DESCRIPTION,
+  VISIT_PAGE_TITLE,
   VISIT_SECTION_BLURB,
   VISIT_SECTION_TITLE,
 } from "@/lib/site-copy";
-import { getRequiredCanonicalSiteUrl, OPENING_HOURS, OPENING_HOURS_FOOTNOTE, SITE } from "@/lib/site";
-import { getSiteMenuContent, getSiteReviewsContent } from "@/lib/server/site-content";
+import { getRequiredCanonicalSiteUrl, SITE } from "@/lib/site";
+import { getSiteMenuContent, getSiteOpeningHours, getSiteReviewsContent } from "@/lib/server/site-content";
 
-export type MachineDocumentId = "home" | "menu" | "reviews" | "privacy" | "terms";
+export type MachineDocumentId =
+  | "home"
+  | "menu"
+  | "reviews"
+  | "visit"
+  | "faq"
+  | "privacy"
+  | "terms";
 
-export type MachineDocumentDescriptor = {
+export type MarkdownRequestMode = "suffix" | "query" | "accept-header" | "llms-index";
+
+export type MachineSurfaceDescriptor = {
   id: MachineDocumentId;
-  path: string;
   canonicalPath: string;
+  markdownPath: string;
   title: string;
   description: string;
+  priority: number;
+  includeInLlms: boolean;
+  includeInLlmsFull: boolean;
+  includeInSitemap: boolean;
+  renderStrategy: "curated" | "generated";
 };
 
-const MACHINE_DOCUMENTS: readonly MachineDocumentDescriptor[] = [
+export type ResolvedMarkdownDocument = {
+  body: string;
+  descriptor: MachineSurfaceDescriptor;
+  source: "curated";
+};
+
+const MACHINE_SURFACES: readonly MachineSurfaceDescriptor[] = [
   {
     id: "home",
-    path: "/llms/home.md",
     canonicalPath: "/",
+    markdownPath: "/llms/home.md",
     title: "Home - Indonesian Cafe",
     description: "Restaurant summary, address, opening hours, and key links.",
+    priority: 1,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
   },
   {
     id: "menu",
-    path: "/llms/menu.md",
     canonicalPath: "/menu",
+    markdownPath: "/llms/menu.md",
     title: "Menu - Indonesian Cafe",
     description: "Current menu categories, items, prices, and allergen disclaimer.",
+    priority: 0.9,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
   },
   {
     id: "reviews",
-    path: "/llms/reviews.md",
     canonicalPath: "/reviews",
+    markdownPath: "/llms/reviews.md",
     title: "Reviews - Indonesian Cafe",
     description: "Guest review text and review-related links.",
+    priority: 0.7,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
+  },
+  {
+    id: "visit",
+    canonicalPath: "/visit",
+    markdownPath: "/llms/visit.md",
+    title: "Visit - Indonesian Cafe",
+    description: "Address, opening hours, maps, phone, and visitor planning links.",
+    priority: 0.8,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
+  },
+  {
+    id: "faq",
+    canonicalPath: "/faq",
+    markdownPath: "/llms/faq.md",
+    title: "FAQ - Indonesian Cafe",
+    description: "Verified questions and answers about halal food, takeaway, hours, and location.",
+    priority: 0.8,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
   },
   {
     id: "privacy",
-    path: "/llms/privacy.md",
     canonicalPath: "/privacy",
+    markdownPath: "/llms/privacy.md",
     title: "Privacy notice - Indonesian Cafe",
     description: "Website privacy notice.",
+    priority: 0.3,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
   },
   {
     id: "terms",
-    path: "/llms/terms.md",
     canonicalPath: "/terms",
+    markdownPath: "/llms/terms.md",
     title: "Terms of use - Indonesian Cafe",
     description: "Website terms of use.",
+    priority: 0.3,
+    includeInLlms: true,
+    includeInLlmsFull: true,
+    includeInSitemap: true,
+    renderStrategy: "curated",
   },
 ] as const;
 
@@ -74,12 +146,17 @@ const SOCIAL_LINKS = [
   },
 ] as const;
 
-function getDescriptor(id: MachineDocumentId): MachineDocumentDescriptor {
-  const descriptor = MACHINE_DOCUMENTS.find((entry) => entry.id === id);
+function getDescriptor(id: MachineDocumentId): MachineSurfaceDescriptor {
+  const descriptor = MACHINE_SURFACES.find((entry) => entry.id === id);
   if (!descriptor) {
     throw new Error(`Missing machine-readable descriptor for id: ${id}`);
   }
   return descriptor;
+}
+
+function getDescriptorForPath(pathname: string): MachineSurfaceDescriptor | null {
+  const normalized = pathname === "/index" ? "/" : pathname.replace(/\/$/, "") || "/";
+  return MACHINE_SURFACES.find((entry) => entry.canonicalPath === normalized) ?? null;
 }
 
 function toAbsolute(base: string, path: string): string {
@@ -122,7 +199,7 @@ function renderInlinePart(base: string, part: LegalInlinePart): string {
   return `[${part.text}](${toAbsolute(base, part.href)})`;
 }
 
-function renderLegalMarkdown(base: string, descriptor: MachineDocumentDescriptor, document: LegalDocument): string {
+function renderLegalMarkdown(base: string, descriptor: MachineSurfaceDescriptor, document: LegalDocument): string {
   const lines: string[] = [
     `# ${document.title}`,
     "",
@@ -155,26 +232,42 @@ function renderLegalMarkdown(base: string, descriptor: MachineDocumentDescriptor
   return lines.join("\n").trimEnd();
 }
 
-export function getMachineDocumentDescriptors(): readonly MachineDocumentDescriptor[] {
-  return MACHINE_DOCUMENTS;
+async function getHomeMenuAndReviews() {
+  const [{ menu }, { reviews, featuredAuthorOrder }] = await Promise.all([
+    getSiteMenuContent(),
+    getSiteReviewsContent(),
+  ]);
+
+  return {
+    menu,
+    reviews,
+    featuredReviews: getFeaturedGuestReviewsFrom(reviews, featuredAuthorOrder).slice(0, 3),
+  };
+}
+
+function getMenuHighlights(
+  menu: Awaited<ReturnType<typeof getHomeMenuAndReviews>>["menu"],
+  limit: number,
+): string[] {
+  return menu.categories
+    .flatMap((category) => {
+      if (category.variant !== "priced") return [];
+      return category.items.filter((item) => item.isAvailable !== false);
+    })
+    .slice(0, limit)
+    .map((item) => `${formatMenuItemDisplayName(item.name)} (${item.price})`);
+}
+
+export function getMachineDocumentDescriptors(): readonly MachineSurfaceDescriptor[] {
+  return MACHINE_SURFACES;
 }
 
 export async function buildHomeMarkdown(): Promise<string> {
   const base = getRequiredCanonicalSiteUrl();
   const descriptor = getDescriptor("home");
-  const [{ menu }, { reviews, featuredAuthorOrder }] = await Promise.all([
-    getSiteMenuContent(),
-    getSiteReviewsContent(),
-  ]);
-  const featuredReviews = getFeaturedGuestReviewsFrom(reviews, featuredAuthorOrder).slice(0, 3);
-
-  const menuHighlights = menu.categories
-    .flatMap((category) => {
-      if (category.variant !== "priced") return [];
-      return category.items.filter((item) => item.isAvailable !== false);
-    })
-    .slice(0, 4)
-    .map((item) => `${formatMenuItemDisplayName(item.name)} (${item.price})`);
+  const { menu, featuredReviews } = await getHomeMenuAndReviews();
+  const { hours, footnote } = await getSiteOpeningHours();
+  const menuHighlights = getMenuHighlights(menu, 4);
 
   return [
     `# ${descriptor.title}`,
@@ -196,15 +289,17 @@ export async function buildHomeMarkdown(): Promise<string> {
     "",
     "## Opening hours",
     "",
-    ...OPENING_HOURS.map((row) => `- ${row.day}: ${row.time}`),
+    ...hours.map((row) => `- ${row.day}: ${row.time}`),
     "",
-    OPENING_HOURS_FOOTNOTE,
+    footnote,
     "",
     "## Quick links",
     "",
     asBulletLink(base, "Home", "/"),
     asBulletLink(base, "Menu", "/menu"),
+    asBulletLink(base, "Visit", "/visit"),
     asBulletLink(base, "Guest reviews", "/reviews"),
+    asBulletLink(base, "FAQ", "/faq"),
     asBulletLink(base, "Privacy", "/privacy"),
     asBulletLink(base, "Terms", "/terms"),
     "",
@@ -267,7 +362,16 @@ export async function buildMenuMarkdown(): Promise<string> {
     }
   }
 
-  lines.push(menu.footerTagline, "", "Last generated from current site content.");
+  lines.push(
+    "## Helpful links",
+    "",
+    asBulletLink(base, "Visit", "/visit"),
+    asBulletLink(base, "FAQ", "/faq"),
+    "",
+    menu.footerTagline,
+    "",
+    "Last generated from current site content.",
+  );
 
   return lines.join("\n").trimEnd();
 }
@@ -296,8 +400,79 @@ export async function buildReviewsMarkdown(): Promise<string> {
     "",
     `- [Google Maps](${SITE.mapsUrl})`,
     asBulletLink(base, "Guest reviews page", "/reviews"),
+    asBulletLink(base, "Visit", "/visit"),
+    asBulletLink(base, "Menu", "/menu"),
     "",
     "Last generated from current site content.",
+  ].join("\n").trimEnd();
+}
+
+export async function buildVisitMarkdown(): Promise<string> {
+  const base = getRequiredCanonicalSiteUrl();
+  const descriptor = getDescriptor("visit");
+  const { hours, footnote } = await getSiteOpeningHours();
+
+  return [
+    `# ${descriptor.title}`,
+    "",
+    `Canonical page: ${toAbsolute(base, descriptor.canonicalPath)}`,
+    "",
+    VISIT_PAGE_DESCRIPTION,
+    "",
+    `## ${VISIT_SECTION_TITLE}`,
+    "",
+    VISIT_SECTION_BLURB,
+    "",
+    "## Address",
+    "",
+    `${SITE.name}`,
+    `${SITE.streetAddress}`,
+    `${SITE.addressLocality} ${SITE.postalCode}`,
+    `${SITE.addressCountry}`,
+    "",
+    "## Opening hours",
+    "",
+    ...hours.map((row) => `- ${row.day}: ${row.time}`),
+    `- note: ${footnote}`,
+    "",
+    "## Contact and travel",
+    "",
+    `- phone: ${SITE.phoneDisplay}`,
+    `- [Open Google Maps](${SITE.mapsUrl})`,
+    "",
+    "## Service",
+    "",
+    "- dine-in available",
+    "- takeaway available",
+    "- coffee and bakery available",
+    "",
+    "## Helpful links",
+    "",
+    asBulletLink(base, "Menu", "/menu"),
+    asBulletLink(base, "Guest reviews", "/reviews"),
+    asBulletLink(base, "FAQ", "/faq"),
+    "",
+    "Last generated from current site content.",
+  ].join("\n");
+}
+
+export async function buildFaqMarkdown(): Promise<string> {
+  const base = getRequiredCanonicalSiteUrl();
+  const descriptor = getDescriptor("faq");
+
+  return [
+    `# ${descriptor.title}`,
+    "",
+    `Canonical page: ${toAbsolute(base, descriptor.canonicalPath)}`,
+    "",
+    "Verified answers based on the public Indonesian Cafe website.",
+    "",
+    ...FAQ_ITEMS.flatMap((item) => [`## ${item.question}`, "", item.answer, ""]),
+    "## Helpful links",
+    "",
+    asBulletLink(base, "Visit", "/visit"),
+    asBulletLink(base, "Menu", "/menu"),
+    asBulletLink(base, "Guest reviews", "/reviews"),
   ].join("\n").trimEnd();
 }
 
@@ -311,33 +486,26 @@ export function buildTermsMarkdown(): string {
   return renderLegalMarkdown(base, getDescriptor("terms"), TERMS_DOCUMENT);
 }
 
-export async function buildLlmsTxt(): Promise<string> {
-  const base = getRequiredCanonicalSiteUrl();
-  const descriptors = getMachineDocumentDescriptors();
-  const [{ menu }, { reviews, featuredAuthorOrder }] = await Promise.all([
-    getSiteMenuContent(),
-    getSiteReviewsContent(),
-  ]);
-  const featuredReviews = getFeaturedGuestReviewsFrom(reviews, featuredAuthorOrder).slice(0, 3);
-
-  const menuHighlights = menu.categories
-    .flatMap((category) => {
-      if (category.variant !== "priced") return [];
-      return category.items.filter((item) => item.isAvailable !== false);
-    })
-    .slice(0, 6)
-    .map((item) => `${formatMenuItemDisplayName(item.name)} (${item.price})`);
-
-  const preferredLinks = descriptors
+function buildPreferredUrlLines(base: string, descriptors: readonly MachineSurfaceDescriptor[]): string {
+  return descriptors
     .map(
       (descriptor) =>
-        `- ${descriptor.id}: canonical ${toAbsolute(base, descriptor.canonicalPath)} | markdown ${toAbsolute(base, descriptor.path)}`,
+        `- ${descriptor.id}: canonical ${toAbsolute(base, descriptor.canonicalPath)} | markdown ${toAbsolute(base, descriptor.markdownPath)}`,
     )
     .join("\n");
+}
 
-  const pageLines = descriptors
-    .map((descriptor) => `- ${toAbsolute(base, descriptor.path)} - ${descriptor.description}`)
+function buildPageLines(base: string, descriptors: readonly MachineSurfaceDescriptor[]): string {
+  return descriptors
+    .map((descriptor) => `- ${toAbsolute(base, descriptor.markdownPath)} - ${descriptor.description}`)
     .join("\n");
+}
+
+async function buildLlmsIndexBody(descriptors: readonly MachineSurfaceDescriptor[]): Promise<string> {
+  const base = getRequiredCanonicalSiteUrl();
+  const { menu, featuredReviews } = await getHomeMenuAndReviews();
+  const { hours, footnote } = await getSiteOpeningHours();
+  const menuHighlights = getMenuHighlights(menu, 6);
 
   return [
     "site: Indonesian Cafe",
@@ -355,8 +523,8 @@ export async function buildLlmsTxt(): Promise<string> {
     `- maps: ${SITE.mapsUrl}`,
     "",
     "Opening hours",
-    ...OPENING_HOURS.map((row) => `- ${row.day}: ${row.time}`),
-    `- note: ${OPENING_HOURS_FOOTNOTE}`,
+    ...hours.map((row) => `- ${row.day}: ${row.time}`),
+    `- note: ${footnote}`,
     "",
     "Cuisine and service",
     "- cuisine: Indonesian, Southeast Asian, halal, Asian",
@@ -377,13 +545,51 @@ export async function buildLlmsTxt(): Promise<string> {
     "Canonical HTML pages are authoritative for ranking, presentation, and user experience.",
     "",
     "Preferred URLs",
-    preferredLinks,
+    buildPreferredUrlLines(base, descriptors),
     "",
     "Policies",
     "- No crawler-specific content substitution.",
     "- Markdown companion pages are simplified renderings of public site content.",
     "",
     "Pages",
-    pageLines,
+    buildPageLines(base, descriptors),
   ].join("\n");
+}
+
+export async function buildLlmsTxt(): Promise<string> {
+  return buildLlmsIndexBody(MACHINE_SURFACES.filter((descriptor) => descriptor.includeInLlms));
+}
+
+export async function buildLlmsFullTxt(): Promise<string> {
+  return buildLlmsIndexBody(MACHINE_SURFACES.filter((descriptor) => descriptor.includeInLlmsFull));
+}
+
+export async function resolveMarkdownForPath(path: readonly string[]): Promise<ResolvedMarkdownDocument | null> {
+  const pathname = (() => {
+    if (path.length === 0) return "/";
+    if (path.length === 1 && path[0] === "index") return "/";
+    return `/${path.join("/")}`;
+  })();
+
+  const descriptor = getDescriptorForPath(pathname);
+  if (!descriptor || descriptor.renderStrategy !== "curated") {
+    return null;
+  }
+
+  switch (descriptor.id) {
+    case "home":
+      return { body: await buildHomeMarkdown(), descriptor, source: "curated" };
+    case "menu":
+      return { body: await buildMenuMarkdown(), descriptor, source: "curated" };
+    case "reviews":
+      return { body: await buildReviewsMarkdown(), descriptor, source: "curated" };
+    case "visit":
+      return { body: await buildVisitMarkdown(), descriptor, source: "curated" };
+    case "faq":
+      return { body: await buildFaqMarkdown(), descriptor, source: "curated" };
+    case "privacy":
+      return { body: buildPrivacyMarkdown(), descriptor, source: "curated" };
+    case "terms":
+      return { body: buildTermsMarkdown(), descriptor, source: "curated" };
+  }
 }

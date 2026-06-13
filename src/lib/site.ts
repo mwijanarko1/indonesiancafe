@@ -1,4 +1,6 @@
 import { getEnv } from "./env";
+import type { SiteMenuContent } from "./cafe-menu";
+import type { FaqItem } from "./faq";
 
 const LOCAL_CANONICAL_SITE_URL = "http://localhost:3000";
 const LEGACY_APEX_SITE_URL = "https://indonesiancafe.co.uk";
@@ -53,7 +55,7 @@ export function getRequiredCanonicalSiteUrl(): string {
  * Leans on local + cuisine intent (Sheffield, Crookes S10, halal, takeaway); menu-level terms live in `keywords` and menu copy.
  */
 export const SITE_SEO_DESCRIPTION =
-  "Indonesian restaurant and cafe in Sheffield — authentic halal Indonesian food, takeaway, coffee and bakery. 15 Crookes, Crookes S10 1UA, UK.";
+  "Indonesian restaurant and cafe in Sheffield, serving authentic halal Indonesian food, takeaway, coffee and bakery. 15 Crookes, Crookes S10 1UA, UK.";
 
 /** Shown on /privacy and /terms (update when legal copy changes). */
 export const LEGAL_CONTENT_LAST_UPDATED = "8 April 2026";
@@ -61,7 +63,7 @@ export const LEGAL_CONTENT_LAST_UPDATED = "8 April 2026";
 export const SITE = {
   name: "Indonesian Cafe",
   tagline:
-    "Indonesian restaurant & cafe Sheffield — halal Indonesian food, takeaway, coffee and bakery · 15 Crookes, S10",
+    "Indonesian restaurant & cafe Sheffield, halal Indonesian food, takeaway, coffee and bakery · 15 Crookes, S10",
   /** Production origin — set `NEXT_PUBLIC_APP_URL` to this on Vercel (metadata, sitemap, JSON-LD). */
   liveUrl: LIVE_CANONICAL_SITE_URL,
   streetAddress: "15 Crookes",
@@ -86,7 +88,9 @@ export const SITE = {
 } as const;
 
 /** Weekly hours shown on the site (holidays may differ). */
-export const OPENING_HOURS: readonly { day: string; time: string }[] = [
+export type OpeningHoursRow = { day: string; time: string };
+
+export const OPENING_HOURS: readonly OpeningHoursRow[] = [
   { day: "Monday", time: "10 am–8 pm" },
   { day: "Tuesday", time: "Closed" },
   { day: "Wednesday", time: "10 am–8 pm" },
@@ -97,7 +101,7 @@ export const OPENING_HOURS: readonly { day: string; time: string }[] = [
 ] as const;
 
 export const OPENING_HOURS_FOOTNOTE =
-  "Bank holiday hours may differ — check Google Maps before you travel.";
+  "Bank holiday hours may differ. Check Google Maps before you travel.";
 
 export function buildRestaurantJsonLd(siteUrl: string) {
   const base = siteUrl.replace(/\/$/, "");
@@ -211,5 +215,84 @@ export function buildBreadcrumbJsonLd(siteUrl: string, items: readonly Breadcrum
       name: item.name,
       item: toAbsoluteSiteUrl(base, item.path),
     })),
+  };
+}
+
+export function buildFaqPageJsonLd(
+  siteUrl: string,
+  path: string,
+  items: readonly FaqItem[],
+) {
+  const base = siteUrl.replace(/\/$/, "");
+  const pageUrl = toAbsoluteSiteUrl(base, path);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${pageUrl}#faq`,
+    url: pageUrl,
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export function buildMenuJsonLd(siteUrl: string, menu: SiteMenuContent) {
+  const base = siteUrl.replace(/\/$/, "");
+  const pageUrl = `${base}${SITE.menuPath}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    "@id": `${pageUrl}#menu`,
+    name: `${SITE.name} menu`,
+    url: pageUrl,
+    hasMenuSection: menu.categories.map((category) => {
+      if (category.variant === "priced") {
+        return {
+          "@type": "MenuSection",
+          name: category.label,
+          hasMenuItem: category.items
+            .filter((item) => item.isAvailable !== false)
+            .map((item) => ({
+              "@type": "MenuItem",
+              name: item.name,
+              description: item.description,
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "GBP",
+                price: item.price.replace(/[^0-9.]/g, ""),
+                availability: "https://schema.org/InStock",
+                url: pageUrl,
+              },
+            })),
+        };
+      }
+
+      return {
+        "@type": "MenuSection",
+        name: category.label,
+        hasMenuItem: category.groups.flatMap((group) =>
+          group.items
+            .filter((item) => item.isAvailable !== false)
+            .map((item) => ({
+              "@type": "MenuItem",
+              name: `${group.title}: ${item.name}`,
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "GBP",
+                price: (item.iced ?? item.hot ?? "").replace(/[^0-9.]/g, ""),
+                availability: "https://schema.org/InStock",
+                url: pageUrl,
+              },
+            })),
+        ),
+      };
+    }),
   };
 }

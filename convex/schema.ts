@@ -6,6 +6,7 @@ const pricedItem = v.object({
   name: v.string(),
   price: v.string(),
   description: v.optional(v.string()),
+  image: v.optional(v.string()),
   isAvailable: v.optional(v.boolean()),
 });
 
@@ -21,6 +22,7 @@ const drinkRow = v.object({
   name: v.string(),
   hot: v.union(v.string(), v.null()),
   iced: v.union(v.string(), v.null()),
+  image: v.optional(v.string()),
   isAvailable: v.optional(v.boolean()),
 });
 
@@ -43,6 +45,7 @@ const pricedItemPublic = v.object({
   name: v.string(),
   price: v.string(),
   description: v.optional(v.string()),
+  image: v.optional(v.string()),
 });
 
 const pricedCategoryPublic = v.object({
@@ -57,6 +60,7 @@ const drinkRowPublic = v.object({
   name: v.string(),
   hot: v.union(v.string(), v.null()),
   iced: v.union(v.string(), v.null()),
+  image: v.optional(v.string()),
 });
 
 const drinkGroupPublic = v.object({
@@ -80,7 +84,17 @@ export const guestReview = v.object({
   homeExcerpt: v.optional(v.string()),
 });
 
+const openingHoursDay = v.object({
+  day: v.string(),
+  time: v.string(),
+});
+
 export default defineSchema({
+  /** Clerk users allowed to access the admin dashboard. Add rows manually in Convex. */
+  admins: defineTable({
+    userId: v.string(),
+  }).index("by_userId", ["userId"]),
+
   /** Singleton: disclaimer, image URLs, footer. */
   menuSettings: defineTable({
     key: v.literal("default"),
@@ -105,6 +119,7 @@ export default defineSchema({
     name: v.string(),
     price: v.string(),
     description: v.optional(v.string()),
+    image: v.optional(v.string()),
     isAvailable: v.boolean(),
     sortOrder: v.number(),
   }).index("by_category_sort", ["categoryId", "sortOrder"]),
@@ -122,6 +137,7 @@ export default defineSchema({
     name: v.string(),
     hot: v.union(v.string(), v.null()),
     iced: v.union(v.string(), v.null()),
+    image: v.optional(v.string()),
     isAvailable: v.boolean(),
     sortOrder: v.number(),
   }).index("by_group_sort", ["groupId", "sortOrder"]),
@@ -130,5 +146,12 @@ export default defineSchema({
     key: v.literal("default"),
     reviews: v.array(guestReview),
     featuredAuthorOrder: v.array(v.string()),
+  }).index("by_key", ["key"]),
+
+  /** Singleton: weekly opening hours and footnote for visit page, footer, and LLM docs. */
+  siteOpeningHours: defineTable({
+    key: v.literal("default"),
+    hours: v.array(openingHoursDay),
+    footnote: v.string(),
   }).index("by_key", ["key"]),
 });

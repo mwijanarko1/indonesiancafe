@@ -1,28 +1,32 @@
 /**
- * Site content admin is exposed only via Convex HTTP actions (`convex/http.ts`).
- * Set `MENU_ADMIN_SECRET` in the Convex dashboard and send `Authorization: Bearer <secret>`.
- * Never pass this token from browser code.
+ * Admin helpers.
+ * Image URL allowlist used by menu mutations (defence-in-depth).
  */
 
-export function assertBearerSiteAdmin(authorizationHeader: string | null): void {
-  const expected = process.env.MENU_ADMIN_SECRET;
-  if (expected === undefined || expected.length === 0) {
-    throw new Error("Server misconfiguration: MENU_ADMIN_SECRET is not set");
-  }
-  if (!authorizationHeader?.startsWith("Bearer ")) {
-    throw new Error("Unauthorized");
-  }
-  const token = authorizationHeader.slice("Bearer ".length).trim();
-  if (token.length === 0 || token !== expected) {
-    throw new Error("Unauthorized");
-  }
+/* ------------------------------------------------------------------ */
+/*  Image URL allowlist                                                */
+/*                                                                     */
+/*  Allowed:                                                           */
+/*    - Same-site paths: `/menu-food.jpeg`                             */
+/*    - Convex cloud storage: `https://*.convex.cloud/...`             */
+/*    - Empty string (optional image fields)                           */
+/*                                                                     */
+/*  Rejected: arbitrary https hosts, `javascript:`, `data:`, `//`, …  */
+/* ------------------------------------------------------------------ */
+
+const ALLOWED_IMAGE_HOST_SUFFIXES = [".convex.cloud"];
+
+function isAllowedImageUrlHost(hostname: string): boolean {
+  return ALLOWED_IMAGE_HOST_SUFFIXES.some((suffix) => hostname.endsWith(suffix));
 }
 
 /**
- * Allow absolute http(s) URLs or same-site path-only URLs (`/menu.jpg`).
- * Rejects `javascript:`, `data:`, `//evil.example`, etc.
+ * Validate an image URL against the allowlist. Throws on invalid.
+ * Empty string is accepted (for optional fields).
  */
-export function assertHttpOrHttpsUrl(url: string): void {
+export function assertAllowedImageUrl(url: string): void {
+  if (url === "") return;
+  // Same-site absolute path (but not protocol-relative `//`)
   if (url.startsWith("/") && !url.startsWith("//")) {
     return;
   }
@@ -32,19 +36,26 @@ export function assertHttpOrHttpsUrl(url: string): void {
   } catch {
     throw new Error("Invalid image URL");
   }
-  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-    throw new Error("Image URL must use http or https");
+  if (parsed.protocol !== "https:") {
+    throw new Error("Image URL must use https for external hosts");
+  }
+  if (!isAllowedImageUrlHost(parsed.hostname)) {
+    throw new Error("Image URL host is not in the allowlist");
   }
 }
 
-/** Defense in depth for public menu reads (stale bad data in DB). */
-export function safeHttpOrHttpsUrl(url: string): string {
+/**
+ * Defense-in-depth for public menu reads (stale/wrong data in DB).
+ * Returns the URL if allowed, empty string otherwise.
+ */
+export function safeImageUrl(url: string): string {
+  if (url === "") return "";
   if (url.startsWith("/") && !url.startsWith("//")) {
     return url;
   }
   try {
     const u = new URL(url);
-    if (u.protocol === "http:" || u.protocol === "https:") {
+    if (u.protocol === "https:" && isAllowedImageUrlHost(u.hostname)) {
       return url;
     }
   } catch {

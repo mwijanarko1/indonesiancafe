@@ -3,6 +3,7 @@ import { LegalDocumentContent } from "@/components/cafe/LegalDocumentContent";
 import { LegalPageShell } from "@/components/cafe/LegalPageShell";
 import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { TERMS_DOCUMENT } from "@/lib/legal-documents";
+import { getSiteOpeningHours } from "@/lib/server/site-content";
 
 export const revalidate = 3600;
 
@@ -23,6 +24,8 @@ export const metadata: Metadata = {
 };
 
 export default async function TermsPage() {
+  const openingHours = await getSiteOpeningHours();
+
   return (
     <>
       <PageJsonLd
@@ -31,7 +34,11 @@ export default async function TermsPage() {
         description={TERMS_DOCUMENT.description}
         breadcrumbLabel="Terms"
       />
-      <LegalPageShell title={TERMS_DOCUMENT.title}>
+      <LegalPageShell
+        title={TERMS_DOCUMENT.title}
+        hours={openingHours.hours}
+        footnote={openingHours.footnote}
+      >
         <LegalDocumentContent document={TERMS_DOCUMENT} />
       </LegalPageShell>
     </>

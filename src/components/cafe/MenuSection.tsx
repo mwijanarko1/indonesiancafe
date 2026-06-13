@@ -110,7 +110,7 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
                     <Link
                       href="/menu"
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-maroon/20 text-brand-maroon transition hover:border-brand-maroon hover:bg-brand-menu-surface"
-                      aria-label={`Order ${formatMenuItemDisplayName(featured.name)} — open menu`}
+                      aria-label={`Order ${formatMenuItemDisplayName(featured.name)}, open menu`}
                     >
                       <ShoppingBag className="h-4 w-4" aria-hidden />
                     </Link>

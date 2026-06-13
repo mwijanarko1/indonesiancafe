@@ -8,6 +8,11 @@ import {
   GUEST_REVIEWS,
   type GuestReview,
 } from "@/lib/guest-reviews";
+import {
+  OPENING_HOURS,
+  OPENING_HOURS_FOOTNOTE,
+  type OpeningHoursRow,
+} from "@/lib/site";
 
 type ContentSource = "convex" | "fallback";
 type NextFetchInit = RequestInit & {
@@ -17,6 +22,10 @@ type NextFetchInit = RequestInit & {
 };
 
 const SITE_CONTENT_REVALIDATE_SECONDS = 3600;
+
+export const SITE_MENU_CACHE_TAG = "site-menu";
+export const SITE_REVIEWS_CACHE_TAG = "site-reviews";
+export const SITE_OPENING_HOURS_CACHE_TAG = "site-opening-hours";
 
 export type SiteMenuContentResult = {
   menu: SiteMenuContent;
@@ -29,23 +38,31 @@ export type SiteReviewsContentResult = {
   source: ContentSource;
 };
 
+export type SiteOpeningHoursResult = {
+  hours: readonly OpeningHoursRow[];
+  footnote: string;
+  source: ContentSource;
+};
+
 function getConvexDeploymentUrl(): string | null {
   const url = process.env.NEXT_PUBLIC_CONVEX_URL?.trim();
   return url ? url : null;
 }
 
-function createConvexServerFetch(): typeof fetch {
+function createConvexServerFetch(cacheTag: string): typeof fetch {
   return (input, init) =>
     fetch(input, {
       ...init,
-      cache: "force-cache",
-      next: { revalidate: SITE_CONTENT_REVALIDATE_SECONDS },
+      next: {
+        tags: [cacheTag],
+        revalidate: SITE_CONTENT_REVALIDATE_SECONDS,
+      },
     } as NextFetchInit);
 }
 
-function createConvexClient(url: string): ConvexHttpClient {
+function createConvexClient(url: string, cacheTag: string): ConvexHttpClient {
   return new ConvexHttpClient(url, {
-    fetch: createConvexServerFetch(),
+    fetch: createConvexServerFetch(cacheTag),
   });
 }
 
@@ -64,6 +81,14 @@ function fallbackReviewsContent(): SiteReviewsContentResult {
   };
 }
 
+function fallbackOpeningHoursContent(): SiteOpeningHoursResult {
+  return {
+    hours: OPENING_HOURS,
+    footnote: OPENING_HOURS_FOOTNOTE,
+    source: "fallback",
+  };
+}
+
 export async function getSiteMenuContent(): Promise<SiteMenuContentResult> {
   const url = getConvexDeploymentUrl();
   if (!url) {
@@ -71,7 +96,7 @@ export async function getSiteMenuContent(): Promise<SiteMenuContentResult> {
   }
 
   try {
-    const menu = await createConvexClient(url).query(api.menu.get, {});
+    const menu = await createConvexClient(url, SITE_MENU_CACHE_TAG).query(api.menu.get, {});
     if (menu !== null) {
       return { menu, source: "convex" };
     }
@@ -90,7 +115,10 @@ export async function getSiteReviewsContent(): Promise<SiteReviewsContentResult>
   }
 
   try {
-    const reviews = await createConvexClient(url).query(api.reviews.get, {});
+    const reviews = await createConvexClient(url, SITE_REVIEWS_CACHE_TAG).query(
+      api.reviews.get,
+      {},
+    );
     if (reviews !== null) {
       return {
         reviews: reviews.reviews,
@@ -104,4 +132,30 @@ export async function getSiteReviewsContent(): Promise<SiteReviewsContentResult>
   }
 
   return fallbackReviewsContent();
+}
+
+export async function getSiteOpeningHours(): Promise<SiteOpeningHoursResult> {
+  const url = getConvexDeploymentUrl();
+  if (!url) {
+    return fallbackOpeningHoursContent();
+  }
+
+  try {
+    const openingHours = await createConvexClient(url, SITE_OPENING_HOURS_CACHE_TAG).query(
+      api.openingHours.get,
+      {},
+    );
+    if (openingHours !== null) {
+      return {
+        hours: openingHours.hours,
+        footnote: openingHours.footnote,
+        source: "convex",
+      };
+    }
+    console.error("[site-content] opening hours query returned null; using fallback.");
+  } catch (error) {
+    console.error("[site-content] opening hours query failed; using fallback.", error);
+  }
+
+  return fallbackOpeningHoursContent();
 }

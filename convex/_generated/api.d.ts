@@ -8,10 +8,15 @@
  * @module
  */
 
+import type * as adminAuth from "../adminAuth.js";
+import type * as admins from "../admins.js";
 import type * as defaultGuestReviews from "../defaultGuestReviews.js";
+import type * as defaultOpeningHours from "../defaultOpeningHours.js";
 import type * as defaultSiteMenu from "../defaultSiteMenu.js";
 import type * as http from "../http.js";
 import type * as menu from "../menu.js";
+import type * as menuPhotos from "../menuPhotos.js";
+import type * as openingHours from "../openingHours.js";
 import type * as reviews from "../reviews.js";
 import type * as seed from "../seed.js";
 import type * as siteAdmin from "../siteAdmin.js";
@@ -23,10 +28,15 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  adminAuth: typeof adminAuth;
+  admins: typeof admins;
   defaultGuestReviews: typeof defaultGuestReviews;
+  defaultOpeningHours: typeof defaultOpeningHours;
   defaultSiteMenu: typeof defaultSiteMenu;
   http: typeof http;
   menu: typeof menu;
+  menuPhotos: typeof menuPhotos;
+  openingHours: typeof openingHours;
   reviews: typeof reviews;
   seed: typeof seed;
   siteAdmin: typeof siteAdmin;

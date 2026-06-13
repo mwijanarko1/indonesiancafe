@@ -22,6 +22,19 @@ vi.mock("@/lib/server/site-content", () => ({
     featuredAuthorOrder: mockFeaturedOrder,
     source: "fallback",
   })),
+  getSiteOpeningHours: vi.fn(async () => ({
+    hours: [
+      { day: "Monday", time: "10 am–8 pm" },
+      { day: "Tuesday", time: "Closed" },
+      { day: "Wednesday", time: "10 am–8 pm" },
+      { day: "Thursday", time: "10 am–8 pm" },
+      { day: "Friday", time: "10 am–8 pm" },
+      { day: "Saturday", time: "10 am–8 pm" },
+      { day: "Sunday", time: "10 am–8 pm" },
+    ],
+    footnote: "Bank holiday hours may differ. Check Google Maps before you travel.",
+    source: "fallback",
+  })),
 }));
 
 describe("machine-readable generators", () => {
@@ -47,6 +60,8 @@ describe("machine-readable generators", () => {
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/home.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/menu.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/reviews.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/visit.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/faq.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/privacy.md");
     expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/terms.md");
     expect(txt).toContain("Restaurant description");
@@ -101,6 +116,42 @@ describe("machine-readable generators", () => {
     expect(markdown).toContain("## All reviews");
     expect(markdown).toContain("### Christopher Cooksley");
     expect(markdown).toContain("Finally, a place to eat delicious, authentic Indonesian food in Sheffield");
+  });
+
+  it("visit markdown includes maps, address, phone, and key links", async () => {
+    const { buildVisitMarkdown } = await import("./machine-readable");
+    const markdown = await buildVisitMarkdown();
+
+    expect(markdown).toContain("# Visit - Indonesian Cafe");
+    expect(markdown).toContain("15 Crookes");
+    expect(markdown).toContain("07491 287515");
+    expect(markdown).toContain("Google Maps");
+    expect(markdown).toContain("[Menu](https://www.indonesiancafe.co.uk/menu)");
+    expect(markdown).toContain("[Guest reviews](https://www.indonesiancafe.co.uk/reviews)");
+  });
+
+  it("faq markdown covers verified recurring visitor questions", async () => {
+    const { buildFaqMarkdown } = await import("./machine-readable");
+    const markdown = await buildFaqMarkdown();
+
+    expect(markdown).toContain("# FAQ - Indonesian Cafe");
+    expect(markdown).toContain("## Is the food halal?");
+    expect(markdown).toContain("## Do you offer takeaway?");
+    expect(markdown).toContain("## Do I need to book?");
+    expect(markdown).toContain("Just walk in while we're open");
+  });
+
+  it("buildLlmsFullTxt includes the expanded public route set", async () => {
+    const { buildLlmsFullTxt } = await import("./machine-readable");
+    const txt = await buildLlmsFullTxt();
+
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/home.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/menu.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/reviews.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/visit.md");
+    expect(txt).toContain("https://www.indonesiancafe.co.uk/llms/faq.md");
+    expect(txt).toContain("canonical https://www.indonesiancafe.co.uk/visit");
+    expect(txt).toContain("canonical https://www.indonesiancafe.co.uk/faq");
   });
 
   it("privacy and terms markdown include expected headings and related links", async () => {

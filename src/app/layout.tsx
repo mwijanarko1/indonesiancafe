@@ -3,8 +3,8 @@ import {
   Anton,
   Barlow_Condensed,
   DM_Sans,
-  Lora,
-} from "next/font/google";
+  Lora, Geist } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import { RestaurantJsonLd } from "@/components/seo/RestaurantJsonLd";
 import {
   getRequiredCanonicalSiteUrl,
@@ -12,12 +12,9 @@ import {
   SITE_SEO_DESCRIPTION,
 } from "@/lib/site";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const dmSans = DM_Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 /** Headings, menu titles, prices — readable serif that pairs with the hero poster face */
 const lora = Lora({
@@ -66,7 +63,7 @@ export const metadata: Metadata = {
         url: HERO_IMAGE_PATH,
         width: 1966,
         height: 1423,
-        alt: "Indonesian restaurant Sheffield — Indonesian Cafe, halal food and takeaway, coffee and bakery, 15 Crookes S10",
+        alt: "Indonesian restaurant Sheffield, Indonesian Cafe, halal food and takeaway, coffee and bakery, 15 Crookes S10",
       },
     ],
     locale: "en_GB",
@@ -91,18 +88,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB" suppressHydrationWarning>
+    <html lang="en-GB" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <body
-        className={`${dmSans.variable} ${lora.variable} ${barlowCondensed.variable} ${anton.variable} min-h-screen antialiased bg-brand-cream-page`}
+        className={`${geist.variable} ${lora.variable} ${barlowCondensed.variable} ${anton.variable} min-h-screen antialiased bg-brand-cream-page`}
       >
-        <RestaurantJsonLd />
-        <a
-          href="#main-content"
-          className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-semibold text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
-        >
-          Skip to main content
-        </a>
-        {children}
+        <ClerkProvider>
+          <RestaurantJsonLd />
+          <a
+            href="#main-content"
+            className="absolute -top-12 left-4 z-[100] rounded-md bg-brand-maroon px-4 py-2 text-sm font-semibold text-brand-address transition-[top] duration-200 focus:top-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-maroon"
+          >
+            Skip to main content
+          </a>
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );

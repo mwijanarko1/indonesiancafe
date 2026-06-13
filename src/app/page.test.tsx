@@ -6,6 +6,7 @@ import {
 } from "@/lib/guest-reviews";
 import Home, { metadata } from "./page";
 import { vi } from "vitest";
+import { openingHoursContentMock } from "@/test/opening-hours-mock";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
@@ -21,6 +22,7 @@ vi.mock("@/lib/server/site-content", () => ({
     featuredAuthorOrder: DEFAULT_FEATURED_AUTHOR_ORDER,
     source: "fallback",
   })),
+  getSiteOpeningHours: vi.fn(async () => openingHoursContentMock),
 }));
 
 vi.mock("next/image", () => ({
@@ -44,18 +46,19 @@ describe("Home (Indonesian Cafe)", () => {
     expect(h1).toHaveTextContent(/Indonesian Restaurant in Sheffield/i);
   });
 
-  it("renders menu and visit sections", async () => {
+  it("renders menu, visit, and faq sections", async () => {
     render(await Home());
     expect(screen.getByRole("heading", { name: /Indonesian favourites/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Home in Crookes/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Frequently Asked Questions/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Is the food halal\?/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /View full FAQ/i })).toHaveAttribute("href", "/faq");
   });
 
   it("primary nav Menu link targets /menu", async () => {
     render(await Home());
     const nav = screen.getByRole("navigation", { name: /main navigation/i });
-    const menuLinks = nav.querySelectorAll('a[href="/menu"]');
-    expect(menuLinks.length).toBe(1);
-    expect(menuLinks[0]).toHaveTextContent(/^Menu$/i);
+    expect(nav.querySelector('a[href="/menu"]')).toHaveTextContent(/^Menu$/i);
   });
 
   it("homepage menu section links to full menu page", async () => {

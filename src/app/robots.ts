@@ -6,14 +6,14 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
-      { userAgent: "GPTBot", allow: "/" },
+      { userAgent: "GPTBot", disallow: "/" },
       { userAgent: "OAI-SearchBot", allow: "/" },
       { userAgent: "ChatGPT-User", allow: "/" },
       { userAgent: "Googlebot", allow: "/" },
-      { userAgent: "Google-Extended", allow: "/" },
+      { userAgent: "Google-Extended", disallow: "/" },
       { userAgent: "ClaudeBot", allow: "/" },
       { userAgent: "PerplexityBot", allow: "/" },
-      { userAgent: "*", disallow: "/" },
+      { userAgent: "*", allow: "/", disallow: ["/api/"] },
     ],
     sitemap: `${base}/sitemap.xml`,
   };

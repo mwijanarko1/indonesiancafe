@@ -1,17 +1,22 @@
 import Link from "next/link";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
 import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
+import type { OpeningHoursRow } from "@/lib/site";
 
 type LegalPageShellProps = {
   title: string;
   /** Line above the main heading (brand line). */
   eyebrow?: string;
+  hours: readonly OpeningHoursRow[];
+  footnote: string;
   children: React.ReactNode;
 };
 
 export function LegalPageShell({
   title,
   eyebrow = "Indonesian Cafe",
+  hours,
+  footnote,
   children,
 }: LegalPageShellProps) {
   return (
@@ -53,7 +58,7 @@ export function LegalPageShell({
           </p>
         </article>
       </main>
-      <SiteFooter />
+      <SiteFooter hours={hours} footnote={footnote} />
     </>
   );
 }

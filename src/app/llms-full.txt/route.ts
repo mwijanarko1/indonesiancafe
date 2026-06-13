@@ -1,0 +1,11 @@
+import { buildLlmsFullTxt } from "@/lib/server/machine-readable";
+
+export async function GET(): Promise<Response> {
+  const body = await buildLlmsFullTxt();
+  return new Response(body, {
+    status: 200,
+    headers: {
+      "content-type": "text/plain; charset=utf-8",
+    },
+  });
+}

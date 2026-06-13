@@ -2,7 +2,12 @@ import Link from "next/link";
 import type { IconType } from "react-icons";
 import { FaFacebook, FaInstagram } from "react-icons/fa6";
 import { VISIT_SECTION_BLURB, VISIT_SECTION_TITLE } from "@/lib/site-copy";
-import { OPENING_HOURS, OPENING_HOURS_FOOTNOTE, SITE } from "@/lib/site";
+import {
+  OPENING_HOURS,
+  OPENING_HOURS_FOOTNOTE,
+  SITE,
+  type OpeningHoursRow,
+} from "@/lib/site";
 
 const socialContact: { href: string; label: string; Icon: IconType }[] = [
   {
@@ -17,7 +22,13 @@ const socialContact: { href: string; label: string; Icon: IconType }[] = [
   },
 ];
 
-export function VisitSection() {
+export function VisitSection({
+  hours = OPENING_HOURS,
+  footnote = OPENING_HOURS_FOOTNOTE,
+}: {
+  hours?: readonly OpeningHoursRow[];
+  footnote?: string;
+}) {
   return (
     <section
       id="visit"
@@ -75,14 +86,14 @@ export function VisitSection() {
                 Opening hours
               </p>
               <dl className="mt-2 grid max-w-md grid-cols-[minmax(0,6.75rem)_1fr] gap-x-3 gap-y-1 text-sm [font-family:var(--font-address)]">
-                {OPENING_HOURS.map((row) => (
+                {hours.map((row) => (
                   <div key={row.day} className="contents">
                     <dt className="font-semibold text-brand-cream">{row.day}</dt>
                     <dd className="text-brand-cream/90">{row.time}</dd>
                   </div>
                 ))}
               </dl>
-              <p className="mt-2 text-xs text-brand-cream/70">{OPENING_HOURS_FOOTNOTE}</p>
+              <p className="mt-2 text-xs text-brand-cream/70">{footnote}</p>
             </li>
             <li>
               <p className="font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-brand-cream/65">

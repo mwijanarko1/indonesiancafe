@@ -1,9 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import TermsPage, { metadata } from "./page";
+import { openingHoursContentMock } from "@/test/opening-hours-mock";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/terms",
+}));
+
+vi.mock("@/lib/server/site-content", () => ({
+  getSiteOpeningHours: vi.fn(async () => openingHoursContentMock),
 }));
 
 describe("/terms page", () => {

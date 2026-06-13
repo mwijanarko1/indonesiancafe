@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
 
+
 /**
  * Apply to `<main id="main-content">` on pages where the hero does not run under the
  * fixed header (e.g. menu, reviews) so the first content clears the overlay bar.
@@ -47,7 +48,7 @@ export function SiteHeader({ variant = "default" }: SiteHeaderProps) {
           </Link>
 
           <nav
-            className="flex min-w-0 items-center gap-3 sm:gap-4"
+            className="flex min-w-0 items-center gap-2 sm:gap-3"
             aria-label="Main navigation"
           >
             <Link

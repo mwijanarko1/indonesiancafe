@@ -3,6 +3,13 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     qualities: [75, 92],
+    remotePatterns: [
+      // Convex storage serves uploaded menu photos.
+      {
+        protocol: "https",
+        hostname: "*.convex.cloud",
+      },
+    ],
   },
   async headers() {
     return [

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GuestReviewsListView } from "@/components/cafe/GuestReviewsList";
+import { PageCrossLinks } from "@/components/cafe/PageCrossLinks";
 import { SiteFooter } from "@/components/cafe/SiteFooter";
 import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
 import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { HERO_IMAGE_PATH, SITE } from "@/lib/site";
-import { getSiteReviewsContent } from "@/lib/server/site-content";
+import { getSiteOpeningHours, getSiteReviewsContent } from "@/lib/server/site-content";
 
 export const revalidate = 3600;
 
@@ -40,7 +41,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const { reviews } = await getSiteReviewsContent();
+  const [{ reviews }, openingHours] = await Promise.all([
+    getSiteReviewsContent(),
+    getSiteOpeningHours(),
+  ]);
 
   return (
     <>
@@ -86,6 +90,15 @@ export default async function ReviewsPage() {
             </Link>
           </div>
 
+          <PageCrossLinks
+            title="Keep planning"
+            description="Browse the current menu or check practical travel details before you share the restaurant with someone else."
+            links={[
+              { href: "/menu", label: "Browse the menu" },
+              { href: "/visit", label: "Plan your visit" },
+            ]}
+          />
+
           <p className="mt-10 text-center">
             <Link
               href="/"
@@ -96,7 +109,7 @@ export default async function ReviewsPage() {
           </p>
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter hours={openingHours.hours} footnote={openingHours.footnote} />
     </>
   );
 }

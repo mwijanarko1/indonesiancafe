@@ -20,6 +20,7 @@ vi.mock("@convex/_generated/api", () => ({
   api: {
     menu: { get: "menu.get" },
     reviews: { get: "reviews.get" },
+    openingHours: { get: "openingHours.get" },
   },
 }));
 
@@ -84,6 +85,21 @@ describe("site content loaders", () => {
       reviews: GUEST_REVIEWS,
       featuredAuthorOrder: DEFAULT_FEATURED_AUTHOR_ORDER,
       source: "fallback",
+    });
+  });
+
+  it("returns Convex opening hours when configured", async () => {
+    process.env.NEXT_PUBLIC_CONVEX_URL = "https://example.convex.cloud";
+    mockConvexQuery.mockResolvedValueOnce({
+      hours: [{ day: "Monday", time: "9 am–5 pm" }],
+      footnote: "Custom footnote",
+    });
+
+    const { getSiteOpeningHours } = await import("./site-content");
+    await expect(getSiteOpeningHours()).resolves.toEqual({
+      hours: [{ day: "Monday", time: "9 am–5 pm" }],
+      footnote: "Custom footnote",
+      source: "convex",
     });
   });
 });

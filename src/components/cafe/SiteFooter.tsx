@@ -1,7 +1,12 @@
 import Link from "next/link";
 import type { IconType } from "react-icons";
 import { FaFacebook, FaInstagram } from "react-icons/fa6";
-import { OPENING_HOURS, OPENING_HOURS_FOOTNOTE, SITE } from "@/lib/site";
+import {
+  OPENING_HOURS,
+  OPENING_HOURS_FOOTNOTE,
+  SITE,
+  type OpeningHoursRow,
+} from "@/lib/site";
 
 const CREDIT_URL = "https://mikhailwijanarko.xyz";
 
@@ -18,7 +23,23 @@ const socialLinks: { href: string; label: string; Icon: IconType }[] = [
   },
 ];
 
-export function SiteFooter() {
+const footerLinks = [
+  { href: "/menu", label: "Menu" },
+  { href: "/visit", label: "Visit" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/llms.txt", label: "Machine-readable guide" },
+] as const;
+
+export function SiteFooter({
+  hours = OPENING_HOURS,
+  footnote = OPENING_HOURS_FOOTNOTE,
+}: {
+  hours?: readonly OpeningHoursRow[];
+  footnote?: string;
+}) {
   return (
     <footer className="border-t border-brand-address/20 bg-brand-maroon px-4 py-14 text-brand-address/90">
       <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
@@ -78,14 +99,14 @@ export function SiteFooter() {
             Hours
           </p>
           <dl className="mt-3 grid max-w-xs gap-1 text-sm [font-family:var(--font-address)]">
-            {OPENING_HOURS.map((row) => (
+            {hours.map((row) => (
               <div key={row.day} className="flex justify-between gap-4">
                 <dt className="text-brand-address/92">{row.day}</dt>
                 <dd className="text-brand-address/75">{row.time}</dd>
               </div>
             ))}
           </dl>
-          <p className="mt-3 text-xs leading-relaxed text-brand-address/55">{OPENING_HOURS_FOOTNOTE}</p>
+          <p className="mt-3 text-xs leading-relaxed text-brand-address/55">{footnote}</p>
         </div>
       </div>
 
@@ -93,24 +114,15 @@ export function SiteFooter() {
         aria-label="Legal"
         className="mx-auto mt-12 flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-2 border-t border-brand-address/15 pt-8 text-sm text-brand-address/75"
       >
-        <Link
-          href="/privacy"
-          className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
-        >
-          Privacy
-        </Link>
-        <Link
-          href="/terms"
-          className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
-        >
-          Terms
-        </Link>
-        <Link
-          href="/llms.txt"
-          className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
-        >
-          Machine-readable guide
-        </Link>
+        {footerLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="underline-offset-2 transition hover:text-brand-address hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
+          >
+            {link.label}
+          </Link>
+        ))}
       </nav>
 
       <p className="mx-auto mt-8 max-w-6xl border-t border-brand-address/20 pt-8 text-center text-xs leading-relaxed text-brand-address/50">

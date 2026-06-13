@@ -4,12 +4,14 @@ import { MenuPageBody } from "@/components/cafe/MenuPageBody";
 import { SITE_HEADER_OVERLAY_MAIN_PAD, SiteHeader } from "@/components/cafe/SiteHeader";
 import { DEFAULT_SITE_MENU } from "@/lib/cafe-menu";
 import MenuPage, { metadata } from "./page";
+import { openingHoursContentMock } from "@/test/opening-hours-mock";
 
 vi.mock("@/lib/server/site-content", () => ({
   getSiteMenuContent: vi.fn(async () => ({
     menu: DEFAULT_SITE_MENU,
     source: "fallback",
   })),
+  getSiteOpeningHours: vi.fn(async () => openingHoursContentMock),
 }));
 
 function MenuPageTestShell() {
@@ -40,7 +42,7 @@ describe("/menu page", () => {
     render(<MenuPageTestShell />);
     expect(screen.getByRole("link", { name: /food menu \(PDF \/ image\)/i })).toHaveAttribute(
       "href",
-      "/indo-cafe-menu.jpg",
+      "/menu-food.jpeg",
     );
     expect(screen.getByRole("link", { name: /drinks menu \(PDF \/ image\)/i })).toHaveAttribute(
       "href",
@@ -93,6 +95,12 @@ describe("/menu page", () => {
       scripts.some((script) => {
         const content = script.textContent ?? "";
         return content.includes('"BreadcrumbList"') && content.includes("/menu");
+      }),
+    ).toBe(true);
+    expect(
+      scripts.some((script) => {
+        const content = script.textContent ?? "";
+        return content.includes('"Menu"') && content.includes('"Offer"');
       }),
     ).toBe(true);
   });
