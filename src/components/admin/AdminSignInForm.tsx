@@ -122,7 +122,7 @@ export function AdminSignInForm() {
           onChange={(event) => setUsername(event.target.value)}
           required
           className="mt-2 min-h-12 w-full rounded-sm border border-brand-cream/25 bg-brand-cream px-4 py-3 text-sm font-semibold text-brand-maroon shadow-sm placeholder:text-brand-maroon/35 focus:border-brand-gold focus:bg-white focus:outline-none"
-          placeholder="admin username"
+          placeholder="username"
         />
       </div>
 
