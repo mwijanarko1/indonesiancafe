@@ -41,7 +41,7 @@ export function menuItemPhotoIfMatched(itemName: string): string | null {
   if (n.includes("pisang goreng keju")) return p("pisang_goreng_keju_coklat_.jpg");
 
   // Sides (specific before generic)
-  if (n.includes("gado-gado / indonesian salad")) return p("gado-gado2.jpg");
+  if (n.includes("gado-gado")) return p("gado-gado2.jpg");
   if (n.includes("chicken spring roll")) return p("chicken spring roll.webp");
   if (n.includes("vegetarian spring roll")) return p("vegetarian spring roll.jpg");
   if (n.includes("king butterfly prawn")) return p("king butterfly prawns.jpg");

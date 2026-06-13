@@ -36,7 +36,7 @@ const HIGHLIGHTS: HighlightSpec[] = [
   },
   {
     id: "gado",
-    match: (n) => n.toLowerCase().includes("gado-gado / indonesian salad"),
+    match: (n) => n.toLowerCase().includes("gado-gado"),
     image: publicMenuPhoto("gado-gado2.jpg"),
     imageAlt: "Gado-gado Indonesian salad at Indonesian Cafe",
   },
@@ -64,20 +64,12 @@ export function MenuSection({ menu }: { menu: SiteMenuContent }) {
       aria-labelledby="menu-heading"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <h2
-            id="menu-heading"
-            className="font-[family-name:var(--font-serif)] text-3xl font-bold text-brand-maroon sm:text-4xl"
-          >
-            Indonesian favourites
-          </h2>
-          <Link
-            href="/menu"
-            className="font-[family-name:var(--font-label)] text-sm font-bold uppercase tracking-[0.1em] text-brand-maroon underline-offset-4 transition hover:underline"
-          >
-            View full menu
-          </Link>
-        </div>
+        <h2
+          id="menu-heading"
+          className="text-center font-[family-name:var(--font-serif)] text-3xl font-bold text-brand-maroon sm:text-4xl"
+        >
+          Indonesian Favourites
+        </h2>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {/* Featured — spans 2 cols on large */}

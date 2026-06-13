@@ -11,7 +11,7 @@ export const VISIT_PAGE_TITLE = "Visit Indonesian Cafe";
 export const VISIT_PAGE_DESCRIPTION =
   "Plan your visit to Indonesian Cafe in Crookes, Sheffield — address, opening hours, halal dine-in and takeaway details, phone number, maps, and quick links.";
 
-export const REVIEWS_SECTION_TITLE = "Word of mouth";
+export const REVIEWS_SECTION_TITLE = "Word of Mouth";
 export const REVIEWS_SECTION_BLURB =
   "Real words from guests who have eaten with us in Crookes.";
 
