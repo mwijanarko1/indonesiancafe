@@ -2,7 +2,7 @@
 
 import { useTransition, useState, useRef, type FormEvent, type ReactNode } from "react";
 import Image from "next/image";
-import { Eye, EyeOff, Pencil, Trash2, MoreVertical, ImagePlus } from "lucide-react";
+import { Eye, EyeOff, Pencil, Trash2, ImagePlus, EllipsisVertical } from "lucide-react";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import {
   togglePricedItemAvailability,
@@ -612,13 +612,19 @@ function ActionsMenu({
         <Button
           variant="outline"
           size="sm"
-          className="gap-1 border-brand-maroon/20 text-brand-maroon hover:bg-brand-cream hover:text-brand-maroon"
+          className="h-11 min-h-11 w-full justify-center gap-2 rounded-lg border-brand-maroon/20 text-brand-maroon shadow-none hover:bg-brand-cream hover:text-brand-maroon sm:size-9 sm:min-h-0 sm:w-9 sm:gap-0 sm:px-0"
+          aria-label="Open menu"
         >
-          Actions
-          <MoreVertical className="h-3.5 w-3.5" />
+          <span className="font-[family-name:var(--font-label)] text-[0.7rem] font-bold uppercase tracking-[0.06em] sm:hidden">
+            More
+          </span>
+          <EllipsisVertical className="size-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[150px]">
+      <DropdownMenuContent
+        align="end"
+        className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[var(--radix-dropdown-menu-trigger-width)] sm:w-auto sm:min-w-[150px]"
+      >
         <DropdownMenuItem onClick={onEdit}>
           <Pencil className="h-3.5 w-3.5" />
           Edit
@@ -640,6 +646,44 @@ function ActionsMenu({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Item row layout                                                   */
+/* ------------------------------------------------------------------ */
+
+function AdminMenuItemShell({
+  image,
+  title,
+  price,
+  priceClassName,
+  actions,
+  children,
+}: {
+  image: ReactNode;
+  title: ReactNode;
+  price: ReactNode;
+  priceClassName?: string;
+  actions: ReactNode;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex gap-3 sm:gap-4">
+        {image}
+        <div className="min-w-0 flex-1">
+          {title}
+          {children}
+          <div className={cn("mt-1.5 sm:hidden", priceClassName)}>{price}</div>
+        </div>
+        <div className="hidden shrink-0 items-center gap-2 self-start sm:flex">
+          <div className={priceClassName}>{price}</div>
+          {actions}
+        </div>
+      </div>
+      <div className="sm:hidden">{actions}</div>
+    </div>
   );
 }
 
@@ -682,9 +726,19 @@ function PricedItemRow({ item }: { item: AdminPricedItem }) {
             onSaved={() => setIsEditing(false)}
           />
         ) : (
-          <div className="flex gap-4">
-            <ImageThumb src={imgSrc} alt={item.name} />
-            <div className="min-w-0 flex-1">
+          <AdminMenuItemShell
+            image={<ImageThumb src={imgSrc} alt={item.name} />}
+            price={item.price}
+            priceClassName="font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon"
+            actions={
+              <ActionsMenu
+                onToggle={handleToggle}
+                onEdit={() => setIsEditing(true)}
+                onDelete={() => setDeleteOpen(true)}
+                isAvailable={item.isAvailable}
+              />
+            }
+            title={
               <p
                 className={cn(
                   "font-[family-name:var(--font-serif)] font-bold text-brand-maroon",
@@ -693,27 +747,17 @@ function PricedItemRow({ item }: { item: AdminPricedItem }) {
               >
                 {formatMenuItemDisplayName(item.name)}
               </p>
-              {item.description ? (
-                <p className="mt-1 text-sm text-stone-600">{item.description}</p>
-              ) : null}
-              {!item.isAvailable ? (
-                <p className="mt-1 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon/70">
-                  Hidden from menu
-                </p>
-              ) : null}
-            </div>
-            <p className="shrink-0 font-[family-name:var(--font-serif)] font-bold tabular-nums text-brand-maroon">
-              {item.price}
-            </p>
-            <div className="shrink-0 self-start">
-              <ActionsMenu
-                onToggle={handleToggle}
-                onEdit={() => setIsEditing(true)}
-                onDelete={() => setDeleteOpen(true)}
-                isAvailable={item.isAvailable}
-              />
-            </div>
-          </div>
+            }
+          >
+            {item.description ? (
+              <p className="mt-1.5 text-sm leading-relaxed text-stone-600">{item.description}</p>
+            ) : null}
+            {!item.isAvailable ? (
+              <p className="mt-1.5 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon/70">
+                Hidden from menu
+              </p>
+            ) : null}
+          </AdminMenuItemShell>
         )}
       </li>
 
@@ -773,9 +817,19 @@ function DrinkItemRow({ item }: { item: AdminDrinkItem }) {
             onSaved={() => setIsEditing(false)}
           />
         ) : (
-          <div className="flex gap-4">
-            <ImageThumb src={imgSrc} alt={item.name} />
-            <div className="min-w-0 flex-1">
+          <AdminMenuItemShell
+            image={<ImageThumb src={imgSrc} alt={item.name} />}
+            price={priceLabel || "—"}
+            priceClassName="text-right font-[family-name:var(--font-serif)] text-sm font-bold leading-snug tabular-nums text-brand-maroon"
+            actions={
+              <ActionsMenu
+                onToggle={handleToggle}
+                onEdit={() => setIsEditing(true)}
+                onDelete={() => setDeleteOpen(true)}
+                isAvailable={item.isAvailable}
+              />
+            }
+            title={
               <p
                 className={cn(
                   "font-[family-name:var(--font-serif)] font-bold text-brand-maroon",
@@ -784,24 +838,14 @@ function DrinkItemRow({ item }: { item: AdminDrinkItem }) {
               >
                 {formatMenuItemDisplayName(item.name)}
               </p>
-              {!item.isAvailable ? (
-                <p className="mt-1 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon/70">
-                  Hidden from menu
-                </p>
-              ) : null}
-            </div>
-            <p className="shrink-0 text-right font-[family-name:var(--font-serif)] text-sm font-bold tabular-nums text-brand-maroon">
-              {priceLabel || "—"}
-            </p>
-            <div className="shrink-0 self-start">
-              <ActionsMenu
-                onToggle={handleToggle}
-                onEdit={() => setIsEditing(true)}
-                onDelete={() => setDeleteOpen(true)}
-                isAvailable={item.isAvailable}
-              />
-            </div>
-          </div>
+            }
+          >
+            {!item.isAvailable ? (
+              <p className="mt-1.5 font-[family-name:var(--font-label)] text-[0.6rem] font-bold uppercase tracking-wide text-brand-maroon/70">
+                Hidden from menu
+              </p>
+            ) : null}
+          </AdminMenuItemShell>
         )}
       </li>
 
@@ -838,26 +882,16 @@ function DrinkGroupSection({ group }: { group: AdminDrinkGroup }) {
 /*  Category panel (tab content)                                      */
 /* ------------------------------------------------------------------ */
 
-function getCategoryItemCount(category: AdminCategory) {
-  if (category.variant === "priced") return category.items.length;
-  return category.groups.reduce((acc, group) => acc + group.items.length, 0);
-}
-
 function CategoryPanel({ category }: { category: AdminCategory }) {
-  const itemCount = getCategoryItemCount(category);
-
   return (
     <div>
       {category.variant === "priced" && category.subtitle ? (
         <p className="text-sm text-stone-600">{category.subtitle}</p>
       ) : null}
-      <p className="mt-2 border-b border-brand-maroon/15 pb-2 font-[family-name:var(--font-label)] text-[0.65rem] font-bold uppercase tracking-[0.2em] text-stone-500">
-        {itemCount} {itemCount === 1 ? "item" : "items"}
-      </p>
 
       {category.variant === "priced" ? (
         category.items.length > 0 ? (
-          <ul className="mt-4 space-y-5">
+          <ul className={cn("space-y-5", category.subtitle && "mt-4")}>
             {category.items.map((item) => (
               <PricedItemRow key={item._id} item={item} />
             ))}

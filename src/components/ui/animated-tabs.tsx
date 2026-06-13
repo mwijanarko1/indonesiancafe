@@ -1,8 +1,15 @@
 "use client";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { motion, useReducedMotion } from "motion/react";
-import { type ReactNode, useCallback, useId, useState } from "react";
+import { type ReactNode, useCallback, useId, useMemo, useState } from "react";
 
 export type AnimatedTab = {
   id: string;
@@ -128,37 +135,110 @@ export function AnimatedTabs({
       indicatorClassName,
     );
 
-  return (
-    <div aria-label="Tabs" className={cn(baseContainerStyles, className)} role="tablist">
-      {tabs.map((tab, index) => {
-        const isActive = activeTab === tab.id;
+  const selectItems = useMemo(
+    () => tabs.map((tab) => ({ value: tab.id, label: tab.label })),
+    [tabs],
+  );
 
-        return (
-          <button
-            key={tab.id}
-            id={`${layoutId}-tab-${tab.id}`}
-            type="button"
-            role="tab"
-            aria-selected={isActive}
-            tabIndex={isActive ? 0 : -1}
-            className={getTabStyles(isActive)}
-            onClick={() => handleTabChange(tab.id)}
-            onKeyDown={(e) => handleKeyDown(e, index)}
+  const mobileSelectTriggerClassName = cn(
+    "h-auto min-h-11 w-full justify-between px-4 py-2.5 shadow-sm",
+    "focus-visible:border-brand-maroon focus-visible:ring-2 focus-visible:ring-brand-maroon/30 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream-page focus-visible:outline-none",
+    variant === "pill" && [
+      "rounded-full border border-brand-maroon/20 bg-brand-maroon text-white",
+      "[&_svg]:text-white/80",
+      "data-placeholder:text-white/70",
+    ],
+    variant === "underline" && [
+      "rounded-t-md border-border bg-transparent text-brand-maroon",
+      "[&_svg]:text-brand-maroon/70",
+    ],
+    variant === "segment" && [
+      "rounded-lg border-transparent bg-muted text-brand-maroon",
+      "[&_svg]:text-brand-maroon/70",
+    ],
+    tabClassName,
+  );
+
+  const mobileSelectContentClassName = cn(
+    "rounded-xl border border-brand-maroon/15 bg-white p-1.5 shadow-md ring-0",
+    tabClassName,
+  );
+
+  const mobileSelectItemClassName = cn(
+    "rounded-lg py-2.5 pl-3 pr-8 text-brand-charcoal",
+    "focus:bg-brand-maroon/8 focus:text-brand-maroon",
+    "data-highlighted:bg-brand-maroon/8 data-highlighted:text-brand-maroon",
+    "[&_svg]:text-brand-maroon",
+    tabClassName,
+  );
+
+  return (
+    <>
+      <div className="w-full sm:hidden">
+        <Select
+          items={selectItems}
+          value={activeTab}
+          onValueChange={(value) => {
+            if (value) handleTabChange(value);
+          }}
+        >
+          <SelectTrigger className={mobileSelectTriggerClassName} aria-label="Select section">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent
+            side="bottom"
+            sideOffset={8}
+            align="start"
+            alignItemWithTrigger={false}
+            className={mobileSelectContentClassName}
           >
-            {isActive ? (
-              <motion.span
-                layout
-                layoutId={layoutId}
-                className={getIndicatorStyles()}
-                style={{ originY: "0px" }}
-                transition={shouldReduceMotion ? { duration: 0 } : SPRING}
-              />
-            ) : null}
-            {tab.icon ? <span className="relative z-10">{tab.icon}</span> : null}
-            <span className="relative z-10">{tab.label}</span>
-          </button>
-        );
-      })}
-    </div>
+            {tabs.map((tab) => (
+              <SelectItem key={tab.id} value={tab.id} className={mobileSelectItemClassName}>
+                <span className="flex items-center gap-2">
+                  {tab.icon}
+                  {tab.label}
+                </span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div
+        aria-label="Tabs"
+        className={cn(baseContainerStyles, className, "hidden sm:inline-flex")}
+        role="tablist"
+      >
+        {tabs.map((tab, index) => {
+          const isActive = activeTab === tab.id;
+
+          return (
+            <button
+              key={tab.id}
+              id={`${layoutId}-tab-${tab.id}`}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              tabIndex={isActive ? 0 : -1}
+              className={getTabStyles(isActive)}
+              onClick={() => handleTabChange(tab.id)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+            >
+              {isActive ? (
+                <motion.span
+                  layout
+                  layoutId={layoutId}
+                  className={getIndicatorStyles()}
+                  style={{ originY: "0px" }}
+                  transition={shouldReduceMotion ? { duration: 0 } : SPRING}
+                />
+              ) : null}
+              {tab.icon ? <span className="relative z-10">{tab.icon}</span> : null}
+              <span className="relative z-10">{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </>
   );
 }
