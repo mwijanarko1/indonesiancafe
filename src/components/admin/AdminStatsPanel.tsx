@@ -736,7 +736,6 @@ export function AdminStatsPanel({
                 onSelect={(date) => {
                   if (date) handleDateInput(format(date, "yyyy-MM-dd"));
                 }}
-                initialFocus
               />
             </PopoverContent>
           </Popover>
