@@ -6,13 +6,14 @@ import { isClerkUserAdmin } from "@/lib/server/admin-auth";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const { userId } = await auth();
+  const { userId, getToken } = await auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  const isAdmin = await isClerkUserAdmin(userId);
+  const token = await getToken({ template: "convex" });
+  const isAdmin = await isClerkUserAdmin(token);
   if (!isAdmin) {
     redirect("/sign-in");
   }

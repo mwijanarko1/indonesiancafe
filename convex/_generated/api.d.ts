@@ -17,6 +17,7 @@ import type * as http from "../http.js";
 import type * as menu from "../menu.js";
 import type * as menuPhotos from "../menuPhotos.js";
 import type * as openingHours from "../openingHours.js";
+import type * as orders from "../orders.js";
 import type * as reviews from "../reviews.js";
 import type * as seed from "../seed.js";
 import type * as siteAdmin from "../siteAdmin.js";
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   menu: typeof menu;
   menuPhotos: typeof menuPhotos;
   openingHours: typeof openingHours;
+  orders: typeof orders;
   reviews: typeof reviews;
   seed: typeof seed;
   siteAdmin: typeof siteAdmin;

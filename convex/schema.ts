@@ -95,6 +95,23 @@ export default defineSchema({
     userId: v.string(),
   }).index("by_userId", ["userId"]),
 
+  /**
+   * Escalating lockout for failed admin auth/authorization attempts.
+   * One row per Clerk `subject` (userId) that has failed admin checks.
+   *
+   * Thresholds (documented in adminAuth.ts):
+   *   < 3 failures        → no lockout
+   *   3 failures           → 5 min lockout
+   *   4 failures (post-5m) → 15 min lockout
+   *   5 failures           → 25 min lockout
+   *   …arithmetic: 5 + 10*(failures-3) minutes.
+   */
+  adminLockouts: defineTable({
+    subject: v.string(),
+    failedAttempts: v.number(),
+    lockedUntil: v.number(),
+  }).index("by_subject", ["subject"]),
+
   /** Singleton: disclaimer, image URLs, footer. */
   menuSettings: defineTable({
     key: v.literal("default"),
@@ -154,4 +171,28 @@ export default defineSchema({
     hours: v.array(openingHoursDay),
     footnote: v.string(),
   }).index("by_key", ["key"]),
+
+  /** One row per order placed by staff. */
+  orders: defineTable({
+    tableNumber: v.optional(v.number()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("completed"),
+      v.literal("cancelled"),
+    ),
+    total: v.number(),
+    createdAt: v.number(),
+    createdBy: v.string(),
+    notes: v.optional(v.string()),
+  }).index("by_createdAt", ["createdAt"]),
+
+  /** One row per line item within an order. */
+  orderItems: defineTable({
+    orderId: v.id("orders"),
+    menuItemName: v.string(),
+    priceAtOrder: v.number(),
+    quantity: v.number(),
+    notes: v.optional(v.string()),
+    sortOrder: v.number(),
+  }).index("by_orderId", ["orderId"]),
 });

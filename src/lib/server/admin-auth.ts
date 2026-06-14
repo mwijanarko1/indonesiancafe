@@ -18,7 +18,12 @@ function createNoStoreConvexClient(url: string): ConvexHttpClient {
   });
 }
 
-export async function isClerkUserAdmin(userId: string): Promise<boolean> {
+export async function isClerkUserAdmin(token: string | null): Promise<boolean> {
+  if (!token) {
+    console.error("[admin-auth] No Clerk token; denying admin access.");
+    return false;
+  }
+
   const url = getConvexDeploymentUrl();
   if (!url) {
     console.error("[admin-auth] NEXT_PUBLIC_CONVEX_URL is not set; denying admin access.");
@@ -26,9 +31,11 @@ export async function isClerkUserAdmin(userId: string): Promise<boolean> {
   }
 
   try {
-    return await createNoStoreConvexClient(url).query(api.admins.isAdmin, { userId });
+    const client = createNoStoreConvexClient(url);
+    client.setAuth(token);
+    return await client.mutation(api.admins.isAdmin);
   } catch (error) {
-    console.error("[admin-auth] admins.isAdmin query failed; denying admin access.", error);
+    console.error("[admin-auth] admins.isAdmin mutation failed; denying admin access.", error);
     return false;
   }
 }

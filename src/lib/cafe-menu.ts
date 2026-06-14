@@ -47,6 +47,31 @@ const LEGACY_FOOD_MENU_IMAGE_PATHS = new Set([
   "/menu-pg2.jpeg",
 ]);
 
+/**
+ * Parse a price display string (e.g. "£12.80", "£5,000") to a numeric value.
+ * Strips £, $, comma, and whitespace, then parses as float.
+ * Returns 0 for unparseable values (empty, null, "Free", "POA").
+ */
+export function parsePrice(display: string | null | undefined): number {
+  if (!display) return 0;
+  const cleaned = display.replace(/[£$,]/g, "").replace(/\s+/g, "").trim();
+  const parsed = parseFloat(cleaned);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+/**
+ * Parse the first available drink price from hot/iced strings.
+ * Returns the numeric value of the first non-null price, or 0 if both are null.
+ */
+export function parseDrinkPrice(
+  hot: string | null | undefined,
+  iced: string | null | undefined,
+): number {
+  if (hot) return parsePrice(hot);
+  if (iced) return parsePrice(iced);
+  return 0;
+}
+
 /** Safe href for menu image links: `http(s):` or same-site path `/...` only. */
 export function safeMenuImageHref(url: string): string | null {
   let href: string | null = null;
