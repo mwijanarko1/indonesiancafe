@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { isClerkUserAdmin } from "@/lib/server/admin-auth";
+import { verifyAdminAccess } from "@/lib/server/admin-auth";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
@@ -13,9 +13,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   }
 
   const token = await getToken({ template: "convex" });
-  const isAdmin = await isClerkUserAdmin(token);
-  if (!isAdmin) {
-    redirect("/sign-in");
+  const access = await verifyAdminAccess(token);
+  if (!access.ok) {
+    redirect(`/sign-in?error=${access.reason}`);
   }
 
   return (

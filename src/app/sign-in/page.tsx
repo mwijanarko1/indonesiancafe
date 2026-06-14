@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminSignInForm } from "@/components/admin/AdminSignInForm";
+import { adminAccessErrorMessage } from "@/lib/server/admin-auth";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -25,7 +26,14 @@ function AuthWaveDivider() {
   );
 }
 
-export default function SignInPage() {
+type SignInPageProps = {
+  searchParams: Promise<{ error?: string }>;
+};
+
+export default async function SignInPage({ searchParams }: SignInPageProps) {
+  const { error } = await searchParams;
+  const accessError = adminAccessErrorMessage(error);
+
   return (
     <main id="main-content">
       {/* Hero-style auth section */}
@@ -59,7 +67,7 @@ export default function SignInPage() {
           </p>
 
           <div className="mt-12 w-full max-w-md">
-            <AdminSignInForm />
+            <AdminSignInForm initialAccessError={accessError} />
           </div>
         </div>
 

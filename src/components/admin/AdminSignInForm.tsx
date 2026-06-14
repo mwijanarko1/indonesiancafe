@@ -2,8 +2,8 @@
 
 import { useClerk, useSignIn, useUser } from "@clerk/nextjs";
 import { Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
+import { checkAdminAccessAction } from "@/lib/actions/admin-access";
 
 function getClerkErrorMessage(error: unknown): string {
   if (typeof error === "object" && error !== null) {
@@ -30,17 +30,70 @@ function getClerkErrorMessage(error: unknown): string {
   return "Unable to sign in. Check the username and password, then try again.";
 }
 
-export function AdminSignInForm() {
-  const router = useRouter();
+type AdminSignInFormProps = {
+  initialAccessError?: string | null;
+};
+
+export function AdminSignInForm({ initialAccessError = null }: AdminSignInFormProps) {
   const { signOut } = useClerk();
   const { signIn, fetchStatus } = useSignIn();
   const { isSignedIn } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialAccessError);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isCheckingAccess, setIsCheckingAccess] = useState(false);
+
+  useEffect(() => {
+    setError(initialAccessError);
+  }, [initialAccessError]);
+
+  useEffect(() => {
+    if (!isSignedIn || isRedirecting) {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function verifyExistingSession() {
+      setIsCheckingAccess(true);
+      try {
+        const access = await checkAdminAccessAction();
+        if (cancelled) {
+          return;
+        }
+
+        if (access.ok) {
+          setError(null);
+          return;
+        }
+
+        setError(access.message);
+      } catch {
+        if (!cancelled) {
+          setError("Unable to verify admin access. Try again in a moment.");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsCheckingAccess(false);
+        }
+      }
+    }
+
+    void verifyExistingSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isSignedIn, isRedirecting]);
+
+  function goToDashboard() {
+    setError(null);
+    setIsRedirecting(true);
+    window.location.assign("/admin");
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -69,8 +122,7 @@ export function AdminSignInForm() {
 
       shouldRedirect = true;
       setIsRedirecting(true);
-      router.push("/admin");
-      router.refresh();
+      window.location.assign("/admin");
     } catch (caughtError) {
       setError(getClerkErrorMessage(caughtError));
     } finally {
@@ -86,12 +138,18 @@ export function AdminSignInForm() {
         <p className="font-[family-name:var(--font-label)] text-sm tracking-wide text-brand-cream/80">
           You are already signed in.
         </p>
+        {error ? (
+          <p className="mt-4 rounded-sm border border-brand-gold/40 bg-brand-gold/10 px-4 py-3 text-sm leading-relaxed text-brand-cream">
+            {error}
+          </p>
+        ) : null}
         <button
           type="button"
-          onClick={() => router.push("/admin")}
-          className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-sm bg-brand-cream px-5 py-2.5 font-[family-name:var(--font-label)] text-xs font-bold uppercase tracking-[0.1em] text-brand-maroon transition hover:bg-brand-cream-page focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream"
+          onClick={goToDashboard}
+          disabled={isCheckingAccess || isRedirecting}
+          className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-sm bg-brand-cream px-5 py-2.5 font-[family-name:var(--font-label)] text-xs font-bold uppercase tracking-[0.1em] text-brand-maroon transition hover:bg-brand-cream-page focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cream disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Go to Dashboard
+          {isCheckingAccess ? "Checking access..." : isRedirecting ? "Opening dashboard..." : "Go to Dashboard"}
         </button>
         <button
           type="button"
